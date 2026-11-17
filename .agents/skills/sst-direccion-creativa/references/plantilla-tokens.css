@@ -1,0 +1,51 @@
+/* PLANTILLA DE TOKENS — reemplaza TODOS los valores por los de la dirección elegida.
+   Los #808080 son marcadores de posición, no una recomendación. Quita los comentarios DEFINIR al terminar. */
+
+:root {
+  /* Marca: 4–6 colores nombrados por lo que son (p. ej. --concreto, --tinta, --cinta) */
+  --marca-fondo:   #808080; /* DEFINIR */
+  --marca-tinta:   #808080; /* DEFINIR */
+  --marca-acento:  #808080; /* DEFINIR */
+  --marca-apoyo-1: #808080; /* DEFINIR */
+  --marca-apoyo-2: #808080; /* DEFINIR */
+
+  /* Señales de seguridad: SOLO significado. Nunca decorativas ni de marca.
+     Verifica contraste del texto sobre cada una (sobre amarillo, texto oscuro). */
+  --senal-prohibicion:  #808080; /* DEFINIR (rojo)     */
+  --senal-advertencia:  #808080; /* DEFINIR (amarillo) */
+  --senal-obligacion:   #808080; /* DEFINIR (azul)     */
+  --senal-seguridad:    #808080; /* DEFINIR (verde)    */
+  --senal-neutra:       #808080; /* DEFINIR            */
+
+  /* Tipografía */
+  --fuente-display: system-ui, sans-serif; /* DEFINIR */
+  --fuente-texto:   system-ui, sans-serif; /* DEFINIR */
+  --texto-base: 1rem;
+  --texto-escala: 1.25;          /* razón de la escala; ajusta según la dirección */
+  --texto-medida-max: 70ch;
+
+  /* Espaciado (base 4px) */
+  --esp-1: .25rem; --esp-2: .5rem; --esp-3: .75rem; --esp-4: 1rem;
+  --esp-6: 1.5rem; --esp-8: 2rem;  --esp-12: 3rem;  --esp-16: 4rem;
+
+  /* Radios jerárquicos: no uses uno solo para todo */
+  --radio-control:    0; /* DEFINIR */
+  --radio-superficie: 0; /* DEFINIR */
+  --radio-sello:      0; /* DEFINIR */
+
+  /* Objetivos táctiles (ver sst-ui-accesibilidad-campo) */
+  --objetivo-min: 44px;
+  --objetivo-campo: 56px; /* guantes / uso en planta */
+
+  /* Movimiento (ver sst-motion-design) */
+  --mov-micro:  160ms;
+  --mov-estado: 280ms;
+  --mov-escena: 700ms;
+  --ease-salida:    cubic-bezier(.2, .7, .2, 1);
+  --ease-simetrico: cubic-bezier(.65, 0, .35, 1);
+}
+
+/* Modo oscuro: redefine los tokens de color aquí, no valores sueltos en los componentes. */
+@media (prefers-color-scheme: dark) {
+  :root { /* DEFINIR si el proyecto soporta modo oscuro */ }
+}
