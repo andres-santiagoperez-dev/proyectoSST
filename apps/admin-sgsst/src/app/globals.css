@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+:root {
+  --color-fondo: #F4F3EF;
+}
+
+html, body {
+  background-color: var(--color-fondo);
+  color: #111827;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid #D97706;
+  outline-offset: 2px;
+}
+
+/* Patrón diagonal de demarcación industrial de seguridad */
+.patron-demarcacion {
+  background: repeating-linear-gradient(
+    -45deg,
+    #F59E0B,
+    #F59E0B 10px,
+    #1F2937 10px,
+    #1F2937 20px
+  );
+}
