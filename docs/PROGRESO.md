@@ -5,9 +5,9 @@ Documento vivo para registrar el avance, decisiones de arquitectura y diseño, s
 ---
 
 ## 1. Estado Actual
-* **Fase Actual:** FASE 1 — Requerimientos (Borradores generados -> En PUNTO DE CONTROL A)
-* **Fecha de actualización:** 2026-11-17
-* **Último Commit:** `chore(fase-0): inicializacion de estructura base, regla y skills sst` (hash: `8c7b642`)
+* **Fase Actual:** FASE 3 — Arquitectura (Iniciando definición técnica tras aprobación de stack y requerimientos)
+* **Fecha de actualización:** 2026-11-18
+* **Último Commit:** `docs(fase-1): requerimientos, historias de usuario y definicion de MVP` (hash: `d9ff521`)
 
 ---
 
@@ -18,29 +18,35 @@ Documento vivo para registrar el avance, decisiones de arquitectura y diseño, s
 - [x] Inicialización del repositorio Git local (`git init`).
 - [x] Creación de la estructura de documentación (`docs/requerimientos/`, `docs/diseno/`, `docs/adr/`).
 - [x] Creación de `docs/PROGRESO.md`.
-- [x] Propuesta y análisis de 4 skills externos complementarios (esperando aprobación del usuario para instalación).
-- [x] Commit de Fase 0 realizado.
+- [x] Propuesta y análisis de skills externos complementarios.
+- [x] Commit de Fase 0 registrado.
 
 ### Fase 1 — Requerimientos
 - [x] Ronda 1 de preguntas de descubrimiento completada.
 - [x] Elaboración de `docs/requerimientos/00-vision.md`.
-- [x] Elaboración de `docs/requerimientos/01-actores-roles.md` (RBAC y confidencialidad Res. 2346).
-- [x] Elaboración de `docs/requerimientos/02-epicas.md` (3 opciones de MVP, seleccionada Opción B).
+- [x] Elaboración de `docs/requerimientos/01-actores-roles.md` (RBAC y confidencialidad).
+- [x] Elaboración de `docs/requerimientos/02-epicas.md` (Opción B seleccionada).
 - [x] Elaboración de historias de usuario del MVP (`HU-001` a `HU-006`) con criterios Dado/Cuando/Entonces.
 - [x] Elaboración de `docs/requerimientos/03-rnf.md` con metas medibles `[PROPUESTO]`.
 - [x] Registro de preguntas y supuestos en `docs/requerimientos/05-preguntas-abiertas.md`.
-- [ ] **PUNTO DE CONTROL A:** Esperando aprobación del MVP y resolución de decisiones clave por parte del usuario.
+- [x] **Punto de Control A:** Aprobado por el usuario. Commit registrado (`d9ff521`).
 
-### Fase 2 — Norma y Trazabilidad (Pendiente)
-- [ ] Verificación en fuentes oficiales de la normativa colombiana aplicable (SG-SST).
-- [ ] Trazabilidad completa en `docs/requerimientos/04-trazabilidad.md` (norma → requerimiento → historia → prueba).
-- [ ] Identificación de elementos pendientes para validación con profesional SST con licencia.
+### Fase 2 — Norma y Trazabilidad
+- [x] Búsqueda y verificación de fuentes oficiales colombianas (Gestor Normativo Función Pública, SUIN-Juriscol, MinTrabajo).
+- [x] Resolución de `[VERIFICAR]`: Confirmada la derogatoria de la Res. 2346/2007 por la **Resolución 1843 de 2025** (7 tipos de exámenes, reserva médica estricta, prohibición de VIH/embarazo).
+- [x] Confirmación de plazos: Reporte accidente ARL/EPS en 2 días hábiles; investigación interna en 15 días calendario (Res. 1401 de 2007).
+- [x] Confirmación de ponderaciones Res. 0312 de 2019: Planear (25%), Hacer (60%), Verificar (5%), Actuar (10%); escala <60% crítico, 60-85% moderado, >85% aceptable.
+- [x] Creación de la matriz completa en `docs/requerimientos/04-trazabilidad.md`.
+- [x] Identificación de huecos diferidos (Furat directo ARL, riesgo psicosocial) y puntos para validación por profesional SST.
 
-### Fase 3 — Arquitectura (Pendiente)
-- [ ] Opciones de stack técnico (portal público + app autenticada, frontend animado).
-- [ ] ADR en `docs/adr/0001-stack.md`.
-- [ ] Modelo de datos MVP, matriz RBAC, tratamiento de datos sensibles y plan de pruebas.
-- [ ] **Punto de Control B:** Aprobación de stack y modelo.
+### Fase 3 — Arquitectura (En curso)
+- [ ] Decisión de stack técnico: React asincrónico (Next.js / Vite + React con arquitectura asíncrona, TS, Tailwind, GSAP/Motion).
+- [ ] Redacción del ADR en `docs/adr/0001-stack.md`.
+- [ ] Modelo de datos inicial del MVP (esquema relacional con auditoría inmutable).
+- [ ] Matriz detallada de roles y permisos.
+- [ ] Lista de datos sensibles y tratamiento de confidencialidad.
+- [ ] Plan de pruebas para cálculos normativos y permisos.
+- [ ] **Punto de Control B:** Espera de aprobación de stack y modelo.
 
 ### Fase 4 — Identidad Visual (Pendiente)
 - [ ] Brief mínimo y 3 direcciones visuales diferenciadas con momentos animados memorables.
@@ -59,22 +65,21 @@ Documento vivo para registrar el avance, decisiones de arquitectura y diseño, s
 ---
 
 ## 3. Decisiones Tomadas
-* **D-001:** Se utilizará la estructura recomendada por Antigravity en `.agents/` para asegurar portabilidad en el repositorio.
-* **D-002:** Confirmado país: Colombia. Marco legal: Decreto 1072 de 2015, Resolución 0312 de 2019, Resolución 1401 de 2007, Resolución 2346 de 2007 y Ley 1355 de 2009.
-* **D-003:** Operador del aplicativo: Una sola empresa particular para sus colaboradores directos y contratistas.
-* **D-004:** Privacidad médica estricta: Solo conceptos de aptitud laboral y recomendaciones ergonómicas. Cero diagnósticos CIE-10 ni historias clínicas.
-* **D-005:** Requerimiento estrella del cliente: Sistema de alarmas programables en pantalla con guías interactivas y animadas para pausas activas.
-* **D-006:** Selección de la Opción B de MVP ("Experiencia Preventiva y Cumplimiento").
+* **D-001:** Estructura recomendada por Antigravity en `.agents/` para portabilidad.
+* **D-002:** Confirmado país: Colombia. SG-SST (Dec. 1072/2015, Res. 0312/2019, Res. 1401/2007, Ley 1355/2009).
+* **D-003:** Marco médico actualizado a la **Resolución 1843 de 2025** (vigente en Colombia, deroga Res. 2346/2007).
+* **D-004:** Operador: Empresa particular para sus trabajadores directos y contratistas.
+* **D-005:** Requerimiento estrella: Alarmas programables para pausas activas con guía interactiva animada.
+* **D-006:** Selección de arquitectura de frontend: **React de forma asincrónica** (TypeScript, Next.js / Server Actions / TanStack Query, Tailwind CSS, GSAP y Motion).
 
 ---
 
 ## 4. Supuestos Activos
-* **[SUPUESTO-001]:** Las alarmas de pausas activas funcionarán con notificación de navegador (Web Notifications API), modal visual emergente y sonido opcional.
-* **[SUPUESTO-002]:** El reporte de incidentes en campo utilizará almacenamiento local (IndexedDB/localStorage) para permitir captura sin señal y sincronización posterior.
-* **[SUPUESTO-003]:** Los estándares mínimos (Res. 0312) se presentarán con selector configurable según tamaño y riesgo de la empresa.
+* **[SUPUESTO-001]:** Las alarmas de pausas activas contarán con temporizador en segundo plano, Web Notifications API y alerta modal emergente con audio opcional.
+* **[SUPUESTO-002]:** Almacenamiento local offline en el formulario de incidentes mediante IndexedDB con cola de sincronización asincrónica.
+* **[SUPUESTO-003]:** Los estándares mínimos (Res. 0312) se configuran con la tabla de ponderación oficial (25-60-5-10).
 
 ---
 
 ## 5. Pendientes Inmediatos
-* Aprobación del MVP en el **Punto de Control A**.
-* Decisión sobre la instalación de los skills externos analizados (`greensock/gsap-skills`, `vercel-labs/agent-skills`, `johnpolacek/animaxxing-skills`).
+* Elaboración y entrega del ADR `docs/adr/0001-stack.md` y modelo de datos en Fase 3 para el **Punto de Control B**.
