@@ -81,6 +81,20 @@ export const USUARIOS_DEMO: Usuario[] = [
 // ============================================================================
 export const EJERCICIOS_PAUSAS: EjercicioPausaInfo[] = [
   {
+    id: 'HOMBROS_ROTACION',
+    titulo: 'Relajación y Rotación de Hombros',
+    zonaCuerpo: 'Cintura Escapular, Trapecio y Deltoides',
+    duracionSegundos: 60,
+    instrucciones: [
+      'Siéntate o ponte de pie con la espalda erguida y los brazos sueltos a los lados.',
+      'Inhala y eleva lentamente los hombros hacia las orejas.',
+      'Dibuja círculos amplios y suaves hacia atrás, sintiendo cómo se juntan los omóplatos.',
+      'Realiza 10 giros hacia atrás, respira profundo y repite 10 giros hacia adelante.',
+    ],
+    beneficioErgonomico: 'Libera la sobrecarga muscular en trapecios por tensión postural sostenida y tecleo.',
+    iconoSvg: 'activity',
+  },
+  {
     id: 'VISUAL_20_20',
     titulo: 'Regla 20-20-20 (Descanso Ocular)',
     zonaCuerpo: 'Músculos Oculares y Sistema Visual',
@@ -135,6 +149,20 @@ export const EJERCICIOS_PAUSAS: EjercicioPausaInfo[] = [
     ],
     beneficioErgonomico: 'Compensa el acortamiento de flexores de cadera y la compresión discal por sedentarismo.',
     iconoSvg: 'user-check',
+  },
+  {
+    id: 'PIERNAS_CIRCULACION',
+    titulo: 'Activación de Gemelos y Retorno Venoso',
+    zonaCuerpo: 'Piernas, Pantorrillas y Tobillos',
+    duracionSegundos: 60,
+    instrucciones: [
+      'Ponte de pie con la espalda recta, apoyándote suavemente si requieres equilibrio.',
+      'Elévate sobre la punta de ambos pies durante 3 segundos, contrayendo las pantorrillas.',
+      'Baja despacio apoyando los talones y levanta ligeramente las puntas de los pies.',
+      'Realiza 15 elevaciones suaves para activar la bomba muscular de las piernas.',
+    ],
+    beneficioErgonomico: 'Estimula el retorno venoso, previene edemas en miembros inferiores y sensación de pesadez.',
+    iconoSvg: 'activity',
   },
 ];
 

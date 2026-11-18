@@ -34,11 +34,11 @@ Documento vivo para registrar el avance, decisiones de arquitectura y diseño, s
     - Compilación estática Next.js 14 verificada (Code 0).
   - **Aplicativo 2 (`apps/pausas-vitales` - Puerto 3021):**
     - Dirección 2: Ergonomía Vital / El Pulso Humano (#0D7377, #F48C42, #14213D).
-    - Orbe biomecánico animado con ciclo de respiración cuadrada 4-4-4 (Inhalar, Sostener, Exhalar).
-    - Temporizador circular de cuenta regresiva (5 a 15 min de pausa recomendada por Ley 1355/2009).
-    - Alarma sonora con sintetizador Web Audio API (acordes armónicos pentatónicos, sin estridencias) y notificaciones de escritorio Web Notifications API.
-    - Catálogo interactivo de ejercicios posturales (cuello, túnel carpiano, espalda lumbar, fatiga ocular).
-    - Registro de cumplimiento diario de pausas con telemetría de pausas activas.
+    - **Demostraciones animadas tipo GIF en bucle (`MannequinAnimation.tsx`):** 6 avatares vectoriales SVG/CSS biomecánicos que demuestran de forma continua la ejecución exacta de cada ejercicio (Relajación de hombros, Túnel carpiano, Descompresión cervical, Regla 20-20-20 visual, Extensión lumbar y Retorno venoso de pantorrillas).
+    - **Disparador Aleatorio de Pausas:** Envío aleatorio de pausas activas al empleado mediante el botón destacado y al sonar la alarma programada.
+    - **Modal Guiado Inmersivo (`ActiveBreakModal.tsx`):** Vista de pausa activa con cronómetro circular regresivo, pasos guiados, animación en bucle del muñeco, botón para cambiar a otra pausa aleatoria y confirmación con felicitación.
+    - **Orbe Biomecánico (`BreathingOrb.tsx`):** Ciclo 4-4-4 y 4-7-8 con campanillas acústicas al cambio de fase (Web Audio API) y "Modo Zen" en pantalla completa.
+    - **Motor de Alarmas (`AlarmScheduler.tsx`):** Intervalos configurables (30, 45, 60, 90 min), selector de 3 tonos armónicos relajantes, notificaciones web de escritorio y seguimiento de racha semanal de hábitos.
     - Compilación estática Next.js 14 verificada (Code 0).
   - **Aplicativo 3 (`apps/admin-sgsst` - Puerto 3022):**
     - Dirección 1: Demarcación Industrial / Tablero Andon (#F59E0B, #10B981, #EF4444, #111827).

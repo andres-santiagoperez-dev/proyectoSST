@@ -10,100 +10,109 @@ import {
   ChevronRight, 
   ChevronLeft, 
   Sparkles, 
-  Trophy 
+  Trophy,
+  Shuffle,
+  Play,
+  RotateCw,
+  Footprints,
+  ShieldCheck,
+  HeartHandshake
 } from 'lucide-react';
 import { EJERCICIOS_PAUSAS } from '@/lib/data-mock';
-import { TipoEjercicioPausa } from '@/types';
+import { TipoEjercicioPausa, EjercicioPausaInfo } from '@/types';
+import MannequinAnimation from './MannequinAnimation';
+import ActiveBreakModal from './ActiveBreakModal';
 
 export default function ErgonomicExercises({ onPausaCompletada }: { onPausaCompletada?: () => void }) {
   const [ejercicioActivoIdx, setEjercicioActivoIdx] = useState<number>(0);
-  const [segundosRestantes, setSegundosRestantes] = useState<number>(EJERCICIOS_PAUSAS[0].duracionSegundos);
-  const [estaContando, setEstaContando] = useState<boolean>(false);
   const [ejerciciosCompletados, setEjerciciosCompletados] = useState<string[]>([]);
-  const [mostrarFelicitacion, setMostrarFelicitacion] = useState<boolean>(false);
+  const [modalAbierto, setModalAbierto] = useState<boolean>(false);
+  const [ejercicioParaModal, setEjercicioParaModal] = useState<EjercicioPausaInfo>(EJERCICIOS_PAUSAS[0]);
 
   const ejercicioActual = EJERCICIOS_PAUSAS[ejercicioActivoIdx];
 
-  // Cambiar tiempo al cambiar de ejercicio
-  useEffect(() => {
-    setSegundosRestantes(EJERCICIOS_PAUSAS[ejercicioActivoIdx].duracionSegundos);
-    setEstaContando(false);
-  }, [ejercicioActivoIdx]);
-
-  // Cronómetro del ejercicio activo
-  useEffect(() => {
-    if (!estaContando) return;
-
-    const timer = setInterval(() => {
-      setSegundosRestantes((prev) => {
-        if (prev <= 1) {
-          marcarEjercicioHecho();
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [estaContando, ejercicioActivoIdx]);
-
-  const marcarEjercicioHecho = () => {
-    setEstaContando(false);
-    if (!ejerciciosCompletados.includes(ejercicioActual.id)) {
-      setEjerciciosCompletados((prev) => [...prev, ejercicioActual.id]);
-    }
+  const iconosPorTipo: Record<TipoEjercicioPausa, React.ElementType> = {
+    HOMBROS_ROTACION: RotateCw,
+    VISUAL_20_20: Eye,
+    CUELLO_TRAPECIO: Activity,
+    TUNEL_CARPIANO: Hand,
+    LUMBAR_POSTURAL: UserCheck,
+    PIERNAS_CIRCULACION: Footprints,
   };
 
-  const registrarPausaGlobal = () => {
-    setMostrarFelicitacion(true);
+  const IconoActual = iconosPorTipo[ejercicioActual.id] || Activity;
+
+  const lanzarPausaAleatoria = () => {
+    const indiceAleatorio = Math.floor(Math.random() * EJERCICIOS_PAUSAS.length);
+    const seleccionado = EJERCICIOS_PAUSAS[indiceAleatorio];
+    setEjercicioActivoIdx(indiceAleatorio);
+    setEjercicioParaModal(seleccionado);
+    setModalAbierto(true);
+  };
+
+  const abrirModalEjercicioActual = () => {
+    setEjercicioParaModal(ejercicioActual);
+    setModalAbierto(true);
+  };
+
+  const marcarEjercicioComoCompletado = (ejercicio: EjercicioPausaInfo) => {
+    if (!ejerciciosCompletados.includes(ejercicio.id)) {
+      setEjerciciosCompletados((prev) => [...prev, ejercicio.id]);
+    }
     if (typeof window !== 'undefined') {
       const hoy = new Date().toISOString().split('T')[0];
-      const count = parseInt(localStorage.getItem(`pausas_hoy_${hoy}`) || '0', 10);
-      localStorage.setItem(`pausas_hoy_${hoy}`, (count + 1).toString());
+      const count = parseInt(localStorage.getItem(`pausas_hoy_${hoy}`) || '0', 10) + 1;
+      localStorage.setItem(`pausas_hoy_${hoy}`, count.toString());
     }
     if (onPausaCompletada) {
       onPausaCompletada();
     }
   };
 
-  const iconosPorTipo: Record<TipoEjercicioPausa, React.ElementType> = {
-    VISUAL_20_20: Eye,
-    CUELLO_TRAPECIO: Activity,
-    TUNEL_CARPIANO: Hand,
-    LUMBAR_POSTURAL: UserCheck,
-  };
-
-  const IconoActual = iconosPorTipo[ejercicioActual.id];
-
   return (
-    <section id="rutina-ejercicios" className="py-10">
+    <section id="rutina-ejercicios" className="py-6">
       <div className="bg-white rounded-3xl p-6 sm:p-10 shadow-xl border border-vital-border">
+        
         {/* Encabezado */}
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between pb-6 border-b border-slate-100 gap-4">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between pb-6 border-b border-slate-100 gap-4">
           <div>
-            <span className="text-xs font-mono font-bold text-vital-terracotta uppercase tracking-wider block mb-1">
-              GUÍA INTERACTIVA DE BIOMECÁNICA OCUPACIONAL
-            </span>
+            <div className="flex items-center space-x-2 text-xs font-mono font-bold text-vital-terracotta uppercase tracking-wider mb-1">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>BIOMECÁNICA OCUPACIONAL // DEMOSTRACIONES EN VIVO</span>
+            </div>
             <h3 className="text-2xl sm:text-3xl font-extrabold text-vital-forest font-outfit">
-              Catálogo de Ejercicios Ergonómicos
+              Catálogo de Pausas Activas Guiadas
             </h3>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1">
-              Selecciona una postura y sigue las instrucciones para descomprimir la zona afectada.
+            <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-xl">
+              Cada ejercicio cuenta con su avatar biomecánico animado en bucle continuo, tiempo sugerido y advertencias ergonómicas.
             </p>
           </div>
 
-          <div className="flex items-center space-x-2 bg-emerald-50 px-4 py-2 rounded-2xl border border-emerald-200">
-            <Trophy className="w-5 h-5 text-emerald-600" />
-            <span className="text-xs font-bold text-emerald-900 font-mono">
-              {ejerciciosCompletados.length} de {EJERCICIOS_PAUSAS.length} Posturas Listas
-            </span>
+          <div className="flex flex-wrap items-center gap-3">
+            {/* BOTÓN LANZAR PAUSA ALEATORIA */}
+            <button
+              onClick={lanzarPausaAleatoria}
+              className="flex items-center space-x-2 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-vital-terracotta to-amber-600 hover:from-amber-600 hover:to-vital-terracotta text-white font-mono text-xs font-bold shadow-md shadow-vital-terracotta/20 transition-all hover:scale-[1.02]"
+              title="Selecciona una pausa al azar y abre la guía inmersiva"
+            >
+              <Shuffle className="w-4 h-4" />
+              <span>Lanzar Pausa Aleatoria al Empleado 🎲</span>
+            </button>
+
+            {/* Contador de Cumplimiento */}
+            <div className="flex items-center space-x-2 bg-emerald-50 px-3.5 py-2 rounded-2xl border border-emerald-200">
+              <Trophy className="w-4 h-4 text-emerald-600" />
+              <span className="text-xs font-bold text-emerald-900 font-mono">
+                {ejerciciosCompletados.length} de {EJERCICIOS_PAUSAS.length} Listas
+              </span>
+            </div>
           </div>
         </div>
 
-        {/* Pestañas de Selección de Ejercicio */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 my-6">
+        {/* Pestañas de Selección de los 6 Ejercicios */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 my-6">
           {EJERCICIOS_PAUSAS.map((ej, idx) => {
-            const Icon = iconosPorTipo[ej.id];
+            const Icon = iconosPorTipo[ej.id] || Activity;
             const esActivo = ejercicioActivoIdx === idx;
             const esCompletado = ejerciciosCompletados.includes(ej.id);
 
@@ -111,141 +120,140 @@ export default function ErgonomicExercises({ onPausaCompletada }: { onPausaCompl
               <button
                 key={ej.id}
                 onClick={() => setEjercicioActivoIdx(idx)}
-                className={`p-3.5 rounded-2xl text-left border transition-all flex items-start space-x-3 ${
+                className={`p-3 rounded-2xl border text-left transition-all flex flex-col justify-between relative overflow-hidden group ${
                   esActivo
-                    ? 'bg-vital-forest text-white border-vital-forest shadow-lg shadow-vital-forest/20'
-                    : esCompletado
-                    ? 'bg-emerald-50/80 border-emerald-300 text-slate-800'
-                    : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+                    ? 'bg-vital-forest text-white border-vital-forest shadow-lg shadow-vital-forest/20 scale-[1.02]'
+                    : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
                 }`}
               >
-                <div
-                  className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
-                    esActivo ? 'bg-white/20 text-white' : 'bg-white text-slate-700 shadow-sm'
-                  }`}
-                >
-                  <Icon className="w-4 h-4" />
-                </div>
-                <div className="min-w-0">
-                  <div className="text-xs font-bold truncate font-outfit">{ej.titulo}</div>
-                  <div className={`text-[10px] truncate ${esActivo ? 'text-emerald-200' : 'text-slate-400'}`}>
-                    {ej.zonaCuerpo}
+                <div className="flex items-center justify-between w-full mb-2">
+                  <div className={`p-2 rounded-xl ${esActivo ? 'bg-white/10 text-vital-terracotta' : 'bg-white text-slate-600 shadow-sm'}`}>
+                    <Icon className="w-4 h-4" />
                   </div>
+                  {esCompletado && (
+                    <CheckCircle2 className={`w-4 h-4 ${esActivo ? 'text-emerald-300' : 'text-emerald-600'}`} />
+                  )}
+                </div>
+
+                <div>
+                  <span className={`text-[10px] font-mono block ${esActivo ? 'text-emerald-300' : 'text-slate-400'}`}>
+                    {ej.duracionSegundos} seg
+                  </span>
+                  <span className={`text-xs font-bold font-outfit line-clamp-2 leading-tight ${esActivo ? 'text-white' : 'text-slate-800'}`}>
+                    {ej.titulo}
+                  </span>
                 </div>
               </button>
             );
           })}
         </div>
 
-        {/* Panel Principal del Ejercicio Seleccionado */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-slate-50/80 rounded-2xl p-6 sm:p-8 border border-slate-200/80 my-4">
-          {/* Ilustración SVG Biomecánica y Cronómetro */}
-          <div className="lg:col-span-5 flex flex-col items-center justify-center text-center">
-            <div className="w-40 h-40 sm:w-48 sm:h-48 rounded-full bg-gradient-to-tr from-emerald-100 to-amber-100 border-4 border-white shadow-xl flex flex-col items-center justify-center p-4 relative mb-4">
-              <IconoActual className="w-14 h-14 text-vital-forest mb-1 animate-pulse" />
-              <span className="text-3xl font-black text-vital-forest font-mono">
-                {segundosRestantes}s
-              </span>
-              <span className="text-[10px] text-slate-500 font-mono">
-                {estaContando ? 'En ejecución' : 'Listo para iniciar'}
-              </span>
-            </div>
-
-            <button
-              onClick={() => setEstaContando(!estaContando)}
-              className={`w-full max-w-xs py-3 px-6 rounded-xl font-mono text-xs font-bold transition-all shadow-md ${
-                estaContando
-                  ? 'bg-amber-600 text-white hover:bg-amber-700'
-                  : 'bg-vital-forest text-white hover:bg-emerald-950'
-              }`}
-            >
-              {estaContando ? 'Pausar Cronómetro' : 'Iniciar Esta Postura'}
-            </button>
-          </div>
-
-          {/* Instrucciones Detalladas y Beneficios */}
-          <div className="lg:col-span-7 space-y-4">
-            <div>
-              <span className="text-xs font-mono font-bold text-vital-forest uppercase tracking-wider">
-                ZONA: {ejercicioActual.zonaCuerpo}
-              </span>
-              <h4 className="text-2xl font-black text-slate-900 font-outfit mt-0.5">
-                {ejercicioActual.titulo}
-              </h4>
-            </div>
-
-            <div className="bg-white p-4 rounded-xl border border-slate-200 text-xs text-slate-700 space-y-2">
-              <strong className="text-vital-forest font-mono block">Pasos para realizarlo correctamente:</strong>
-              <ol className="space-y-1.5 list-decimal list-inside text-slate-600 leading-relaxed">
-                {ejercicioActual.instrucciones.map((inst, i) => (
-                  <li key={i}>{inst}</li>
-                ))}
-              </ol>
-            </div>
-
-            <div className="bg-emerald-50/80 p-3.5 rounded-xl border border-emerald-200/80 text-xs text-emerald-900">
-              <strong>Beneficio Ergonómico:</strong> {ejercicioActual.beneficioErgonomico}
-            </div>
-
-            {/* Navegación entre posturas */}
-            <div className="flex items-center justify-between pt-2">
-              <button
-                disabled={ejercicioActivoIdx === 0}
-                onClick={() => setEjercicioActivoIdx((prev) => Math.max(0, prev - 1))}
-                className="flex items-center space-x-1 text-xs font-mono text-slate-500 hover:text-slate-900 disabled:opacity-40"
-              >
-                <ChevronLeft className="w-4 h-4" />
-                <span>Anterior</span>
-              </button>
-
-              <button
-                disabled={ejercicioActivoIdx === EJERCICIOS_PAUSAS.length - 1}
-                onClick={() => setEjercicioActivoIdx((prev) => Math.min(EJERCICIOS_PAUSAS.length - 1, prev + 1))}
-                className="flex items-center space-x-1 text-xs font-mono text-vital-forest font-bold hover:text-emerald-800 disabled:opacity-40"
-              >
-                <span>Siguiente postura</span>
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Botón Final: Registrar Pausa Activa en el SG-SST */}
-        <div className="mt-8 pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="text-xs text-slate-500 font-sans">
-            Al registrar tu pausa activa, ayudas al cumplimiento de los indicadores de medicina preventiva (Ley 1355 de 2009).
-          </div>
-
-          <button
-            onClick={registrarPausaGlobal}
-            className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-vital-forest text-white font-bold font-mono text-xs shadow-lg shadow-emerald-600/30 hover:scale-[1.02] transition-all flex items-center justify-center space-x-2"
-          >
-            <CheckCircle2 className="w-4 h-4 text-emerald-300" />
-            <span>Marcar Pausa Activa Realizada</span>
-          </button>
-        </div>
-
-        {/* Tarjeta emergente de felicitación al completar */}
-        {mostrarFelicitacion && (
-          <div className="mt-6 p-4 rounded-2xl bg-emerald-100 border border-emerald-300 text-emerald-900 flex items-center justify-between animate-in fade-in duration-300">
-            <div className="flex items-center space-x-3">
-              <Sparkles className="w-6 h-6 text-emerald-600 shrink-0" />
-              <div>
-                <strong className="text-sm font-bold block">¡Excelente trabajo! Has cuidado tu salud hoy.</strong>
-                <span className="text-xs text-emerald-800">
-                  Tu participación ha quedado registrada en el indicador de bienestar SG-SST de la empresa.
+        {/* Vista Detallada del Ejercicio Activo con Muñeco Animado tipo GIF */}
+        <div className="bg-slate-50 rounded-3xl p-6 sm:p-8 border border-slate-200">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            
+            {/* Columna Izquierda: DEMOSTRACIÓN TIPO GIF DEL MUÑECO EN BUCLE */}
+            <div className="lg:col-span-5 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-mono text-slate-500 font-bold uppercase">
+                  Animación Biomecánica en Bucle:
+                </span>
+                <span className="text-xs font-mono text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full font-bold">
+                  {ejercicioActual.zonaCuerpo}
                 </span>
               </div>
+
+              {/* Renderizado del avatar animado */}
+              <MannequinAnimation
+                ejercicioId={ejercicioActual.id}
+                duracionSegundos={ejercicioActual.duracionSegundos}
+                tamano="amplio"
+              />
+
+              <div className="flex items-center justify-between text-[11px] font-mono text-slate-500 pt-1">
+                <span>⏱ Duración sugerida: {ejercicioActual.duracionSegundos}s</span>
+                <span className="text-emerald-700 font-semibold">Respiración 4-4-4</span>
+              </div>
             </div>
-            <button
-              onClick={() => setMostrarFelicitacion(false)}
-              className="text-xs font-mono font-bold text-emerald-800 hover:text-emerald-950 px-3 py-1 rounded bg-white/60"
-            >
-              Cerrar
-            </button>
+
+            {/* Columna Derecha: Título, Instrucciones y Botón Guiado */}
+            <div className="lg:col-span-7 space-y-5">
+              <div>
+                <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-300 text-xs font-mono mb-2 font-bold">
+                  <IconoActual className="w-3.5 h-3.5 text-amber-700" />
+                  <span>EJERCICIO SELECCIONADO</span>
+                </div>
+                <h4 className="text-2xl sm:text-3xl font-black text-vital-forest font-outfit">
+                  {ejercicioActual.titulo}
+                </h4>
+                <p className="text-xs sm:text-sm text-slate-600 mt-1">
+                  Zona enfocada: <strong className="text-vital-forest">{ejercicioActual.zonaCuerpo}</strong>
+                </p>
+              </div>
+
+              {/* Pasos de ejecución */}
+              <div className="space-y-2.5">
+                <h5 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-500">
+                  Instrucciones de postura correcta:
+                </h5>
+                <div className="space-y-2">
+                  {ejercicioActual.instrucciones.map((instruccion, i) => (
+                    <div
+                      key={i}
+                      className="p-3 rounded-2xl bg-white border border-slate-200 text-xs sm:text-sm text-slate-700 flex items-start space-x-3 shadow-xs"
+                    >
+                      <span className="w-5 h-5 rounded-full bg-vital-forest text-white flex items-center justify-center text-[10px] font-mono font-bold shrink-0 mt-0.5">
+                        {i + 1}
+                      </span>
+                      <span>{instruccion}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Beneficio ergonómico y botón de acción */}
+              <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-200 text-xs text-emerald-900 flex items-start space-x-2.5">
+                <HeartHandshake className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" />
+                <div>
+                  <strong className="font-bold">Efecto Biomecánico: </strong>
+                  <span>{ejercicioActual.beneficioErgonomico}</span>
+                </div>
+              </div>
+
+              {/* Botón para iniciar la sesión guiada con cronómetro */}
+              <div className="flex flex-wrap items-center gap-3 pt-2">
+                <button
+                  onClick={abrirModalEjercicioActual}
+                  className="flex-1 py-3 px-5 rounded-2xl bg-vital-forest hover:bg-slate-900 text-white font-mono text-xs sm:text-sm font-bold shadow-lg shadow-vital-forest/20 transition-all flex items-center justify-center space-x-2 group"
+                >
+                  <Play className="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform" />
+                  <span>INICIAR ESTA PAUSA GUIADA CON CRONÓMETRO</span>
+                </button>
+
+                <button
+                  onClick={() => marcarEjercicioComoCompletado(ejercicioActual)}
+                  className="py-3 px-4 rounded-2xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 font-mono text-xs font-semibold transition-colors flex items-center space-x-1.5"
+                  title="Marcar como realizado directamente"
+                >
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                  <span>Marcar hecho</span>
+                </button>
+              </div>
+
+            </div>
           </div>
-        )}
+        </div>
+
       </div>
+
+      {/* Modal Inmersivo con Cuenta Regresiva y Animación */}
+      <ActiveBreakModal
+        estaAbierto={modalAbierto}
+        ejercicioInicial={ejercicioParaModal}
+        catalogoEjercicios={EJERCICIOS_PAUSAS}
+        onCerrar={() => setModalAbierto(false)}
+        onCompletarPausa={marcarEjercicioComoCompletado}
+      />
     </section>
   );
 }
