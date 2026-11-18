@@ -49,7 +49,7 @@ export default function PausasNavbar() {
 
             {/* Enlace a Proyecto 1: Portal Empresa */}
             <a
-              href="http://localhost:3010"
+              href="http://localhost:3020"
               target="_blank"
               rel="noreferrer"
               className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-slate-900 text-cyan-300 border border-slate-800 hover:bg-slate-800 transition-all text-xs font-mono"
@@ -62,7 +62,7 @@ export default function PausasNavbar() {
 
             {/* Enlace a Proyecto 3: Consola Admin */}
             <a
-              href="http://localhost:3012"
+              href="http://localhost:3022"
               target="_blank"
               rel="noreferrer"
               className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all text-xs font-mono"

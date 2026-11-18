@@ -11,9 +11,9 @@ El proyecto está estructurado como un monorepo con **npm workspaces**, donde ca
 ```
 proyectoSST/
 ├── apps/
-│   ├── portal-empresa/       # [Puerto 3010] Portal Público Institucional (Dirección 3: Blueprint Isométrico)
-│   ├── pausas-vitales/       # [Puerto 3015] Aplicativo de Pausas Activas y Ergonomía (Dirección 2: Ergonomía Vital)
-│   └── admin-sgsst/          # [Puerto 3012] Consola del Administrador y Dashboard (Dirección 1: Demarcación Andon)
+│   ├── portal-empresa/       # [Puerto 3020] Portal Público Institucional (Dirección 3: Blueprint Isométrico)
+│   ├── pausas-vitales/       # [Puerto 3021] Aplicativo de Pausas Activas y Ergonomía (Dirección 2: Ergonomía Vital)
+│   └── admin-sgsst/          # [Puerto 3022] Consola del Administrador y Dashboard (Dirección 1: Demarcación Andon)
 ├── docs/
 │   ├── adr/                  # Decisiones de arquitectura de software (Stack, Modelo de datos)
 │   ├── diseno/               # Direcciones creativas, tokens CSS y especificación de movimiento
@@ -29,9 +29,9 @@ proyectoSST/
 
 | Aplicativo | Puerto | Enfoque & Rol | Dirección Visual & Estética | Momento Animado Memorable |
 | :--- | :---: | :--- | :--- | :--- |
-| **`portal-empresa`** | `3010` | **Público / Institucional**<br>Visitantes, clientes, colaboradores y comunidad | **Dirección 3: Blueprint Cartográfico Isométrico**<br>Azul técnico y cian cianuro (`#00E5FF`, `#002244`). Tono de plano de ingeniería, cuadrícula milimétrica, rigor topográfico. | **Plano Arquitectónico Isométrico Interactivo**: conmutación fluida entre capas de rutas de evacuación, puntos de pausa activa y extintores con tarjetas de inspección. |
-| **`pausas-vitales`** | `3015` | **Trabajadores / Campo y Oficina**<br>Operarios y administrativos durante su jornada | **Dirección 2: Ergonomía Vital / El Pulso Humano**<br>Verde clínico-respiratorio (`#0D7377`), terracota cinético (`#F48C42`) y azul medianoche (`#14213D`). | **Orbe Biomecánico de Respiración Cuadrada (4-4-4)**: expansión y contracción orgánica para reducir cortisol, temporizador circular y campana acústica armónica (Web Audio API). |
-| **`admin-sgsst`** | `3012` | **Líder SST / Administrador / Auditor**<br>Gerencia, Responsable de SST, ARL y MinTrabajo | **Dirección 1: Demarcación Industrial / Tablero Andon**<br>Amarillo preventivo tráfico (`#F59E0B`), gris asfalto (`#111827`) y bandas de seguridad en franjas diagonales. | **Marcador Andon de Telemetría**: semáforo interactivo ponderado de Estándares Mínimos (Res. 0312/2019) y reporte ágil de incidentes en campo (&lt; 60 seg, offline-first). |
+| **`portal-empresa`** | `3020` | **Público / Institucional**<br>Visitantes, clientes, colaboradores y comunidad | **Dirección 3: Blueprint Cartográfico Isométrico**<br>Azul técnico y cian cianuro (`#00E5FF`, `#002244`). Tono de plano de ingeniería, cuadrícula milimétrica, rigor topográfico. | **Plano Arquitectónico Isométrico Interactivo**: conmutación fluida entre capas de rutas de evacuación, puntos de pausa activa y extintores con tarjetas de inspección. |
+| **`pausas-vitales`** | `3021` | **Trabajadores / Campo y Oficina**<br>Operarios y administrativos durante su jornada | **Dirección 2: Ergonomía Vital / El Pulso Humano**<br>Verde clínico-respiratorio (`#0D7377`), terracota cinético (`#F48C42`) y azul medianoche (`#14213D`). | **Orbe Biomecánico de Respiración Cuadrada (4-4-4)**: expansión y contracción orgánica para reducir cortisol, temporizador circular y campana acústica armónica (Web Audio API). |
+| **`admin-sgsst`** | `3022` | **Líder SST / Administrador / Auditor**<br>Gerencia, Responsable de SST, ARL y MinTrabajo | **Dirección 1: Demarcación Industrial / Tablero Andon**<br>Amarillo preventivo tráfico (`#F59E0B`), gris asfalto (`#111827`) y bandas de seguridad en franjas diagonales. | **Marcador Andon de Telemetría**: semáforo interactivo ponderado de Estándares Mínimos (Res. 0312/2019) y reporte ágil de incidentes en campo (&lt; 60 seg, offline-first). |
 
 ---
 
@@ -72,22 +72,22 @@ npm install
 Puedes ejecutar cada aplicativo de manera individual según tu necesidad:
 
 ```bash
-# 1. Portal Público Corporativo (Puerto 3010)
+# 1. Portal Público Corporativo (Puerto 3020)
 npm run dev:portal
 
-# 2. Aplicativo de Pausas Activas y Ergonomía (Puerto 3015)
+# 2. Aplicativo de Pausas Activas y Ergonomía (Puerto 3021)
 npm run dev:pausas
 
-# 3. Consola Administrativa y Dashboard Andon (Puerto 3012)
+# 3. Consola Administrativa y Dashboard Andon (Puerto 3022)
 npm run dev:admin
 ```
 
 O iniciar sus versiones compiladas de producción:
 ```bash
 # Iniciar los servidores en paralelo
-npm run start:portal   # http://localhost:3010
-npm run start:pausas   # http://localhost:3015
-npm run start:admin    # http://localhost:3012
+npm run start:portal   # http://localhost:3020
+npm run start:pausas   # http://localhost:3021
+npm run start:admin    # http://localhost:3022
 ```
 
 ### 3. Compilación de Producción de Toda la Suite

@@ -8,9 +8,9 @@ Documento vivo para registrar el avance, decisiones de arquitectura y diseño, s
 * **Fase Actual:** FASE 6 — Cierre y Verificación de Entrega (`sst-verificacion-entrega`)
 * **Fecha de actualización:** 2026-11-18
 * **Arquitectura de Solución:** Suite monorepo con 3 aplicativos web independientes, cada uno en su propio puerto y con su propia identidad visual:
-  1. `apps/portal-empresa` (Puerto 3010) — Dirección 3: Blueprint Cartográfico Isométrico (Público).
-  2. `apps/pausas-vitales` (Puerto 3015) — Dirección 2: Ergonomía Vital / El Pulso Humano (Trabajadores).
-  3. `apps/admin-sgsst` (Puerto 3012) — Dirección 1: Demarcación Industrial / Tablero Andon (Líder SST / Admin).
+  1. `apps/portal-empresa` (Puerto 3020) — Dirección 3: Blueprint Cartográfico Isométrico (Público).
+  2. `apps/pausas-vitales` (Puerto 3021) — Dirección 2: Ergonomía Vital / El Pulso Humano (Trabajadores).
+  3. `apps/admin-sgsst` (Puerto 3022) — Dirección 1: Demarcación Industrial / Tablero Andon (Líder SST / Admin).
 
 ---
 
@@ -26,13 +26,13 @@ Documento vivo para registrar el avance, decisiones de arquitectura y diseño, s
 ### Fase 5 — Construcción por Incrementos (Completada)
 - [x] **Reorganización a 3 Aplicativos Independientes (Monorepo Workspace):**
   - Se configuró la raíz como orquestador de paquetes `npm workspaces` (`apps/*`).
-  - **Aplicativo 1 (`apps/portal-empresa` - Puerto 3010):**
+  - **Aplicativo 1 (`apps/portal-empresa` - Puerto 3020):**
     - Dirección 3: Blueprint Isométrico en cian cianuro y azul técnico (#00E5FF / #002244).
     - Plano arquitectónico interactivo SVG isométrico en capas (Rutas de evacuación, Estaciones de pausa activa, Equipos de emergencia/extintores) con selector interactivo y popups técnicos.
     - Política de SST firmada digitalmente con hash SHA-256 (`e3b0c442...`) y fecha de actualización.
     - Estructura organizacional interactiva: COPASST (Resolución 2013/1986), Comité de Convivencia Laboral (Ley 1010/2006) y Brigada de Emergencias.
     - Compilación estática Next.js 14 verificada (Code 0).
-  - **Aplicativo 2 (`apps/pausas-vitales` - Puerto 3015):**
+  - **Aplicativo 2 (`apps/pausas-vitales` - Puerto 3021):**
     - Dirección 2: Ergonomía Vital / El Pulso Humano (#0D7377, #F48C42, #14213D).
     - Orbe biomecánico animado con ciclo de respiración cuadrada 4-4-4 (Inhalar, Sostener, Exhalar).
     - Temporizador circular de cuenta regresiva (5 a 15 min de pausa recomendada por Ley 1355/2009).
@@ -40,7 +40,7 @@ Documento vivo para registrar el avance, decisiones de arquitectura y diseño, s
     - Catálogo interactivo de ejercicios posturales (cuello, túnel carpiano, espalda lumbar, fatiga ocular).
     - Registro de cumplimiento diario de pausas con telemetría de pausas activas.
     - Compilación estática Next.js 14 verificada (Code 0).
-  - **Aplicativo 3 (`apps/admin-sgsst` - Puerto 3012):**
+  - **Aplicativo 3 (`apps/admin-sgsst` - Puerto 3022):**
     - Dirección 1: Demarcación Industrial / Tablero Andon (#F59E0B, #10B981, #EF4444, #111827).
     - Telemetría en tiempo real: Marcador de días sin accidentes (342 días), Índices de Frecuencia (IF) y Severidad (IS) calculados según NTC 3701.
     - Autoevaluación interactiva de Estándares Mínimos (Resolución 0312 de 2019) con semáforo dinámico ponderado (Planear 25%, Hacer 60%, Verificar 5%, Actuar 10%).

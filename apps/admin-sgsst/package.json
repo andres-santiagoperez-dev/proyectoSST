@@ -4,9 +4,9 @@
   "private": true,
   "description": "Consola del Administrador y Dashboard SG-SST (Dirección 1: Demarcación Industrial / Tablero Andon)",
   "scripts": {
-    "dev": "next dev -p 3012",
+    "dev": "next dev -p 3022",
     "build": "next build",
-    "start": "next start -p 3012",
+    "start": "next start -p 3022",
     "lint": "next lint"
   },
   "dependencies": {

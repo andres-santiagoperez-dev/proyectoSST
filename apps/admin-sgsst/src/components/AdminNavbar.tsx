@@ -75,7 +75,7 @@ export default function AdminNavbar() {
           {/* Enlaces directos a los 2 aplicativos hermanos */}
           <div className="flex items-center space-x-3">
             <a
-              href="http://localhost:3010"
+              href="http://localhost:3020"
               target="_blank"
               rel="noreferrer"
               className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-800 text-cyan-300 border border-slate-700 hover:bg-slate-700 transition-all text-xs font-mono"
@@ -87,7 +87,7 @@ export default function AdminNavbar() {
             </a>
 
             <a
-              href="http://localhost:3015"
+              href="http://localhost:3021"
               target="_blank"
               rel="noreferrer"
               className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-700 hover:bg-emerald-900 transition-all text-xs font-mono"

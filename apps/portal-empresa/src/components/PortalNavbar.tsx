@@ -59,7 +59,7 @@ export default function PortalNavbar() {
 
             {/* Acceso directo a Aplicativo 2: Pausas Vitales */}
             <a
-              href="http://localhost:3015"
+              href="http://localhost:3021"
               target="_blank"
               rel="noreferrer"
               className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-900/80 transition-all text-xs font-mono"
@@ -72,7 +72,7 @@ export default function PortalNavbar() {
 
             {/* Acceso directo a Aplicativo 3: Consola Admin */}
             <a
-              href="http://localhost:3012"
+              href="http://localhost:3022"
               target="_blank"
               rel="noreferrer"
               className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-amber-950/80 text-amber-300 border border-amber-500/40 hover:bg-amber-900/80 transition-all text-xs font-mono"

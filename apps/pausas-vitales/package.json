@@ -4,9 +4,9 @@
   "private": true,
   "description": "Aplicativo de Ergonomía y Pausas Activas (Dirección 2: Ergonomía Vital / El Pulso Humano)",
   "scripts": {
-    "dev": "next dev -p 3015",
+    "dev": "next dev -p 3021",
     "build": "next build",
-    "start": "next start -p 3015",
+    "start": "next start -p 3021",
     "lint": "next lint"
   },
   "dependencies": {
