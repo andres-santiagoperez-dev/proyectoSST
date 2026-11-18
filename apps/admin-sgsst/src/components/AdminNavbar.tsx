@@ -87,7 +87,7 @@ export default function AdminNavbar() {
             </a>
 
             <a
-              href="http://localhost:3011"
+              href="http://localhost:3015"
               target="_blank"
               rel="noreferrer"
               className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-emerald-950 text-emerald-300 border border-emerald-700 hover:bg-emerald-900 transition-all text-xs font-mono"

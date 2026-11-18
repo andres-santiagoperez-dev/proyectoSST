@@ -9,7 +9,7 @@ Documento vivo para registrar el avance, decisiones de arquitectura y diseño, s
 * **Fecha de actualización:** 2026-11-18
 * **Arquitectura de Solución:** Suite monorepo con 3 aplicativos web independientes, cada uno en su propio puerto y con su propia identidad visual:
   1. `apps/portal-empresa` (Puerto 3010) — Dirección 3: Blueprint Cartográfico Isométrico (Público).
-  2. `apps/pausas-vitales` (Puerto 3011) — Dirección 2: Ergonomía Vital / El Pulso Humano (Trabajadores).
+  2. `apps/pausas-vitales` (Puerto 3015) — Dirección 2: Ergonomía Vital / El Pulso Humano (Trabajadores).
   3. `apps/admin-sgsst` (Puerto 3012) — Dirección 1: Demarcación Industrial / Tablero Andon (Líder SST / Admin).
 
 ---
@@ -32,7 +32,7 @@ Documento vivo para registrar el avance, decisiones de arquitectura y diseño, s
     - Política de SST firmada digitalmente con hash SHA-256 (`e3b0c442...`) y fecha de actualización.
     - Estructura organizacional interactiva: COPASST (Resolución 2013/1986), Comité de Convivencia Laboral (Ley 1010/2006) y Brigada de Emergencias.
     - Compilación estática Next.js 14 verificada (Code 0).
-  - **Aplicativo 2 (`apps/pausas-vitales` - Puerto 3011):**
+  - **Aplicativo 2 (`apps/pausas-vitales` - Puerto 3015):**
     - Dirección 2: Ergonomía Vital / El Pulso Humano (#0D7377, #F48C42, #14213D).
     - Orbe biomecánico animado con ciclo de respiración cuadrada 4-4-4 (Inhalar, Sostener, Exhalar).
     - Temporizador circular de cuenta regresiva (5 a 15 min de pausa recomendada por Ley 1355/2009).
