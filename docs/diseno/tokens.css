@@ -1,0 +1,171 @@
+/**
+ * SISTEMA DE DESIGN TOKENS — SafePulse SST
+ * Estructura de tokens CSS para arquitectura multitema tripartita:
+ * 1. Global / Seguridad ISO 7010
+ * 2. .theme-blueprint (Portal Público)
+ * 3. .theme-vital (Módulo Pausas Activas)
+ * 4. .theme-industrial (Portal Administrador)
+ */
+
+:root {
+  /* ==========================================================================
+     1. SEÑALES DE SEGURIDAD (ISO 7010 / NTC 1461)
+     Inmutables y universales en todos los temas. Solo comunican significado.
+     ========================================================================== */
+  --senal-rojo-peligro:      #DC2626; /* Prohibición, parada de emergencia, crítico */
+  --senal-rojo-fondo:        #FEF2F2;
+  --senal-amarillo-aviso:    #F59E0B; /* Advertencia, riesgo latente, vencimiento próximo */
+  --senal-amarillo-fondo:    #FFFBEB;
+  --senal-azul-obligacion:   #2563EB; /* Obligación de EPP, instrucción mandatoria */
+  --senal-azul-fondo:        #EFF6FF;
+  --senal-verde-seguridad:   #16A34A; /* Evacuación, puesto de primeros auxilios, conforme */
+  --senal-verde-fondo:       #F0FDF4;
+
+  /* ==========================================================================
+     2. ESCALA TIPOGRÁFICA Y ESPACIADO BASE (4px)
+     ========================================================================== */
+  --esp-1:  0.25rem; /* 4px */
+  --esp-2:  0.50rem; /* 8px */
+  --esp-3:  0.75rem; /* 12px */
+  --esp-4:  1.00rem; /* 16px */
+  --esp-5:  1.25rem; /* 20px */
+  --esp-6:  1.50rem; /* 24px */
+  --esp-8:  2.00rem; /* 32px */
+  --esp-10: 2.50rem; /* 40px */
+  --esp-12: 3.00rem; /* 48px */
+  --esp-16: 4.00rem; /* 64px */
+
+  --texto-xs:   0.75rem;  /* 12px */
+  --texto-sm:   0.875rem; /* 14px */
+  --texto-base: 1.00rem;  /* 16px */
+  --texto-lg:   1.125rem; /* 18px */
+  --texto-xl:   1.25rem;  /* 20px */
+  --texto-2xl:  1.50rem;  /* 24px */
+  --texto-3xl:  1.875rem; /* 30px */
+  --texto-4xl:  2.25rem;  /* 36px */
+  --texto-5xl:  3.00rem;  /* 48px */
+
+  /* Longitud de línea ergonómica para lectura */
+  --medida-linea-max: 68ch;
+
+  /* Objetivos táctiles accesibles (WCAG 2.2 AA) */
+  --touch-min:   44px; /* Estándar interactivo móvil */
+  --touch-campo: 56px; /* Operación en planta con guantes */
+
+  /* ==========================================================================
+     3. CONSTANTES DE MOVIMIENTO Y TRANSICIÓN (sst-motion-design)
+     ========================================================================== */
+  --mov-micro:      140ms;
+  --mov-estado:     260ms;
+  --mov-transicion: 400ms;
+  --mov-hero:       750ms;
+
+  --ease-in-out:    cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out-suave: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-resorte:   cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ==========================================================================
+   TEMA 1: .theme-blueprint — PORTAL PÚBLICO EMPRESARIAL (Dirección 3)
+   Estética de ingeniería, plano isométrico, zonificación y transparencia.
+   ========================================================================== */
+.theme-blueprint,
+[data-theme="blueprint"] {
+  --color-fondo:            #0B132B; /* Azul noche técnico profundo */
+  --color-superficie:       #111C38; /* Tarjeta blueprint */
+  --color-superficie-borde: rgba(56, 189, 248, 0.2);
+  --color-reticula:         rgba(56, 189, 248, 0.07);
+
+  --color-texto-titular:    #F8FAFC;
+  --color-texto-cuerpo:     #94A3B8;
+  --color-texto-atenuado:   #64748B;
+
+  --color-marca-primario:   #38BDF8; /* Cian técnico blueprint */
+  --color-marca-hover:      #0EA5E9;
+  --color-marca-acento:     #818CF8;
+
+  --fuente-display:         'Space Grotesk', system-ui, sans-serif;
+  --fuente-cuerpo:          'Space Grotesk', system-ui, sans-serif;
+  --fuente-codigo:          'Space Mono', monospace;
+
+  --radio-control:          4px;  /* Esquinas técnicas sobrias */
+  --radio-superficie:       8px;
+  --radio-tag:              2px;
+}
+
+/* ==========================================================================
+   TEMA 2: .theme-vital — MÓDULO PAUSAS ACTIVAS "PAUSA VITAL" (Dirección 2)
+   Estética orgánica, calidez humana, respiración y ergonomía activa.
+   ========================================================================== */
+.theme-vital,
+[data-theme="vital"] {
+  --color-fondo:            #FBFBF9; /* Lino suave */
+  --color-superficie:       #FFFFFF; /* Blanco puro */
+  --color-superficie-borde: #E2E8F0;
+  --color-reticula:         transparent;
+
+  --color-texto-titular:    #14382A; /* Verde bosque profundo */
+  --color-texto-cuerpo:     #334155;
+  --color-texto-atenuado:   #64748B;
+
+  --color-marca-primario:   #14382A; /* Bosque vital */
+  --color-marca-hover:      #1F4D3B;
+  --color-marca-acento:     #D96236; /* Terracota cálido (energía y pulso) */
+
+  --color-orbe-gradiente-1: #14382A;
+  --color-orbe-gradiente-2: #2E654F;
+  --color-orbe-pulso:       rgba(217, 98, 54, 0.35);
+
+  --fuente-display:         'Outfit', system-ui, sans-serif;
+  --fuente-cuerpo:          'Plus Jakarta Sans', system-ui, sans-serif;
+  --fuente-codigo:          'Space Mono', monospace;
+
+  --radio-control:          12px; /* Esquinas amables orgánicas */
+  --radio-superficie:       20px;
+  --radio-tag:              9999px; /* Badges redondeados */
+}
+
+/* ==========================================================================
+   TEMA 3: .theme-industrial — PORTAL ADMINISTRADOR Y DASHBOARD (Dirección 1)
+   Estética editorial-industrial, concreto, demarcación y tablero Andon.
+   ========================================================================== */
+.theme-industrial,
+[data-theme="industrial"] {
+  --color-fondo:            #F4F3EF; /* Concreto arquitectónico claro */
+  --color-superficie:       #FFFFFF;
+  --color-superficie-borde: #CBD5E1;
+  --color-reticula:         rgba(0, 0, 0, 0.03);
+
+  --color-texto-titular:    #111827; /* Carbón profundo */
+  --color-texto-cuerpo:     #374151;
+  --color-texto-atenuado:   #6B7280;
+
+  --color-marca-primario:   #1E232A; /* Asfalto oscuro */
+  --color-marca-hover:      #333A44;
+  --color-marca-acento:     #D97706; /* Ámbar industrial de señalización */
+
+  --color-demarcacion-amarillo: #FBBF24;
+  --color-demarcacion-negro:    #1F2937;
+
+  --fuente-display:         'Space Grotesk', system-ui, sans-serif;
+  --fuente-cuerpo:          'Plus Jakarta Sans', system-ui, sans-serif;
+  --fuente-codigo:          'JetBrains Mono', monospace;
+
+  --radio-control:          6px;  /* Esquinas industriales precisas */
+  --radio-superficie:       10px;
+  --radio-tag:              4px;
+}
+
+/* ==========================================================================
+   ACCESIBILIDAD: PREFERS-REDUCED-MOTION
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
