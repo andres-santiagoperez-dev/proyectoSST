@@ -2,26 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 :root {
-  --color-fondo: #0E1B2F; /* Azul Marino Oscuro unificado */
-  --color-reticula: rgba(20, 184, 166, 0.12); /* Turquesa unificado */
+  /* Fondo general: Azul Grisáceo Claro para reducir fatiga visual */
+  --color-fondo: #F8FAFC;
+  /* Textos de alta jerarquía: Azul Marino Oscuro */
+  --color-texto: #0E1B2F;
+  /* Bordes y líneas divisorias: Gris Azulado */
+  --color-borde: #64748B;
 }
 
 html, body {
-  background-color: var(--color-fondo);
-  color: #F8FAFC;
+  background-color: #F8FAFC;
+  color: #0E1B2F;
   font-family: 'Space Grotesk', system-ui, sans-serif;
   min-height: 100vh;
-  background-image: 
-    linear-gradient(to right, var(--color-reticula) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--color-reticula) 1px, transparent 1px);
-  background-size: 24px 24px;
   -webkit-font-smoothing: antialiased;
 }
 
 :focus-visible {
-  outline: 2px solid #14B8A6;
+  outline: 2px solid #1A56DB;
   outline-offset: 2px;
 }
