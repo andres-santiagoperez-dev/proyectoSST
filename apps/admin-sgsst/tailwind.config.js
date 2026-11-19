@@ -8,23 +8,42 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        industrial: {
-          concrete: "#F4F3EF",
-          charcoal: "#1A1D20",
-          amber: "#D97706",
-          dark: "#111827",
-          border: "#CBD5E1",
+        brand: {
+          navy: "#0E1B2F",
+          blue: "#1A56DB",
+          tealDark: "#0B7A87",
+        },
+        accent: {
+          turquoise: "#14B8A6",
+          turquoiseLight: "#2DD4BF",
+        },
+        vital: {
+          emerald: "#10B981",
+          mint: "#34D399",
+          forest: "#047857",
+        },
+        status: {
+          active: "#2563EB",
+          break: "#10B981",
+          upcoming: "#06B6D4",
+          missed: "#1E293B",
+        },
+        surface: {
+          white: "#FFFFFF",
+          bg: "#F8FAFC",
+          border: "#64748B",
         },
         senal: {
           peligro: "#DC2626",
           advertencia: "#F59E0B",
-          obligacion: "#2563EB",
-          seguridad: "#16A34A",
+          obligacion: "#1A56DB",
+          seguridad: "#10B981",
         },
       },
       fontFamily: {
         space: ["'Space Grotesk'", "sans-serif"],
         jakarta: ["'Plus Jakarta Sans'", "sans-serif"],
+        outfit: ["'Outfit'", "sans-serif"],
         mono: ["'JetBrains Mono'", "'Space Mono'", "monospace"],
       },
     },

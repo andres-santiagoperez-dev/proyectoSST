@@ -1,113 +1,54 @@
 'use client';
 
 import React, { useState } from 'react';
-import AndonDashboard from '@/components/AndonDashboard';
-import Estandares0312Manager from '@/components/Estandares0312Manager';
-import IncidentesManager from '@/components/IncidentesManager';
-import AptitudMedicaManager from '@/components/AptitudMedicaManager';
-import PlanesAccionManager from '@/components/PlanesAccionManager';
-import AuditLogViewer from '@/components/AuditLogViewer';
-import { 
-  FileCheck2, 
-  AlertTriangle, 
-  HeartPulse, 
-  Target, 
-  History, 
-  HardHat 
-} from 'lucide-react';
+import AdminSidebar, { TabAdmin } from '@/components/AdminSidebar';
+import AdminHeader from '@/components/AdminHeader';
+import ControlBienestarDashboard from '@/components/ControlBienestarDashboard';
+import EmpleadosView from '@/components/EmpleadosView';
+import AlertasConfigView from '@/components/AlertasConfigView';
+import BibliotecaView from '@/components/BibliotecaView';
+import ReportesHistorialView from '@/components/ReportesHistorialView';
 
 export default function AdminPage() {
-  const [pestanaActiva, setPestanaActiva] = useState<'0312' | 'INCIDENTES' | 'SALUD' | 'PLANES' | 'AUDITORIA'>('0312');
-  const [puntaje0312, setPuntaje0312] = useState<number>(89.2);
+  const [tabActiva, setTabActiva] = useState<TabAdmin>('DASHBOARD');
+
+  const titulosPorTab: Record<TabAdmin, string> = {
+    DASHBOARD: 'Control de Bienestar',
+    EMPLEADOS: 'Directorio de Empleados y Puestos',
+    ALERTAS: 'Configuración de Alertas en Red',
+    BIBLIOTECA: 'Biblioteca de Ejercicios',
+    REPORTES: 'Reportes, Estándares 0312 y Auditoría',
+  };
 
   return (
-    <div className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-8">
-      {/* Tablero Andon Central Superior */}
-      <AndonDashboard porcentaje0312={puntaje0312} />
+    <div className="min-h-screen flex bg-surface-bg text-brand-navy font-sans antialiased">
+      {/* 1. SIDEBAR IZQUIERDO (Azul Marino Oscuro #0E1B2F) */}
+      <AdminSidebar
+        tabActiva={tabActiva}
+        onCambiarTab={(tab) => setTabActiva(tab)}
+      />
 
-      {/* Menú de Módulos Administrativos */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-slate-300 pb-3 font-mono text-xs">
-        <button
-          onClick={() => setPestanaActiva('0312')}
-          className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl transition-all font-bold ${
-            pestanaActiva === '0312'
-              ? 'bg-slate-900 text-white shadow-md'
-              : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
-          }`}
-        >
-          <FileCheck2 className="w-4 h-4 text-cyan-400" />
-          <span>Autoevaluación Res. 0312</span>
-        </button>
+      {/* 2. ÁREA PRINCIPAL DERECHA */}
+      <div className="flex-1 flex flex-col min-w-0">
+        
+        {/* Encabezado Superior con Título Dinámico y Perfil */}
+        <AdminHeader titulo={titulosPorTab[tabActiva]} />
 
-        <button
-          onClick={() => setPestanaActiva('INCIDENTES')}
-          className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl transition-all font-bold ${
-            pestanaActiva === 'INCIDENTES'
-              ? 'bg-slate-900 text-white shadow-md'
-              : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
-          }`}
-        >
-          <AlertTriangle className="w-4 h-4 text-amber-500" />
-          <span>Gestión de Incidentes (&lt; 60s)</span>
-        </button>
+        {/* Contenido Principal */}
+        <main className="flex-1 p-6 sm:p-8 max-w-7xl w-full mx-auto">
+          {tabActiva === 'DASHBOARD' && <ControlBienestarDashboard />}
+          {tabActiva === 'EMPLEADOS' && <EmpleadosView />}
+          {tabActiva === 'ALERTAS' && <AlertasConfigView />}
+          {tabActiva === 'BIBLIOTECA' && <BibliotecaView />}
+          {tabActiva === 'REPORTES' && <ReportesHistorialView />}
+        </main>
 
-        <button
-          onClick={() => setPestanaActiva('SALUD')}
-          className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl transition-all font-bold ${
-            pestanaActiva === 'SALUD'
-              ? 'bg-slate-900 text-white shadow-md'
-              : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
-          }`}
-        >
-          <HeartPulse className="w-4 h-4 text-emerald-500" />
-          <span>Aptitud Médica (Res. 1843/2025)</span>
-        </button>
-
-        <button
-          onClick={() => setPestanaActiva('PLANES')}
-          className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl transition-all font-bold ${
-            pestanaActiva === 'PLANES'
-              ? 'bg-slate-900 text-white shadow-md'
-              : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
-          }`}
-        >
-          <Target className="w-4 h-4 text-blue-500" />
-          <span>Planes de Acción</span>
-        </button>
-
-        <button
-          onClick={() => setPestanaActiva('AUDITORIA')}
-          className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl transition-all font-bold ${
-            pestanaActiva === 'AUDITORIA'
-              ? 'bg-slate-900 text-white shadow-md'
-              : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
-          }`}
-        >
-          <History className="w-4 h-4 text-purple-500" />
-          <span>Bitácora de Auditoría</span>
-        </button>
+        {/* Footer Discreto */}
+        <footer className="py-4 px-8 border-t border-slate-200/80 text-xs font-mono text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2 bg-white/50">
+          <span>PausaActiva / SafePulse SST • Sistema de Monitoreo de PCs y Estándares de Bienestar</span>
+          <span>Resolución 0312/2019 • Resolución 1843/2025 • Ley 1355/2009</span>
+        </footer>
       </div>
-
-      {/* Renderizado del Módulo Seleccionado */}
-      {pestanaActiva === '0312' && (
-        <Estandares0312Manager onCambioPuntaje={(p) => setPuntaje0312(p)} />
-      )}
-
-      {pestanaActiva === 'INCIDENTES' && (
-        <IncidentesManager />
-      )}
-
-      {pestanaActiva === 'SALUD' && (
-        <AptitudMedicaManager />
-      )}
-
-      {pestanaActiva === 'PLANES' && (
-        <PlanesAccionManager />
-      )}
-
-      {pestanaActiva === 'AUDITORIA' && (
-        <AuditLogViewer />
-      )}
     </div>
   );
 }

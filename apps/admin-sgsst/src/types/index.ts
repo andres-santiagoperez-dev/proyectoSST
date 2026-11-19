@@ -16,10 +16,12 @@ export interface Usuario {
 }
 
 export type TipoEjercicioPausa = 
+  | 'HOMBROS_ROTACION'
   | 'VISUAL_20_20' 
   | 'CUELLO_TRAPECIO' 
   | 'TUNEL_CARPIANO' 
-  | 'LUMBAR_POSTURAL';
+  | 'LUMBAR_POSTURAL'
+  | 'PIERNAS_CIRCULACION';
 
 export interface EjercicioPausaInfo {
   id: TipoEjercicioPausa;

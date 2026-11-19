@@ -1,93 +1,99 @@
-# Dirección Visual y Sistema de Identidad — SafePulse SST
+# Dirección Visual y Sistema de Identidad — PausaActiva / SafePulse SST
 
-**Versión:** 1.0  
+**Versión:** 2.0 (Sistema de Color Unificado y Portal Administrativo de Bienestar)  
 **Fecha:** 2026-11-18  
-**Aprobación de Diseño:** Usuario / Product Owner (Punto de Control C)  
-**Concepto Rector:** *Sistema Tripartito con Propósito*: cada área del sistema adopta la identidad visual que mejor sirve a su función psicológica y operativa.
+**Aprobación:** Product Owner / Usuario  
+**Concepto Rector:** *Identidad Visual Cohesiva (Verde, Azul y Agua Marina)*. Los 3 proyectos comparten la misma paleta corporativa y cromática, manteniendo su propósito operativo especializado.
 
 ---
 
-## 1. El Sistema Visual Tripartito
+## 1. Paleta de Colores Unificada de la Suite
 
-El proyecto adopta una estructura visual armónica y diferenciada en tres niveles:
+```
+1. Identidad y Navegación (Primarios):
+   ├── Azul Marino Oscuro (#0E1B2F): Sidebar de navegación y textos de alta jerarquía.
+   ├── Azul Corporativo   (#1A56DB): Botones y acción principal, enlaces destacados.
+   └── Agua Marina Oscuro (#0B7A87): Botones secundarios, pausas de emergencia y avisos armónicos.
 
-```mermaid
-flowchart TD
-    subgraph PUBLICO ["1. ÁMBITO PÚBLICO (Cualquier Visitante o Trabajador)"]
-        D3["DIRECCIÓN 3: Blueprint Cartográfico Isométrico
-        • Estructura de la empresa y organigrama
-        • Plano interactivo de instalaciones
-        • Zonas de evacuación y puntos de encuentro
-        • Zonas demarcadas de pausas activas
-        • Política SST, normas y compromisos"]
-    end
+2. Enfoque y Énfasis (Agua Marina y Celestes):
+   ├── Turquesa / Agua Marina (#14B8A6): Controles activos, interruptores, switches y toggles.
+   └── Turquesa Claro         (#2DD4BF): Elementos visuales, relieves y gráficos destacados.
 
-    subgraph OPERATIVO_BIENESTAR ["2. ÁMBITO DE BIENESTAR (Colaboradores en Jornada)"]
-        D2["DIRECCIÓN 2: Ergonomía Vital / El Pulso Humano
-        • Alarmas programables en segundo plano
-        • Orbe biomecánico de respiración guiada
-        • Catálogo animado de ejercicios osteomusculares
-        • Registro de cumplimiento de Pausa Activa"]
-    end
+3. Bienestar (Verdes):
+   ├── Verde Esmeralda (#10B981): Salud, éxito y la actividad de la "Pausa".
+   ├── Verde Menta     (#34D399): Sliders, logros y switches "ON".
+   └── Verde Bosque    (#047857): Estadísticas y datos analíticos de participación.
 
-    subgraph ADMINISTRACION ["3. ÁMBITO DE GESTIÓN (Responsable SG-SST y Gerencia)"]
-        D1["DIRECCIÓN 1: Planta Viva / Demarcación Industrial
-        • Tablero Andon digital (Días seguros: 342)
-        • Autoevaluación de Estándares Mínimos Res. 0312
-        • Gestión y tipificación de reportes de incidentes
-        • Control de aptitudes médicas Res. 1843/2025
-        • Plan de acción y trazabilidad inmutable"]
-    end
+4. Estados de Trabajadores (Monitoreo de PCs en Tiempo Real):
+   ├── Azul Enérgico         (#2563EB): "Estado: Activo" (en su PC).
+   ├── Verde Esmeralda       (#10B981): "Estado: En Pausa" (cumpliendo la pausa).
+   ├── Agua Marina           (#06B6D4): "Estado: Próxima Pausa" (aviso cercano).
+   └── Azul Grisáceo Oscuro (#1E293B): "Estado: Omitida" (aviso neutral, sin tono de culpa).
 
-    PUBLICO -. Acceso anónimo .-> D3
-    OPERATIVO_BIENESTAR -. Acceso diario personal .-> D2
-    ADMINISTRACION -. Acceso autenticado administrativo .-> D1
+5. Neutros y Fondos:
+   ├── Blanco (#FFFFFF): Tarjetas, popups de alerta y contenedores del panel.
+   ├── Azul Grisáceo Claro (#F8FAFC): Fondo general de toda la aplicación (anti-fatiga visual).
+   └── Gris Azulado (#64748B): Bordes, líneas divisorias y textos secundarios.
 ```
 
 ---
 
-## 2. Detalle de Cada Ámbito Visual
+## 2. Los 3 Aplicativos de la Suite con la Paleta Unificada
 
-### Ámbito 1: Portal Corporativo e Institucional (Público) — *Dirección 3: Blueprint Cartográfico*
-* **Audiencia:** Visitantes externos, trabajadores, candidatos, auditores y público general.
-* **Función:** Transparentar el compromiso preventivo de la empresa, mostrar su infraestructura de seguridad mediante un plano interactivo y divulgar las políticas normativas.
-* **Atmósfera y Estilo:**
-  * Fondo: Blueprint técnico oscuro `#0B132B` / `#0F172A` con sutil retícula milimétrica de ingeniería (`grid 24x24 px`).
-  * Colores de acento: Cian técnico de alta legibilidad `#38BDF8` y `#06B6D4`.
-  * Elemento icónico memorable: **Plano Isométrico Interactivo de la Empresa**, con capas alternables:
-    * *Capa Verde:* Rutas de evacuación y salidas de emergencia.
-    * *Capa Ámbar:* Zonas ergonómicas designadas para pausas activas.
-    * *Capa Azul:* Puntos de primeros auxilios y extintores.
-* **Tipografía:** **Space Mono** para rotulación técnica, códigos y coordenadas; **Space Grotesk** para párrafos y descripciones de política.
+```mermaid
+flowchart TD
+    PALETA["SISTEMA DE COLOR UNIFICADO (PausaActiva)
+    #0E1B2F • #1A56DB • #0B7A87 • #14B8A6 • #10B981 • #F8FAFC"]
+
+    subgraph APP1 ["1. PORTAL PÚBLICO EMPRESA (Puerto 3020)"]
+        A1["Blueprint Institucional y Plano Isométrico
+        • Cuadrícula técnica sobre fondo marino #0E1B2F
+        • Capas conmutables en turquesa #14B8A6 y esmeralda #10B981
+        • Política de SST y comités normativos"]
+    end
+
+    subgraph APP2 ["2. APLICATIVO DE PAUSAS VITALES (Puerto 3021)"]
+        A2["Ergonomía, Respiración y Alarmas para Trabajadores
+        • Orbe rítmico 4-4-4 y 4-7-8 con tonos Web Audio API
+        • Demostraciones animadas del muñeco biomecánico en bucle
+        • Disparador aleatorio de pausas al empleado"]
+    end
+
+    subgraph APP3 ["3. PORTAL ADMINISTRATIVO - CONTROL DE BIENESTAR (Puerto 3022)"]
+        A3["Consola del Administrador y Monitoreo de PCs
+        • Sidebar lateral en #0E1B2F con navegación por módulos
+        • Telemetría de PCs en vivo: Activo, En Pausa, Próxima, Omitida
+        • Estadísticas de participación con gráfico semanal y curva esmeralda
+        • Control de alertas, sliders y botón 'Lanzar Pausa de Emergencia'
+        • Vista previa fotorrealista de aviso en la PC con avatar descansando"]
+    end
+
+    PALETA --> APP1
+    PALETA --> APP2
+    PALETA --> APP3
+```
 
 ---
 
-### Ámbito 2: Módulo de Pausas Activas ("Pausa Vital") — *Dirección 2: Ergonomía Vital*
-* **Audiencia:** Colaboradores de oficina y operarios durante su jornada laboral activa.
-* **Función:** Aliviar la fatiga física y mental mediante un oasis visual de calma, ritmo y movimiento corporal consciente.
-* **Atmósfera y Estilo:**
-  * Fondo: Lino natural y blanco cálido (`#FBFBF9` / `#FFFFFF`), con bordes suaves en salvia desaturado (`#E2E8F0`).
-  * Colores principales: Verde Bosque Profundo `#14382A` (estabilidad y vida) y Terracota Cálido `#D96236` (energía humana y pulso).
-  * Elemento icónico memorable: **Orbe de Respiración Biomecánico** con animación expansiva rítmica 4-4-4, temporizador circular de descansos y guías ilustradas paso a paso de ejercicios ergonómicos (20-20-20, cuello, muñecas/túnel carpiano y lumbar).
-* **Tipografía:** **Outfit** para titulares redondeados y amables; **Plus Jakarta Sans** para instrucciones; **Space Mono** para cuentas regresivas de segundos.
+## 3. Arquitectura del Portal Administrativo (`apps/admin-sgsst`)
 
----
+Inspirado directamente en la guía de UI de referencia:
 
-### Ámbito 3: Portal del Administrador y Dashboard SG-SST — *Dirección 1: Demarcación Industrial*
-* **Audiencia:** Responsable del SG-SST, Coordinadores de Planta, COPASST y Gerencia.
-* **Función:** Monitoreo analítico de alta densidad, telemetría de siniestralidad, resolución ágil de reportes de campo y control de estándares legales.
-* **Atmósfera y Estilo:**
-  * Fondo: Concreto arquitectónico claro `#F4F3EF` con áreas de trabajo en blanco óptico y paneles en carbón grafito `#1A1D20`.
-  * Colores de acento: Ámbar industrial de señalización `#D97706` y líneas sutiles de demarcación técnica.
-  * Elemento icónico memorable: **Tablero Andon Digital en Tiempo Real** ("DÍAS SEGUROS: 342"), con medidores mecánicos de avance en la Resolución 0312 de 2019 y tarjetas de acción inmediata.
-* **Tipografía:** **Space Grotesk** en titulares técnicos condensados; **Plus Jakarta Sans** en tablas y formularios; **JetBrains Mono** en contadores numéricos y radicados (`REP-2026-0042`).
+1. **Sidebar Izquierdo (`#0E1B2F`):**
+   * Logo **PausaActiva** en degradado turquesa/esmeralda.
+   * Pestañas de navegación: *Dashboard*, *Empleados*, *Configuración de Alertas*, *Biblioteca de Ejercicios*, *Reportes e Historial*.
+   * Indicador inferior de sincronización en red y enlaces a los otros dos aplicativos.
 
----
+2. **Píldoras Superiores de Telemetría:**
+   * **PCs Conectadas:** Contador en vivo `254/280` con ícono de laptop.
+   * **Cumplimiento Hoy:** Indicador `88%` con anillo circular verde esmeralda.
+   * **Próxima Pausa General:** Contador `12:45 min` en cápsula celeste con reloj.
 
-## 3. Cohesión Normativa Transversal (Regla Inquebrantable)
+3. **Columna Central-Izquierda:**
+   * **Monitoreo de PCs en Tiempo Real:** Tabla con avatares, departamento y badges de estado (`• En Pausa (02:15)`, `• Activo (Trabajando)`, `🌐 Próxima Pausa (3m)`, `• Omitida`).
+   * **Estadísticas de Participación:** Gráfico de doble barra semanal (Lun a Vie) con curva continua de tendencia en verde esmeralda `#10B981`.
 
-En cualquiera de los tres ámbitos, los **Colores de Señal de Seguridad (ISO 7010 / NTC 1461)** mantienen exactamente el mismo valor semántico y **NUNCA** se usan como simple decoración estética:
-1. **Rojo Señal (`#DC2626`):** Exclusivo para paradas de emergencia, eventos no conformes graves o estándares en estado crítico.
-2. **Amarillo Señal (`#F59E0B`):** Exclusivo para advertencias, exámenes médicos próximos a vencer y riesgos en estudio.
-3. **Azul Señal (`#2563EB`):** Exclusivo para obligaciones (uso de EPP, recomendaciones de postura obligatoria).
-4. **Verde Señal (`#16A34A`):** Exclusivo para rutas de evacuación seguras, acciones cerradas con éxito y condición "Apto".
+4. **Columna Derecha (Control y Simulación):**
+   * **Configuración de Alertas:** Sliders interactivos de frecuencia (60 min) y duración (5 min), interruptores de forzar pantalla completa, posponer y sonido.
+   * **Botón 'Lanzar Pausa de Emergencia' (`#0B7A87`):** Disparo inmediato a todas las PCs conectadas con acorde armónico Web Audio API.
+   * **Vista Previa del Aviso en la PC:** Marco de monitor de escritorio con stand que muestra la alerta real con el personaje reclinado descansando hombros y cuello, contador de 5 minutos y botones *Comenzar* / *Posponer*.

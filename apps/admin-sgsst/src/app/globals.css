@@ -2,32 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 :root {
-  --color-fondo: #F4F3EF;
+  --color-fondo: #F8FAFC;
 }
 
 html, body {
-  background-color: var(--color-fondo);
-  color: #111827;
+  background-color: #F8FAFC;
+  color: #0E1B2F;
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 }
 
 :focus-visible {
-  outline: 2px solid #D97706;
+  outline: 2px solid #14B8A6;
   outline-offset: 2px;
 }
 
-/* Patrón diagonal de demarcación industrial de seguridad */
-.patron-demarcacion {
-  background: repeating-linear-gradient(
-    -45deg,
-    #F59E0B,
-    #F59E0B 10px,
-    #1F2937 10px,
-    #1F2937 20px
-  );
+/* Scrollbar estilizada */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+::-webkit-scrollbar-thumb {
+  background: #94A3B8;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #64748B;
 }
