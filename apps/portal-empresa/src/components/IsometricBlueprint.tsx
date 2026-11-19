@@ -10,7 +10,10 @@ import {
   DoorOpen, 
   Info, 
   CheckCircle2, 
-  Maximize2 
+  Maximize2,
+  Play,
+  RotateCcw,
+  Volume2
 } from 'lucide-react';
 
 interface ZonaPlano {
@@ -97,7 +100,61 @@ const ZONAS_EMPRESA: ZonaPlano[] = [
 export default function IsometricBlueprint() {
   const [capaActiva, setCapaActiva] = useState<'TODAS' | 'EVACUACION' | 'PAUSAS' | 'EMERGENCIA'>('TODAS');
   const [zonaSeleccionada, setZonaSeleccionada] = useState<ZonaPlano | null>(ZONAS_EMPRESA[0]);
+  const [simulando, setSimulando] = useState(false);
+  const [segundosSimulacion, setSegundosSimulacion] = useState(0);
   const svgRef = useRef<SVGSVGElement | null>(null);
+
+  const reproducirChime = () => {
+    try {
+      const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      const audioCtx = new AudioContextClass();
+      const notas = [523.25, 659.25, 783.99]; // Acorde mayor despeje Do-Mi-Sol
+      notas.forEach((freq, idx) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.09);
+        gain.gain.setValueAtTime(0.06, audioCtx.currentTime + idx * 0.09);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + idx * 0.09 + 0.35);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(audioCtx.currentTime + idx * 0.09);
+        osc.stop(audioCtx.currentTime + idx * 0.09 + 0.35);
+      });
+    } catch {
+      // Audio silencioso en entornos restringidos
+    }
+  };
+
+  const alternarSimulacion = () => {
+    if (simulando) {
+      setSimulando(false);
+      setSegundosSimulacion(0);
+    } else {
+      setCapaActiva('EVACUACION');
+      setSimulando(true);
+      setSegundosSimulacion(0);
+      const pe01 = ZONAS_EMPRESA.find((z) => z.id === 'ZONA-6');
+      if (pe01) setZonaSeleccionada(pe01);
+      reproducirChime();
+    }
+  };
+
+  useEffect(() => {
+    let intervalo: NodeJS.Timeout;
+    if (simulando) {
+      intervalo = setInterval(() => {
+        setSegundosSimulacion((s) => {
+          if (s >= 10) {
+            setSimulando(false);
+            return 0;
+          }
+          return s + 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(intervalo);
+  }, [simulando]);
 
   useEffect(() => {
     if (!svgRef.current) return;
@@ -190,8 +247,46 @@ export default function IsometricBlueprint() {
             <ShieldAlert className="w-3.5 h-3.5" />
             <span>Equipos y Extintores</span>
           </button>
+
+          {/* Botón de Simulación de Evacuación Interactivo */}
+          <button
+            onClick={alternarSimulacion}
+            className={`px-3.5 py-2 rounded-xl text-xs font-mono transition-all flex items-center space-x-1.5 border ml-1 ${
+              simulando
+                ? 'bg-[#047857] hover:bg-[#035941] text-white border-emerald-400 font-bold shadow-md shadow-emerald-500/25'
+                : 'bg-[#10B981]/15 hover:bg-[#10B981]/25 text-[#047857] border-[#10B981]/30 font-bold'
+            }`}
+            title="Activa el trazado dinámico de flujo hacia el Punto de Encuentro PE-01"
+          >
+            {simulando ? (
+              <>
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>Detener ({10 - segundosSimulacion}s)</span>
+              </>
+            ) : (
+              <>
+                <Play className="w-3.5 h-3.5 fill-current" />
+                <span>Simular Evacuación</span>
+              </>
+            )}
+          </button>
         </div>
       </div>
+
+      {/* Alerta de Simulación Activa */}
+      {simulando && (
+        <div className="mt-4 p-3.5 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-900 flex items-center justify-between">
+          <div className="flex items-center space-x-2.5">
+            <Volume2 className="w-4 h-4 text-[#10B981] animate-bounce shrink-0" />
+            <span className="text-xs font-mono font-bold">
+              SIMULACIÓN ACTIVA: Flujo de evacuación despejado hacia Punto de Encuentro Exterior (PE-01 - Patio Principal).
+            </span>
+          </div>
+          <span className="text-[11px] font-mono text-[#047857] bg-white px-2 py-0.5 rounded border border-emerald-200 font-bold shrink-0">
+            Tiempo de arribo: 45s
+          </span>
+        </div>
+      )}
 
       {/* Cuerpo: Visor Vectorial de Ingeniería + Panel de Detalle */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6 items-start">
@@ -217,6 +312,15 @@ export default function IsometricBlueprint() {
               <marker id="flecha-verde" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
                 <path d="M0,0 L6,3 L0,6 Z" fill="#10B981" />
               </marker>
+              <style>{`
+                @keyframes dashEvacuacion {
+                  from { stroke-dashoffset: 40; }
+                  to { stroke-dashoffset: 0; }
+                }
+                .ruta-activa-anim {
+                  animation: dashEvacuacion 0.75s linear infinite;
+                }
+              `}</style>
             </defs>
 
             <rect width="780" height="500" fill="url(#blueprint-grid)" rx="12" />
@@ -282,7 +386,20 @@ export default function IsometricBlueprint() {
                   </text>
 
                   {zona.id === 'ZONA-6' && (
-                    <circle cx={x + ancho - 30} cy={y + 35} r="16" fill="#047857" opacity="0.9" />
+                    <g>
+                      <circle cx={x + ancho - 30} cy={y + 35} r="16" fill="#047857" opacity="0.9" />
+                      {simulando && (
+                        <circle
+                          cx={x + ancho - 30}
+                          cy={y + 35}
+                          r="24"
+                          fill="none"
+                          stroke="#10B981"
+                          strokeWidth="2.5"
+                          className="animate-ping origin-center"
+                        />
+                      )}
+                    </g>
                   )}
                 </g>
               );
@@ -295,24 +412,27 @@ export default function IsometricBlueprint() {
                   d="M 250 150 L 250 410"
                   fill="none"
                   stroke="#10B981"
-                  strokeWidth="3.5"
+                  strokeWidth={simulando ? '4' : '3.5'}
                   strokeDasharray="6,4"
+                  className={simulando ? 'ruta-activa-anim' : ''}
                   markerEnd="url(#flecha-verde)"
                 />
                 <path
                   d="M 490 150 L 490 230 L 250 230"
                   fill="none"
                   stroke="#10B981"
-                  strokeWidth="3"
+                  strokeWidth={simulando ? '3.5' : '3'}
                   strokeDasharray="6,4"
+                  className={simulando ? 'ruta-activa-anim' : ''}
                   markerEnd="url(#flecha-verde)"
                 />
                 <path
                   d="M 680 300 L 260 300"
                   fill="none"
                   stroke="#10B981"
-                  strokeWidth="3"
+                  strokeWidth={simulando ? '3.5' : '3'}
                   strokeDasharray="6,4"
+                  className={simulando ? 'ruta-activa-anim' : ''}
                   markerEnd="url(#flecha-verde)"
                 />
                 <rect x="235" y="400" width="30" height="10" fill="#10B981" rx="2" />

@@ -9,15 +9,17 @@ export default function PausasPage() {
     <div className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-10">
       {/* Banner de bienvenida y propósito de salud */}
       <div className="text-center max-w-3xl mx-auto pt-4">
-        <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 text-xs font-mono font-bold mb-3">
-          <Sparkles className="w-3.5 h-3.5 text-emerald-700" />
+        <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-teal-50 text-[#0B7A87] border border-teal-200 text-xs font-mono font-bold mb-3 shadow-xs">
+          <Sparkles className="w-3.5 h-3.5 text-[#10B981]" />
           <span>Proyecto 2 • Dirección 2: Ergonomía Vital / El Pulso Humano</span>
         </div>
-        <h1 className="text-3xl sm:text-5xl font-black text-vital-forest font-outfit tracking-tight">
+        <h1 className="text-3xl sm:text-5xl font-black text-[#0E1B2F] font-outfit tracking-tight leading-tight">
           Tu cuerpo es el ritmo que <br />
-          <span className="text-vital-terracotta">mueve nuestra empresa.</span>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#10B981] via-[#14B8A6] to-[#0B7A87]">
+            mueve nuestra empresa.
+          </span>
         </h1>
-        <p className="text-sm sm:text-base text-slate-600 mt-3 max-w-2xl mx-auto">
+        <p className="text-sm sm:text-base text-[#64748B] mt-3 max-w-2xl mx-auto font-medium">
           Las jornadas prolongadas frente a pantallas o en líneas de empaque fatigan músculos y ojos. Configura tu alarma periódica y realiza 3 minutos de pausa activa para renovar tu bienestar.
         </p>
       </div>
