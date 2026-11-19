@@ -2,10 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 :root {
   --color-fondo: #F8FAFC;
+  --color-texto: #0E1B2F;
+  --color-borde: #64748B;
+
+  /* Emil Kowalski Animation Easing Tokens */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quad: cubic-bezier(0.25, 1, 0.5, 1);
+  --duration-micro: 150ms;
 }
 
 html, body {
@@ -14,6 +21,13 @@ html, body {
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Selección temada según Impeccable Craft Floor */
+::selection {
+  background-color: #14B8A6;
+  color: #0E1B2F;
 }
 
 :focus-visible {
@@ -30,9 +44,25 @@ html, body {
   background: #F1F5F9;
 }
 ::-webkit-scrollbar-thumb {
-  background: #94A3B8;
+  background: #CBD5E1;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #64748B;
+  background: #94A3B8;
+}
+
+/* Tabular figures para datos numéricos y telemetría */
+.num-tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* Respeto estricto a reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

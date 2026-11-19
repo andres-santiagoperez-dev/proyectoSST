@@ -5,12 +5,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Fondo general: Azul Grisáceo Claro para reducir fatiga visual */
+  /* Fondo general: Azul Grisáceo Claro para reducir fatiga visual (Impeccable & Brand tokens) */
   --color-fondo: #F8FAFC;
   /* Textos de alta jerarquía: Azul Marino Oscuro */
   --color-texto: #0E1B2F;
   /* Bordes y líneas divisorias: Gris Azulado */
   --color-borde: #64748B;
+
+  /* Emil Kowalski Animation Tokens (Exponential & Spring easings) */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quad: cubic-bezier(0.25, 1, 0.5, 1);
+  --duration-micro: 150ms;
+  --duration-enter: 400ms;
 }
 
 html, body {
@@ -19,9 +25,51 @@ html, body {
   font-family: 'Space Grotesk', system-ui, sans-serif;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
 }
 
+/* Selección de texto temada según Impeccable Craft Floor */
+::selection {
+  background-color: #1A56DB;
+  color: #FFFFFF;
+}
+
+/* Scrollbar refinado y sobrio sin desentonar con la interfaz */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F8FAFC;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
+  border: 2px solid #F8FAFC;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* Accesibilidad de foco visual (WCAG 2.2 AA & Impeccable) */
 :focus-visible {
   outline: 2px solid #1A56DB;
   outline-offset: 2px;
+}
+
+/* Tabular numbers para métricas y telemetría exacta */
+.num-tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* Respeto estricto a reduced-motion (Emil Kowalski Hard Rule #4) */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

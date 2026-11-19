@@ -120,12 +120,12 @@ export default function HomePage() {
             <div className="w-full lg:w-auto grid grid-cols-1 sm:grid-cols-2 gap-4 lg:min-w-[340px]">
               
               {/* Tarjeta 1: Días sin accidentes */}
-              <div className="bg-white border border-[#64748B]/20 p-5 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+              <div className="bg-white border border-[#64748B]/20 p-5 rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]">
                 <div className="flex items-center justify-between text-xs text-[#64748B] font-mono mb-2">
                   <span className="font-semibold">TELEMETRÍA EN VIVO</span>
                   <span className="w-2.5 h-2.5 rounded-full bg-[#10B981] animate-ping"></span>
                 </div>
-                <div className="text-3xl sm:text-4xl font-extrabold text-[#0E1B2F] font-outfit">
+                <div className="text-3xl sm:text-4xl font-extrabold text-[#0E1B2F] font-outfit num-tabular">
                   342 <span className="text-xs text-[#10B981] font-bold font-mono">DÍAS</span>
                 </div>
                 <p className="text-xs text-[#64748B] mt-1 font-medium font-sans">
@@ -138,14 +138,14 @@ export default function HomePage() {
               </div>
 
               {/* Tarjeta 2: Cumplimiento Res. 0312 */}
-              <div className="bg-white border border-[#64748B]/20 p-5 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+              <div className="bg-white border border-[#64748B]/20 p-5 rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]">
                 <div className="flex items-center justify-between text-xs text-[#64748B] font-mono mb-2">
                   <span className="font-semibold">RES. 0312 DE 2019</span>
                   <span className="text-[10px] bg-teal-50 text-[#0B7A87] px-2 py-0.5 rounded font-mono font-bold border border-teal-200">
                     Auditado
                   </span>
                 </div>
-                <div className="text-3xl sm:text-4xl font-extrabold text-[#0E1B2F] font-outfit">
+                <div className="text-3xl sm:text-4xl font-extrabold text-[#0E1B2F] font-outfit num-tabular">
                   89.2 <span className="text-xs text-[#14B8A6] font-bold font-mono">%</span>
                 </div>
                 <p className="text-xs text-[#64748B] mt-1 font-medium font-sans">
@@ -158,7 +158,7 @@ export default function HomePage() {
               </div>
 
               {/* Tarjeta 3: Pausas Activas en Planta */}
-              <div className="bg-white border border-[#64748B]/20 p-5 rounded-2xl shadow-sm sm:col-span-2 hover:shadow-md transition-shadow">
+              <div className="bg-white border border-[#64748B]/20 p-5 rounded-2xl shadow-sm sm:col-span-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]">
                 <div className="flex items-center justify-between text-xs text-[#64748B] font-mono mb-1.5">
                   <span className="flex items-center text-[#1A56DB] font-semibold">
                     <Clock className="w-3.5 h-3.5 mr-1.5 text-[#1A56DB]" />
@@ -168,7 +168,7 @@ export default function HomePage() {
                 </div>
                 <div className="flex items-center justify-between mt-2">
                   <div>
-                    <span className="text-2xl font-bold text-[#0E1B2F] font-outfit">92 %</span>
+                    <span className="text-2xl font-bold text-[#0E1B2F] font-outfit num-tabular">92 %</span>
                     <p className="text-xs text-[#64748B] font-sans">Cobertura en puestos de pantalla y empaque</p>
                   </div>
                   <a
