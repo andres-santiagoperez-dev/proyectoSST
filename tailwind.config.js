@@ -4,42 +4,42 @@ module.exports = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./apps/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
       colors: {
-        // Señales de seguridad ISO 7010
+        // Paleta Oficial de 14 Tokens
+        brand: {
+          navy: "#0E1B2F",
+          blue: "#1A56DB",
+          tealDark: "#0B7A87",
+        },
+        accent: {
+          turquoise: "#14B8A6",
+          turquoiseLight: "#2DD4BF",
+        },
+        vital: {
+          emerald: "#10B981",
+          mint: "#34D399",
+          forest: "#047857",
+        },
+        status: {
+          active: "#2563EB",
+          break: "#10B981",
+          upcoming: "#06B6D4",
+          missed: "#1E293B",
+        },
+        surface: {
+          white: "#FFFFFF",
+          bg: "#F8FAFC",
+          border: "#64748B",
+        },
         senal: {
           peligro: "#DC2626",
           advertencia: "#F59E0B",
-          obligacion: "#2563EB",
-          seguridad: "#16A34A",
-        },
-        // Dirección 3 - Blueprint (Público)
-        blueprint: {
-          dark: "#0B132B",
-          surface: "#111C38",
-          border: "rgba(56, 189, 248, 0.2)",
-          cyan: "#38BDF8",
-          accent: "#818CF8",
-        },
-        // Dirección 2 - Ergonomía Vital (Pausas)
-        vital: {
-          bg: "#FBFBF9",
-          forest: "#14382A",
-          forestLight: "#2E654F",
-          terracotta: "#D96236",
-          terracottaLight: "#F28C63",
-          card: "#FFFFFF",
-          border: "#E2E8F0",
-        },
-        // Dirección 1 - Demarcación Industrial (Admin)
-        industrial: {
-          concrete: "#F4F3EF",
-          charcoal: "#1A1D20",
-          amber: "#D97706",
-          dark: "#111827",
-          border: "#CBD5E1",
+          obligacion: "#1A56DB",
+          seguridad: "#10B981",
         },
       },
       fontFamily: {
