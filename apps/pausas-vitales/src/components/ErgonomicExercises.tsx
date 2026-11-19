@@ -92,7 +92,7 @@ export default function ErgonomicExercises({ onPausaCompletada }: { onPausaCompl
             {/* BOTÓN LANZAR PAUSA ALEATORIA */}
             <button
               onClick={lanzarPausaAleatoria}
-              className="flex items-center space-x-2 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-vital-terracotta to-amber-600 hover:from-amber-600 hover:to-vital-terracotta text-white font-mono text-xs font-bold shadow-md shadow-vital-terracotta/20 transition-all hover:scale-[1.02]"
+              className="flex items-center space-x-2 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-brand-blue to-brand-tealDark hover:from-brand-tealDark hover:to-brand-blue text-white font-mono text-xs font-bold shadow-md shadow-brand-blue/20 transition-all hover:scale-[1.02]"
               title="Selecciona una pausa al azar y abre la guía inmersiva"
             >
               <Shuffle className="w-4 h-4" />

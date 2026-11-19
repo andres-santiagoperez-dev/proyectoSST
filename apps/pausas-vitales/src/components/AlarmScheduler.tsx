@@ -304,7 +304,7 @@ export default function AlarmScheduler({ onPausaCompletadaGlobal }: AlarmSchedul
             {/* Barra de Progreso */}
             <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden mt-3">
               <div
-                className="bg-gradient-to-r from-emerald-500 via-vital-terracotta to-amber-500 h-full transition-all duration-1000 ease-linear rounded-full"
+                className="bg-gradient-to-r from-accent-turquoise via-vital-emerald to-brand-blue h-full transition-all duration-1000 ease-linear rounded-full"
                 style={{ width: `${porcentajeTranscurrido}%` }}
               ></div>
             </div>
@@ -317,11 +317,11 @@ export default function AlarmScheduler({ onPausaCompletadaGlobal }: AlarmSchedul
           {/* BOTÓN DESTACADO: MANDAR PAUSA ALEATORIA DE FORMA INMEDIATA */}
           <button
             onClick={dispararAlarmaAleatoria}
-            className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-vital-terracotta to-amber-600 hover:from-amber-600 hover:to-vital-terracotta text-white font-mono text-xs sm:text-sm font-bold shadow-lg shadow-vital-terracotta/25 transition-all flex items-center justify-center space-x-2 group hover:scale-[1.01]"
+            className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-brand-blue to-brand-tealDark hover:from-brand-tealDark hover:to-brand-blue text-white font-mono text-xs sm:text-sm font-bold shadow-lg shadow-brand-blue/25 transition-all flex items-center justify-center space-x-2 group hover:scale-[1.01]"
           >
             <Shuffle className="w-4 h-4 text-white group-hover:rotate-180 transition-transform duration-500" />
             <span>MANDAR PAUSA ALEATORIA AL EMPLEADO</span>
-            <Sparkles className="w-4 h-4 text-amber-200" />
+            <Sparkles className="w-4 h-4 text-accent-turquoiseLight" />
           </button>
 
           <div className="flex items-center justify-between gap-2">
@@ -347,9 +347,9 @@ export default function AlarmScheduler({ onPausaCompletadaGlobal }: AlarmSchedul
           {permisoNotificacion !== 'granted' && (
             <button
               onClick={solicitarPermisoNotificaciones}
-              className="w-full text-center text-[11px] text-amber-800 bg-amber-50 border border-amber-200 py-1.5 px-3 rounded-xl hover:bg-amber-100 transition-colors flex items-center justify-center space-x-1.5 font-mono"
+              className="w-full text-center text-[11px] text-brand-tealDark bg-teal-50 border border-teal-200 py-1.5 px-3 rounded-xl hover:bg-teal-100 transition-colors flex items-center justify-center space-x-1.5 font-mono"
             >
-              <AlertCircle className="w-3.5 h-3.5 shrink-0 text-amber-600" />
+              <AlertCircle className="w-3.5 h-3.5 shrink-0 text-brand-tealDark" />
               <span>Habilitar alertas de escritorio en segundo plano</span>
             </button>
           )}

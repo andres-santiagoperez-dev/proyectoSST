@@ -37,109 +37,108 @@ export default function PolicySection() {
   ];
 
   return (
-    <section className="py-12 border-t border-slate-800 bg-slate-900/40">
+    <section className="py-14 border-t border-slate-200 bg-surface-bg text-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
         {/* Cabecera de Sección */}
         <div className="text-center max-w-3xl mx-auto mb-10">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-800 text-cyan-300 text-xs font-mono mb-3">
-            <FileText className="w-3.5 h-3.5 text-cyan-400" />
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-brand-blue text-xs font-mono font-bold mb-3">
+            <FileText className="w-3.5 h-3.5 text-brand-blue" />
             <span>Marco Legal Decreto 1072 de 2015 • Artículo 2.2.4.6.5</span>
           </div>
-          <h2 className="text-3xl font-extrabold text-white tracking-tight font-mono">
+          <h2 className="text-3xl sm:text-4xl font-black text-brand-navy tracking-tight font-outfit">
             Política de Seguridad y Salud en el Trabajo
           </h2>
-          <p className="text-sm text-slate-400 mt-2">
+          <p className="text-sm text-slate-600 mt-2 font-sans">
             Declaración formal de compromiso de la Alta Dirección, firmada y divulgada a todo el personal.
           </p>
         </div>
 
         {/* Tarjeta de Política Firmada con Sello Digital */}
-        <div className="bg-slate-950 border border-cyan-500/30 rounded-2xl p-6 sm:p-8 shadow-xl relative overflow-hidden mb-12">
-          <div className="absolute -top-12 -right-12 w-48 h-48 bg-cyan-500/5 rounded-full blur-2xl pointer-events-none"></div>
-
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between pb-6 border-b border-slate-800 gap-4">
+        <div className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-md relative overflow-hidden mb-12">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between pb-6 border-b border-slate-100 gap-4">
             <div>
-              <span className="text-xs font-mono uppercase tracking-wider text-cyan-400">
+              <span className="text-xs font-mono uppercase tracking-wider text-brand-tealDark font-bold">
                 DOCUMENTO OFICIAL DEL SG-SST // POL-SST-001
               </span>
-              <h3 className="text-xl font-bold text-slate-100 font-mono mt-1">
+              <h3 className="text-xl sm:text-2xl font-black text-brand-navy font-outfit mt-1">
                 {EMPRESA_EJEMPLO.razonSocial}
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-slate-500 font-mono mt-0.5">
                 NIT {EMPRESA_EJEMPLO.nit} • Vigencia: {EMPRESA_EJEMPLO.politicaSST.vigenciaAnual}
               </p>
             </div>
 
-            <div className="flex items-center space-x-3 bg-slate-900 px-4 py-2 rounded-xl border border-slate-800">
-              <Award className="w-8 h-8 text-amber-400" />
+            <div className="flex items-center space-x-3 bg-emerald-50 px-4 py-2.5 rounded-2xl border border-emerald-200">
+              <Award className="w-8 h-8 text-vital-emerald" />
               <div>
-                <span className="text-[10px] text-slate-400 font-mono block">ESTADO LEGAL</span>
-                <span className="text-xs font-bold text-emerald-400 font-mono">FIRMADA Y VIGENTE</span>
+                <span className="text-[10px] text-emerald-800 font-mono block font-semibold">ESTADO LEGAL</span>
+                <span className="text-xs font-bold text-vital-emerald font-mono">FIRMADA Y VIGENTE</span>
               </div>
             </div>
           </div>
 
-          <div className="py-6 text-sm text-slate-300 leading-relaxed space-y-4">
-            <p className="italic bg-slate-900/50 p-4 rounded-xl border-l-4 border-cyan-500 font-sans">
+          <div className="py-6 text-sm text-slate-700 leading-relaxed space-y-4">
+            <p className="italic bg-surface-bg p-5 rounded-2xl border-l-4 border-accent-turquoise font-sans text-slate-700">
               "{EMPRESA_EJEMPLO.politicaSST.textoCompromiso}"
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 text-xs">
-              <div className="flex items-center space-x-2 text-slate-300">
-                <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 text-xs font-medium">
+              <div className="flex items-center space-x-2 text-slate-700">
+                <CheckCircle className="w-4 h-4 text-vital-emerald shrink-0" />
                 <span>Alcance: 100% Trabajadores y Contratistas</span>
               </div>
-              <div className="flex items-center space-x-2 text-slate-300">
-                <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+              <div className="flex items-center space-x-2 text-slate-700">
+                <CheckCircle className="w-4 h-4 text-vital-emerald shrink-0" />
                 <span>Recursos asignados en presupuesto anual</span>
               </div>
-              <div className="flex items-center space-x-2 text-slate-300">
-                <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+              <div className="flex items-center space-x-2 text-slate-700">
+                <CheckCircle className="w-4 h-4 text-vital-emerald shrink-0" />
                 <span>Revisión anual por Alta Dirección</span>
               </div>
             </div>
           </div>
 
-          <div className="pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between text-xs text-slate-400 gap-4">
-            <div className="font-mono">
-              <span>Fecha de expedición y firma: </span>
-              <strong className="text-white">{EMPRESA_EJEMPLO.politicaSST.fechaFirma}</strong>
-            </div>
-            <div className="flex items-center space-x-2 bg-slate-900 px-3 py-1.5 rounded border border-slate-800 font-mono">
-              <UserCheck className="w-4 h-4 text-cyan-400" />
-              <span className="text-slate-200">{EMPRESA_EJEMPLO.politicaSST.firmaGerente}</span>
-            </div>
+          <div className="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between text-xs text-slate-500 font-mono gap-2">
+            <span>Firma Digital Certificada: Gerencia General &amp; Responsable SG-SST</span>
+            <span className="text-brand-blue font-semibold">Resolución 0312/2019 Estándar 1.1.1</span>
           </div>
         </div>
 
-        {/* Las 6 Reglas de Oro de Seguridad */}
+        {/* Las 6 Reglas de Oro para la Prevención */}
         <div>
-          <div className="text-center max-w-2xl mx-auto mb-8">
-            <h3 className="text-2xl font-bold text-white font-mono">
-              Las 6 Reglas de Oro de Seguridad y Salud
+          <div className="text-center max-w-xl mx-auto mb-8">
+            <div className="inline-flex items-center space-x-1.5 text-xs font-mono font-bold text-brand-tealDark uppercase tracking-wider">
+              <Shield className="w-4 h-4 text-brand-tealDark" />
+              <span>Cultura del Autocuidado</span>
+            </div>
+            <h3 className="text-2xl font-black text-brand-navy font-outfit mt-1">
+              Las 6 Reglas de Oro de Nuestra Planta
             </h3>
-            <p className="text-xs text-slate-400 mt-1">
-              Pilares inquebrantables de comportamiento seguro en todas nuestras plantas y centros de trabajo.
+            <p className="text-xs text-slate-500 font-sans mt-1">
+              Normas no negociables que salvan vidas y previenen lesiones osteomusculares y accidentes.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {reglasOro.map((r) => (
               <div
                 key={r.num}
-                className="bg-slate-950 p-5 rounded-xl border border-slate-800 hover:border-cyan-500/40 transition-all hover:-translate-y-0.5 duration-200"
+                className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs hover:border-accent-turquoise hover:shadow-md transition-all flex flex-col justify-between"
               >
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-2xl font-black text-cyan-400 font-mono opacity-80">
-                    {r.num}
-                  </span>
-                  <Shield className="w-4 h-4 text-slate-500" />
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-xs font-mono font-black text-brand-blue bg-blue-50 border border-blue-100 px-2.5 py-1 rounded-xl">
+                      REGLA #{r.num}
+                    </span>
+                    <Shield className="w-4 h-4 text-accent-turquoise" />
+                  </div>
+                  <h4 className="text-base font-bold text-brand-navy font-outfit mb-2">
+                    {r.titulo}
+                  </h4>
+                  <p className="text-xs text-slate-600 leading-relaxed font-sans">
+                    {r.desc}
+                  </p>
                 </div>
-                <h4 className="text-base font-bold text-slate-100 mb-1.5 font-mono">
-                  {r.titulo}
-                </h4>
-                <p className="text-xs text-slate-400 leading-relaxed">
-                  {r.desc}
-                </p>
               </div>
             ))}
           </div>

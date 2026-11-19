@@ -42,8 +42,8 @@ export default function PausasNavbar() {
           {/* Contador diario y Enlaces a los 2 Aplicativos Hermanos */}
           <div className="flex items-center space-x-3">
             {/* Racha / Pausas hoy */}
-            <div className="hidden sm:flex items-center space-x-1.5 bg-amber-50 px-3 py-1.5 rounded-xl border border-amber-200 text-amber-800 text-xs font-mono font-bold">
-              <Flame className="w-4 h-4 text-amber-500 fill-amber-500" />
+            <div className="hidden sm:flex items-center space-x-1.5 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200 text-vital-emerald text-xs font-mono font-bold">
+              <Flame className="w-4 h-4 text-vital-emerald fill-vital-emerald" />
               <span>{pausasHoy} de 2 Pausas Hoy</span>
             </div>
 
@@ -52,12 +52,12 @@ export default function PausasNavbar() {
               href="http://localhost:3020"
               target="_blank"
               rel="noreferrer"
-              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-slate-900 text-cyan-300 border border-slate-800 hover:bg-slate-800 transition-all text-xs font-mono"
+              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-brand-navy text-accent-turquoise border border-brand-navy hover:bg-[#1E293B] transition-all text-xs font-mono"
               title="Abrir portal público de la empresa"
             >
-              <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+              <ShieldCheck className="w-3.5 h-3.5 text-accent-turquoise" />
               <span className="hidden md:inline">Portal Empresa</span>
-              <ExternalLink className="w-3 h-3 text-cyan-400/80" />
+              <ExternalLink className="w-3 h-3 text-accent-turquoiseLight" />
             </a>
 
             {/* Enlace a Proyecto 3: Consola Admin */}
