@@ -13,54 +13,54 @@ export default function ReportesHistorialView() {
 
   return (
     <div className="space-y-6">
-      {/* Selector de Subsección */}
-      <div className="bg-white rounded-2xl p-2 border border-slate-200/90 shadow-xs flex flex-wrap items-center gap-2">
+      {/* Selector de Subsección con desplazamiento seguro */}
+      <div className="bg-white rounded-2xl p-2 border border-[#64748B]/20 shadow-xs flex flex-wrap items-center gap-2">
         <button
           onClick={() => setSeccion('0312')}
-          className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl font-mono text-xs font-bold transition-all ${
+          className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer ${
             seccion === '0312'
-              ? 'bg-brand-navy text-white shadow-sm'
-              : 'text-slate-600 hover:bg-slate-100'
+              ? 'bg-[#0E1B2F] text-white shadow-xs'
+              : 'text-[#64748B] hover:text-[#0E1B2F] hover:bg-slate-100'
           }`}
         >
-          <FileCheck2 className="w-4 h-4 text-accent-turquoise" />
-          <span>Estándares Mínimos Res. 0312</span>
+          <FileCheck2 className="w-4 h-4 text-[#14B8A6] shrink-0" />
+          <span className="truncate">Estándares Mínimos Res. 0312</span>
         </button>
 
         <button
           onClick={() => setSeccion('INCIDENTES')}
-          className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl font-mono text-xs font-bold transition-all ${
+          className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer ${
             seccion === 'INCIDENTES'
-              ? 'bg-brand-navy text-white shadow-sm'
-              : 'text-slate-600 hover:bg-slate-100'
+              ? 'bg-[#0E1B2F] text-white shadow-xs'
+              : 'text-[#64748B] hover:text-[#0E1B2F] hover:bg-slate-100'
           }`}
         >
-          <AlertTriangle className="w-4 h-4 text-amber-500" />
-          <span>Incidentes en Campo (&lt; 60s)</span>
+          <AlertTriangle className="w-4 h-4 text-[#0B7A87] shrink-0" />
+          <span className="truncate">Incidentes en Campo (&lt; 60s)</span>
         </button>
 
         <button
           onClick={() => setSeccion('PLANES')}
-          className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl font-mono text-xs font-bold transition-all ${
+          className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer ${
             seccion === 'PLANES'
-              ? 'bg-brand-navy text-white shadow-sm'
-              : 'text-slate-600 hover:bg-slate-100'
+              ? 'bg-[#0E1B2F] text-white shadow-xs'
+              : 'text-[#64748B] hover:text-[#0E1B2F] hover:bg-slate-100'
           }`}
         >
-          <Target className="w-4 h-4 text-brand-blue" />
-          <span>Planes de Acción y Compromisos</span>
+          <Target className="w-4 h-4 text-[#1A56DB] shrink-0" />
+          <span className="truncate">Planes de Acción y Compromisos</span>
         </button>
 
         <button
           onClick={() => setSeccion('AUDITORIA')}
-          className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl font-mono text-xs font-bold transition-all ${
+          className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl font-mono text-xs font-bold transition-all cursor-pointer ${
             seccion === 'AUDITORIA'
-              ? 'bg-brand-navy text-white shadow-sm'
-              : 'text-slate-600 hover:bg-slate-100'
+              ? 'bg-[#0E1B2F] text-white shadow-xs'
+              : 'text-[#64748B] hover:text-[#0E1B2F] hover:bg-slate-100'
           }`}
         >
-          <History className="w-4 h-4 text-vital-emerald" />
-          <span>Libro Mayor de Auditoría Inmutable</span>
+          <History className="w-4 h-4 text-[#10B981] shrink-0" />
+          <span className="truncate">Libro Mayor de Auditoría Inmutable</span>
         </button>
       </div>
 

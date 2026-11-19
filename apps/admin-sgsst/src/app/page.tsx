@@ -11,6 +11,7 @@ import ReportesHistorialView from '@/components/ReportesHistorialView';
 
 export default function AdminPage() {
   const [tabActiva, setTabActiva] = useState<TabAdmin>('DASHBOARD');
+  const [sidebarMovilAbierto, setSidebarMovilAbierto] = useState<boolean>(false);
 
   const titulosPorTab: Record<TabAdmin, string> = {
     DASHBOARD: 'Control de Bienestar',
@@ -21,21 +22,26 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="min-h-screen flex bg-surface-bg text-brand-navy font-sans antialiased">
-      {/* 1. SIDEBAR IZQUIERDO (Azul Marino Oscuro #0E1B2F) */}
+    <div className="min-h-screen flex bg-surface-bg text-brand-navy font-sans antialiased selection:bg-accent-turquoise selection:text-brand-navy">
+      {/* 1. SIDEBAR IZQUIERDO (Escritorio + Cajón Móvil) */}
       <AdminSidebar
         tabActiva={tabActiva}
         onCambiarTab={(tab) => setTabActiva(tab)}
+        sidebarMovilAbierto={sidebarMovilAbierto}
+        onCerrarSidebarMovil={() => setSidebarMovilAbierto(false)}
       />
 
       {/* 2. ÁREA PRINCIPAL DERECHA */}
       <div className="flex-1 flex flex-col min-w-0">
         
-        {/* Encabezado Superior con Título Dinámico y Perfil */}
-        <AdminHeader titulo={titulosPorTab[tabActiva]} />
+        {/* Encabezado Superior con Título Dinámico, Botón Móvil y Perfil */}
+        <AdminHeader 
+          titulo={titulosPorTab[tabActiva]} 
+          onAbrirSidebarMovil={() => setSidebarMovilAbierto(true)}
+        />
 
-        {/* Contenido Principal */}
-        <main className="flex-1 p-6 sm:p-8 max-w-7xl w-full mx-auto">
+        {/* Contenido Principal con padding responsivo adaptativo */}
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
           {tabActiva === 'DASHBOARD' && <ControlBienestarDashboard />}
           {tabActiva === 'EMPLEADOS' && <EmpleadosView />}
           {tabActiva === 'ALERTAS' && <AlertasConfigView />}
@@ -43,8 +49,8 @@ export default function AdminPage() {
           {tabActiva === 'REPORTES' && <ReportesHistorialView />}
         </main>
 
-        {/* Footer Discreto */}
-        <footer className="py-4 px-8 border-t border-slate-200/80 text-xs font-mono text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2 bg-white/50">
+        {/* Footer Discreto con ajuste responsivo */}
+        <footer className="py-4 px-4 sm:px-8 border-t border-slate-200/80 text-[11px] sm:text-xs font-mono text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2 bg-white/50 text-center sm:text-left">
           <span>PausaActiva / SafePulse SST • Sistema de Monitoreo de PCs y Estándares de Bienestar</span>
           <span>Resolución 0312/2019 • Resolución 1843/2025 • Ley 1355/2009</span>
         </footer>

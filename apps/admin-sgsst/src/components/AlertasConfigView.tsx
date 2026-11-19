@@ -10,7 +10,6 @@ export default function AlertasConfigView() {
   const [horaFin, setHoraFin] = useState('17:00');
   const [almuerzoInicio, setAlmuerzoInicio] = useState('12:30');
   const [almuerzoFin, setAlmuerzoFin] = useState('13:30');
-  const [sonido, setSonido] = useState('tibet');
   const [guardado, setGuardado] = useState(false);
 
   const probarSonido = () => {
@@ -44,21 +43,22 @@ export default function AlertasConfigView() {
   };
 
   return (
-    <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm max-w-4xl space-y-6">
-      <div className="pb-4 border-b border-slate-100 flex items-center justify-between">
+    <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#64748B]/20 shadow-xs max-w-4xl space-y-6">
+      <div className="pb-4 border-b border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
-          <h3 className="text-xl font-black font-outfit text-brand-navy">
+          <h3 className="text-xl font-black font-outfit text-[#0E1B2F]">
             Configuración General de Alertas y Horarios
           </h3>
-          <p className="text-xs text-slate-500 font-mono mt-1">
+          <p className="text-xs text-[#64748B] font-mono mt-1">
             Parámetros aplicados en red a todas las estaciones de trabajo de la empresa.
           </p>
         </div>
         <button
+          type="button"
           onClick={probarSonido}
-          className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-mono text-slate-700 hover:bg-slate-50 transition-colors"
+          className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl border border-[#64748B]/20 text-xs font-mono text-[#0E1B2F] hover:bg-slate-50 transition-colors shrink-0"
         >
-          <Volume2 className="w-3.5 h-3.5 text-accent-turquoise" />
+          <Volume2 className="w-3.5 h-3.5 text-[#14B8A6]" />
           <span>Probar sonido</span>
         </button>
       </div>
@@ -66,7 +66,7 @@ export default function AlertasConfigView() {
       <form onSubmit={guardarConfiguracion} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <label className="text-xs font-mono font-bold text-slate-700 block">
+            <label className="text-xs font-mono font-bold text-[#0E1B2F] block">
               Frecuencia de alerta (minutos):
             </label>
             <input
@@ -75,15 +75,15 @@ export default function AlertasConfigView() {
               max="120"
               value={frecuencia}
               onChange={(e) => setFrecuencia(parseInt(e.target.value, 10))}
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-mono focus:border-accent-turquoise outline-none"
+              className="w-full px-4 py-2.5 rounded-xl border border-[#64748B]/20 text-sm font-mono focus:border-[#1A56DB] outline-hidden bg-[#F8FAFC]"
             />
-            <span className="text-[11px] text-slate-400 block font-mono">
+            <span className="text-[11px] text-[#64748B] block font-mono">
               Recomendado por Ley 1355/2009: cada 45 a 60 minutos.
             </span>
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-mono font-bold text-slate-700 block">
+            <label className="text-xs font-mono font-bold text-[#0E1B2F] block">
               Duración de la pausa activa (minutos):
             </label>
             <input
@@ -92,76 +92,76 @@ export default function AlertasConfigView() {
               max="15"
               value={duracion}
               onChange={(e) => setDuracion(parseInt(e.target.value, 10))}
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-mono focus:border-accent-turquoise outline-none"
+              className="w-full px-4 py-2.5 rounded-xl border border-[#64748B]/20 text-sm font-mono focus:border-[#1A56DB] outline-hidden bg-[#F8FAFC]"
             />
-            <span className="text-[11px] text-slate-400 block font-mono">
+            <span className="text-[11px] text-[#64748B] block font-mono">
               Estándar médico biomecánico: 3 a 5 minutos.
             </span>
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-mono font-bold text-slate-700 block">
+            <label className="text-xs font-mono font-bold text-[#0E1B2F] block">
               Horario de inicio laboral:
             </label>
             <input
               type="time"
               value={horaInicio}
               onChange={(e) => setHoraInicio(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-mono focus:border-accent-turquoise outline-none"
+              className="w-full px-4 py-2.5 rounded-xl border border-[#64748B]/20 text-sm font-mono focus:border-[#1A56DB] outline-hidden bg-[#F8FAFC]"
             />
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-mono font-bold text-slate-700 block">
+            <label className="text-xs font-mono font-bold text-[#0E1B2F] block">
               Horario de fin laboral:
             </label>
             <input
               type="time"
               value={horaFin}
               onChange={(e) => setHoraFin(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-mono focus:border-accent-turquoise outline-none"
+              className="w-full px-4 py-2.5 rounded-xl border border-[#64748B]/20 text-sm font-mono focus:border-[#1A56DB] outline-hidden bg-[#F8FAFC]"
             />
           </div>
         </div>
 
-        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
-          <span className="text-xs font-mono font-bold text-slate-700 block">
+        <div className="p-4 rounded-2xl bg-[#F8FAFC] border border-[#64748B]/20 space-y-3">
+          <span className="text-xs font-mono font-bold text-[#0E1B2F] block">
             Silenciar alertas durante el almuerzo:
           </span>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <span className="text-[11px] text-slate-500 font-mono block mb-1">Desde:</span>
+              <span className="text-[11px] text-[#64748B] font-mono block mb-1">Desde:</span>
               <input
                 type="time"
                 value={almuerzoInicio}
                 onChange={(e) => setAlmuerzoInicio(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs font-mono"
+                className="w-full px-3 py-2 rounded-lg border border-[#64748B]/20 text-xs font-mono bg-white"
               />
             </div>
             <div>
-              <span className="text-[11px] text-slate-500 font-mono block mb-1">Hasta:</span>
+              <span className="text-[11px] text-[#64748B] font-mono block mb-1">Hasta:</span>
               <input
                 type="time"
                 value={almuerzoFin}
                 onChange={(e) => setAlmuerzoFin(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs font-mono"
+                className="w-full px-3 py-2 rounded-lg border border-[#64748B]/20 text-xs font-mono bg-white"
               />
             </div>
           </div>
         </div>
 
-        <div className="pt-2 flex items-center justify-between">
+        <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <button
             type="submit"
-            className="px-6 py-3 rounded-xl bg-brand-blue hover:bg-blue-700 text-white font-mono text-xs font-bold shadow-md shadow-brand-blue/20 transition-all flex items-center space-x-2"
+            className="px-6 py-3 rounded-xl bg-[#1A56DB] hover:bg-blue-700 text-white font-mono text-xs font-bold shadow-md shadow-[#1A56DB]/20 transition-all flex items-center justify-center space-x-2"
           >
             <ShieldCheck className="w-4 h-4" />
             <span>Guardar Parámetros en Red</span>
           </button>
 
           {guardado && (
-            <span className="text-xs font-mono text-vital-emerald flex items-center space-x-1 font-bold">
-              <CheckCircle2 className="w-4 h-4" />
+            <span className="text-xs font-mono text-[#047857] bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200 flex items-center space-x-1.5 font-bold animate-in fade-in">
+              <CheckCircle2 className="w-4 h-4 text-[#10B981]" />
               <span>Configuración guardada exitosamente</span>
             </span>
           )}

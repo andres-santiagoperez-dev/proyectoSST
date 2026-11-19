@@ -1,5 +1,6 @@
 import React from 'react';
-import { ShieldCheck, FileText, Lock, Building2, HeartHandshake, LayoutDashboard } from 'lucide-react';
+import Link from 'next/link';
+import { ShieldCheck, FileText, Layers, Users, BarChart3 } from 'lucide-react';
 
 export default function PortalFooter() {
   return (
@@ -36,38 +37,48 @@ export default function PortalFooter() {
             </ul>
           </div>
 
-          {/* Columna 3: Suite de 3 Aplicativos con Puertos Oficiales */}
+          {/* Columna 3: Navegación de Vistas del Portal */}
           <div>
             <h4 className="text-white font-bold mb-3 flex items-center font-outfit text-sm">
-              <Lock className="w-4 h-4 text-[#10B981] mr-1.5" />
-              SUITE DE 3 APLICATIVOS INDEPENDIENTES
+              <Layers className="w-4 h-4 text-[#10B981] mr-1.5" />
+              VISTAS DEL PORTAL INSTITUCIONAL
             </h4>
             <ul className="space-y-2 text-xs">
-              <li className="flex items-center space-x-2">
-                <span className="text-[#14B8A6] font-bold">[App 1]</span>
-                <span className="text-slate-200">Portal Empresa (Puerto 3020) — Blueprint Público</span>
-              </li>
               <li>
-                <a
-                  href="http://localhost:3021"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center space-x-2 text-slate-300 hover:text-[#10B981] transition-colors"
-                >
-                  <span className="text-[#10B981] font-bold">[App 2]</span>
-                  <span>Pausas Vitales (Puerto 3021) — Ergonomía y Alarmas ↗</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="http://localhost:3022"
-                  target="_blank"
-                  rel="noreferrer"
+                <Link
+                  href="/resumen"
                   className="flex items-center space-x-2 text-slate-300 hover:text-[#2DD4BF] transition-colors"
                 >
-                  <span className="text-[#2DD4BF] font-bold">[App 3]</span>
-                  <span>Control de Bienestar (Puerto 3022) — Consola Admin ↗</span>
-                </a>
+                  <BarChart3 className="w-3.5 h-3.5 text-[#14B8A6] shrink-0" />
+                  <span>Resumen e Indicadores de Sede</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/plano"
+                  className="flex items-center space-x-2 text-slate-300 hover:text-[#2DD4BF] transition-colors"
+                >
+                  <Layers className="w-3.5 h-3.5 text-[#14B8A6] shrink-0" />
+                  <span>Plano Isométrico y Evacuación PE-01</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/politica"
+                  className="flex items-center space-x-2 text-slate-300 hover:text-[#2DD4BF] transition-colors"
+                >
+                  <FileText className="w-3.5 h-3.5 text-[#14B8A6] shrink-0" />
+                  <span>Política SST y 6 Reglas de Oro</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/comites"
+                  className="flex items-center space-x-2 text-slate-300 hover:text-[#2DD4BF] transition-colors"
+                >
+                  <Users className="w-3.5 h-3.5 text-[#14B8A6] shrink-0" />
+                  <span>Comités Legales y Central 24/7</span>
+                </Link>
               </li>
             </ul>
           </div>

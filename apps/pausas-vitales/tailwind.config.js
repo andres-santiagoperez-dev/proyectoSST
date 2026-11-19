@@ -8,6 +8,33 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        // 14 Tokens Oficiales - Ergonomía Vital / El Pulso Humano
+        fondos: {
+          general: "#F8FAFC", // Azul Grisáceo Claro
+          tarjeta: "#FFFFFF", // Blanco Puro
+        },
+        jerarquia: {
+          encabezados: "#0E1B2F", // Azul Marino Oscuro
+          secundario: "#64748B", // Gris Azulado
+        },
+        botones: {
+          principal: "#1A56DB", // Azul Corporativo (Inicio de pausa)
+          secundario: "#0B7A87", // Agua Marina Oscuro (Cambio de rutina)
+        },
+        energia: {
+          turquesa: "#14B8A6", // Turquesa
+          claro: "#2DD4BF", // Turquesa Claro
+        },
+        respiracion: {
+          inhala: "#10B981", // Verde Esmeralda
+          sosten: "#14B8A6", // Turquesa
+          exhala: "#0B7A87", // Agua Marina Oscuro
+        },
+        logros: {
+          menta: "#34D399", // Verde Menta
+          bosque: "#047857", // Verde Bosque
+        },
+        // Compatibilidad semántica para tokens corporativos
         brand: {
           navy: "#0E1B2F",
           blue: "#1A56DB",
@@ -19,30 +46,20 @@ module.exports = {
         },
         vital: {
           bg: "#F8FAFC",
+          card: "#FFFFFF",
           forest: "#047857",
           forestDark: "#0E1B2F",
           emerald: "#10B981",
           mint: "#34D399",
-          terracotta: "#0B7A87", // Ahora alineado con agua marina oscuro / tono corporativo
-          card: "#FFFFFF",
           border: "#E2E8F0",
+          secondary: "#64748B",
+          tealDark: "#0B7A87",
         },
         status: {
-          active: "#2563EB",
+          active: "#1A56DB",
           break: "#10B981",
-          upcoming: "#06B6D4",
-          missed: "#1E293B",
-        },
-        surface: {
-          white: "#FFFFFF",
-          bg: "#F8FAFC",
-          border: "#64748B",
-        },
-        senal: {
-          peligro: "#DC2626",
-          advertencia: "#F59E0B",
-          obligacion: "#1A56DB",
-          seguridad: "#10B981",
+          upcoming: "#14B8A6",
+          missed: "#0E1B2F",
         },
       },
       fontFamily: {

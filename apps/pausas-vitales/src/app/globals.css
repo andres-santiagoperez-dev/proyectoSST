@@ -5,36 +5,51 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
 
 :root {
-  --color-fondo: #F8FAFC;
-  --color-texto: #0E1B2F;
+  /* 14 Tokens Oficiales - Dirección 2: Ergonomía Vital / El Pulso Humano */
+  --color-fondo-general: #F8FAFC;
+  --color-tarjeta: #FFFFFF;
+  --color-borde-tarjeta: rgba(100, 116, 139, 0.2);
+  --color-encabezados: #0E1B2F;
+  --color-btn-principal: #1A56DB;
+  --color-btn-secundario: #0B7A87;
+  --color-acento-turquesa: #14B8A6;
+  --color-acento-turquesa-claro: #2DD4BF;
+  --color-fase-inhala: #10B981;
+  --color-fase-sosten: #14B8A6;
+  --color-fase-exhala: #0B7A87;
+  --color-progreso-menta: #34D399;
+  --color-progreso-bosque: #047857;
+  --color-texto-secundario: #64748B;
 
   /* Emil Kowalski Animation Easing Tokens */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-quad: cubic-bezier(0.25, 1, 0.5, 1);
-  --duration-micro: 150ms;
+  --ease-in-out-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-micro: 160ms;
+  --duration-state: 260ms;
 }
 
 html, body {
-  background-color: #F8FAFC;
-  color: #0E1B2F;
+  background-color: var(--color-fondo-general);
+  color: var(--color-encabezados);
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Selección temada según Impeccable Craft Floor */
+/* Selección temática basada en Verde Esmeralda y Blanco */
 ::selection {
   background-color: #10B981;
   color: #FFFFFF;
 }
 
 :focus-visible {
-  outline: 2px solid #10B981;
+  outline: 2px solid #14B8A6;
   outline-offset: 2px;
 }
 
-/* Scrollbar estilizada */
+/* Scrollbar estilizada y accesible */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -50,43 +65,18 @@ html, body {
   background: #94A3B8;
 }
 
-/* Tabular figures para datos numéricos y telemetría */
+/* Tabular figures para datos numéricos, cronómetros y telemetría */
 .num-tabular {
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum";
 }
 
-/* Animación de expansión armónica para el orbe de respiración */
-@keyframes orb-breathe {
-  0%, 100% {
-    transform: scale(0.92);
-    box-shadow: 0 0 35px rgba(16, 185, 129, 0.25);
-  }
-  33.3% {
-    transform: scale(1.15);
-    box-shadow: 0 0 65px rgba(20, 184, 166, 0.45);
-  }
-  66.6% {
-    transform: scale(1.15);
-    box-shadow: 0 0 65px rgba(14, 27, 47, 0.35);
-  }
-}
-
-.animate-orb-breathe {
-  animation: orb-breathe 12s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-  will-change: transform, box-shadow;
-}
-
-/* Respeto estricto a reduced-motion */
+/* Respeto estricto a reduced-motion (WCAG 2.3.3) */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
-  }
-  .animate-orb-breathe {
-    animation: none !important;
-    transform: scale(1) !important;
   }
 }

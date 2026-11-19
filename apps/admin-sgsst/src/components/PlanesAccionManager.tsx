@@ -37,16 +37,16 @@ export default function PlanesAccionManager() {
   };
 
   return (
-    <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xl space-y-6">
+    <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#64748B]/20 shadow-xs space-y-6">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between pb-6 border-b border-slate-100 gap-4">
         <div>
-          <span className="text-xs font-mono font-bold text-amber-600 uppercase tracking-wider block mb-1">
+          <span className="text-xs font-mono font-bold text-[#0B7A87] uppercase tracking-wider block mb-1">
             CICLO ACTUAR // DECRETO 1072 DE 2015 ART. 2.2.4.6.33
           </span>
-          <h3 className="text-2xl font-bold text-slate-900 font-mono">
+          <h3 className="text-2xl font-black font-outfit text-[#0E1B2F]">
             Planes de Acción y Medidas Correctivas
           </h3>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-[#64748B] font-mono mt-1">
             Seguimiento a hallazgos derivados de incidentes y autoevaluaciones con verificación de eficacia.
           </p>
         </div>
@@ -56,39 +56,39 @@ export default function PlanesAccionManager() {
         {acciones.map((acc) => (
           <div
             key={acc.id}
-            className="p-5 rounded-2xl border border-slate-200 bg-slate-50/50 hover:bg-white transition-all space-y-3"
+            className="p-5 rounded-2xl border border-[#64748B]/20 bg-[#F8FAFC]/50 hover:bg-white transition-all space-y-3"
           >
             <div className="flex items-center justify-between">
-              <span className="text-xs font-mono font-bold text-slate-900 bg-white px-2.5 py-1 rounded border border-slate-200">
+              <span className="text-xs font-mono font-bold text-[#0E1B2F] bg-white px-2.5 py-1 rounded-lg border border-[#64748B]/20">
                 {acc.codigo} • Origen: {acc.origen}
               </span>
-              <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${
-                acc.estado === 'ABIERTA' ? 'bg-amber-100 text-amber-800' :
-                acc.estado === 'EN_EJECUCION' ? 'bg-blue-100 text-blue-800' :
-                'bg-emerald-100 text-emerald-800'
+              <span className={`text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-md ${
+                acc.estado === 'ABIERTA' ? 'bg-cyan-50 text-[#0B7A87] border border-cyan-200' :
+                acc.estado === 'EN_EJECUCION' ? 'bg-blue-50 text-[#1A56DB] border border-blue-200' :
+                'bg-emerald-50 text-[#047857] border border-emerald-200'
               }`}>
                 {acc.estado.replace('_', ' ')}
               </span>
             </div>
 
             <div>
-              <strong className="text-sm text-slate-900 block font-outfit">
+              <strong className="text-sm text-[#0E1B2F] block font-outfit">
                 Hallazgo: {acc.descripcionHallazgo}
               </strong>
-              <p className="text-xs text-slate-600 mt-1">
-                <strong>Medida Propuesta:</strong> {acc.medidaPropuesta}
+              <p className="text-xs text-[#64748B] mt-1 leading-relaxed">
+                <strong className="text-[#0E1B2F]">Medida Propuesta:</strong> {acc.medidaPropuesta}
               </p>
             </div>
 
-            <div className="pt-2 border-t border-slate-200 flex flex-wrap items-center justify-between text-xs text-slate-500 font-mono gap-2">
-              <span>Responsable: <strong className="text-slate-700">{acc.responsableNombre}</strong></span>
-              <span>Fecha límite: <strong className="text-slate-700">{acc.fechaLimite}</strong></span>
-              {acc.fechaCierre && <span>Cerrada en: <strong className="text-emerald-700">{acc.fechaCierre}</strong></span>}
+            <div className="pt-2 border-t border-slate-200/80 flex flex-wrap items-center justify-between text-xs text-[#64748B] font-mono gap-2">
+              <span>Responsable: <strong className="text-[#0E1B2F]">{acc.responsableNombre}</strong></span>
+              <span>Fecha límite: <strong className="text-[#0E1B2F]">{acc.fechaLimite}</strong></span>
+              {acc.fechaCierre && <span>Cerrada en: <strong className="text-[#047857]">{acc.fechaCierre}</strong></span>}
 
               {acc.estado !== 'CERRADA_EFICAZ' && (
                 <button
                   onClick={() => cambiarEstadoAccion(acc.id, 'CERRADA_EFICAZ')}
-                  className="px-3 py-1 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 text-xs font-mono font-bold"
+                  className="px-3.5 py-1.5 rounded-lg bg-[#10B981] hover:bg-emerald-600 text-white text-xs font-mono font-bold transition-colors cursor-pointer shadow-xs"
                 >
                   Verificar Eficacia y Cerrar
                 </button>
