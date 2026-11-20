@@ -4,7 +4,7 @@ import { ShieldCheck, FileText, Layers, Users, BarChart3 } from 'lucide-react';
 
 export default function PortalFooter() {
   return (
-    <footer className="bg-[#0E1B2F] text-slate-400 border-t border-[#64748B]/30 text-xs py-12 mt-auto font-mono">
+    <footer data-theme="dark" className="bg-[#0E1B2F] text-slate-400 border-t border-[#64748B]/30 text-xs py-12 mt-auto font-mono">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           

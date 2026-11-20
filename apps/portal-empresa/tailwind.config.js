@@ -8,6 +8,31 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        // 1. Interfaz Corporativa y Normativa (Modo Claro Ergonómico)
+        corp: {
+          bg: "#F8FAFC",
+          surface: "#FFFFFF",
+          text: "#0E1B2F",
+          muted: "#64748B",
+          primary: "#1A56DB",
+          accent: "#0B7A87",
+        },
+        // 2. Paleta Técnica CAD / Digital Twin (Visor del Plano Interactivo)
+        cad: {
+          bg: "#0B132B",
+          canvas: "#080E1E",
+          hud: "#0E1726",
+          details: "#1E293B",
+          volume: "#334155",
+        },
+        // 3. Señalética de Seguridad y Normativa SST (NTC 1461 / GTC 45)
+        sst: {
+          evac: "#10B981",
+          evacActive: "#34D399",
+          equipment: "#06B6D4",
+          warning: "#F59E0B",
+          emergency: "#EF4444",
+        },
         brand: {
           navy: "#0E1B2F",
           blue: "#1A56DB",

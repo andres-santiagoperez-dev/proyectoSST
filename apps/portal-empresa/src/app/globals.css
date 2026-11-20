@@ -5,18 +5,38 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Fondo general: Azul Grisáceo Claro para reducir fatiga visual (Impeccable & Brand tokens) */
-  --color-fondo: #F8FAFC;
-  /* Textos de alta jerarquía: Azul Marino Oscuro */
-  --color-texto: #0E1B2F;
-  /* Bordes y líneas divisorias: Gris Azulado */
-  --color-borde: #64748B;
+  /* ==========================================================================
+     SISTEMA DE COLORES OBLIGATORIO (3 PALETAS POR CONTEXTO)
+     ========================================================================== */
 
-  /* Emil Kowalski Animation Tokens (Exponential & Spring easings) */
+  /* 1. Interfaz Corporativa y Normativa (Modo Claro Ergonómico) */
+  --color-corp-bg: #F8FAFC;        /* Azul Grisáceo Claro (Fondo general) */
+  --color-corp-surface: #FFFFFF;   /* Blanco Puro (Superficies, tarjetas, modales) */
+  --color-corp-text: #0E1B2F;      /* Azul Marino Oscuro (Jerarquía principal, títulos) */
+  --color-corp-muted: #64748B;     /* Gris Azulado / Slate (Descripciones, metadatos, bordes) */
+  --color-corp-primary: #1A56DB;   /* Azul Corporativo (Botones CTA, radicación, enlaces) */
+  --color-corp-accent: #0B7A87;    /* Agua Marina Oscuro (Botones secundarios, insignias) */
+
+  /* 2. Paleta Técnica CAD / Digital Twin (Visor del Plano Interactivo) */
+  --color-cad-bg: #0B132B;         /* Azul Noche Profundo (Fondo consola técnica CAD) */
+  --color-cad-canvas: #080E1E;     /* Azul Lienzo CAD (Superficie y losa base corte 3D) */
+  --color-cad-hud: #0E1726;        /* Gris Pizarra Oscuro (Tarjetas HUD, tooltips) */
+  --color-cad-details: #1E293B;    /* Gris Técnico CAD (Cuadrícula milimétrica, cortes) */
+  --color-cad-volume: #334155;     /* Pizarra Medio (Cara superior top-face muros 3D) */
+
+  /* 3. Señalética de Seguridad y Normativa SST (NTC 1461 / GTC 45) */
+  --color-sst-evac: #10B981;        /* Verde Esmeralda Neón (Rutas continuas, OK) */
+  --color-sst-evac-active: #34D399; /* Verde Menta Neón (Trazado activo fotoluminiscente) */
+  --color-sst-equipment: #06B6D4;   /* Cian Neón Eléctrico (Extintores, detectores, TI) */
+  --color-sst-warning: #F59E0B;     /* Ámbar Industrial (Operación, chalecos, advertencias) */
+  --color-sst-emergency: #EF4444;   /* Rojo Señal (Emergencias, paradas, alertas críticas) */
+
+  /* Tokens de movimiento y microinteracciones (Emil Kowalski / Unseen Studio) */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-quad: cubic-bezier(0.25, 1, 0.5, 1);
-  --duration-micro: 150ms;
-  --duration-enter: 400ms;
+  --ease-smooth: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-micro: 180ms;
+  --duration-enter: 450ms;
 }
 
 html {

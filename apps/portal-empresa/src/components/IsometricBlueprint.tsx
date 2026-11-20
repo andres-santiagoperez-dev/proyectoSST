@@ -6,7 +6,6 @@ import {
   Layers, 
   MapPin, 
   ShieldAlert, 
-  HeartPulse, 
   DoorOpen, 
   Info, 
   CheckCircle2, 
@@ -14,16 +13,43 @@ import {
   RotateCcw, 
   Volume2, 
   VolumeX, 
-  Send
+  Send,
+  Flame,
+  Activity,
+  Calendar,
+  Bell,
+  User,
+  Sliders,
+  FileCheck2,
+  AlertTriangle,
+  ZoomIn,
+  ZoomOut,
+  Maximize2,
+  Compass,
+  ArrowRight,
+  ShieldCheck,
+  Building,
+  Check
 } from 'lucide-react';
 import SuggestionModal from './SuggestionModal';
 
-export interface ZonaPlano {
+/* =========================================================================
+   DEFINICIÓN DE ZONAS OPERATIVAS BASADAS EN EL PLANO REAL
+   (Innovatec Soluciones S.A. // SG-SST)
+   ========================================================================= */
+export interface ZonaPlanoReal {
   id: string;
   codigo: string;
   nombre: string;
-  area: string;
-  ala: string;
+  categoria: 'OPERATIVA' | 'ADMINISTRATIVA' | 'REUNION' | 'TECNICA' | 'SERVICIOS';
+  areaM2: number;
+  aforoNominal: number;
+  aforoMax: number;
+  aforoActual: number;
+  temperatura: string;
+  statusSST: 'PASSED' | 'WARNING' | 'CRITICAL';
+  salidaCercana: string;
+  distanciaSalidaM: number;
   tipoRiesgoGTC45: {
     clasificacion: string;
     nivelDeficiencia: string;
@@ -33,1116 +59,1745 @@ export interface ZonaPlano {
     nivelRiesgo: 'I' | 'II' | 'III' | 'IV';
     aceptabilidad: string;
     controles: {
-      eliminacionSustitucion: string;
       ingenieria: string;
       administrativos: string;
       epp: string;
     };
   };
-  aforoMax: number;
-  aforoNominal: number;
-  equiposSeguridad: Array<{ nombre: string; tipo: 'EXTINTOR' | 'PRIMEROS_AUXILIOS' | 'EMERGENCIA'; detalle: string }>;
+  equiposSeguridad: Array<{ nombre: string; tipo: 'EXTINTOR' | 'PRIMEROS_AUXILIOS' | 'DETECTOR'; detalle: string }>;
   responsableZona: string;
-  suplenteBrigada: string;
-  canalRadio: string;
-  gridCoord: { x: number; y: number; w: number; h: number; z: number };
-  colorAcento: string;
-  colorHighlight: string;
-  ultimaInspeccion: string;
+  colorHalo: string;
+  // Bounding box en coordenadas CAD del plano (X: 0..1000, Y: 0..500)
+  cadBox: { x: number; y: number; w: number; h: number };
 }
 
-export const ZONAS_EMPRESA: ZonaPlano[] = [
+export const ZONAS_REALES_SST: ZonaPlanoReal[] = [
   {
-    id: 'ZONA-1',
-    codigo: 'Z-01-LAB',
-    nombre: 'Laboratorio de Calidad y Catación',
-    area: 'Control de Calidad Ocupacional',
-    ala: 'Ala Norte Occidental (Nivel 1)',
-    tipoRiesgoGTC45: {
-      clasificacion: 'Biomecánico (Pantallas VDT / Postura Sedente Prolongada) y Químico Menor (Vapores de infusión y reactivos de catación)',
-      nivelDeficiencia: 'Medio (2)',
-      nivelExposicion: 'Frecuente (3)',
-      nivelProbabilidad: 'Medio (6)',
-      nivelConsecuencia: 'Leve (10)',
-      nivelRiesgo: 'III',
-      aceptabilidad: 'Mejorable con Controles de Ergonomía',
-      controles: {
-        eliminacionSustitucion: 'No aplica (proceso analítico de café esencial para exportación).',
-        ingenieria: 'Luminarias LED antirreflejo 500 Lux, sillas ergonómicas con soporte lumbar ajustable en 3 ejes.',
-        administrativos: 'Pausas activas visuales cada 60 min (regla 20-20-20), rotación de turnos de catación.',
-        epp: 'Bata de laboratorio de algodón ignífugo, calzado cerrado antideslizante con puntera de policarbonato.',
-      },
-    },
-    aforoMax: 12,
+    id: 'Z-PROD',
+    codigo: 'Z-01-PROD',
+    nombre: 'Área de Ensamblaje / Producción',
+    categoria: 'OPERATIVA',
+    areaM2: 52,
     aforoNominal: 8,
-    equiposSeguridad: [
-      { nombre: 'Extintor Solkaflam 123 (5 lbs)', tipo: 'EXTINTOR', detalle: 'Apto para equipos de laboratorio y cómputo' },
-      { nombre: 'Botiquín Tipo A (Res. 0705/2007)', tipo: 'PRIMEROS_AUXILIOS', detalle: 'Dotación básica para atención menor' },
-      { nombre: 'Sensor Óptico de Humo y Térmico', tipo: 'EMERGENCIA', detalle: 'Conexión a panel central contra incendio' },
-    ],
-    responsableZona: 'Laura Camila Torres',
-    suplenteBrigada: 'Esteban Darío Ruiz (Brigadista Auxilios)',
-    canalRadio: 'Canal 1 (Brigada SST)',
-    gridCoord: { x: 40, y: 30, w: 150, h: 120, z: 20 },
-    colorAcento: '#0B7A87', // Agua Marina Oscuro
-    colorHighlight: '#14B8A6',
-    ultimaInspeccion: '12 de Noviembre de 2026',
-  },
-  {
-    id: 'ZONA-2',
-    codigo: 'Z-02-TOST',
-    nombre: 'Sala de Tostaduría y Molienda',
-    area: 'Producción Primaria y Transformación',
-    ala: 'Ala Norte Oriental (Nivel 1)',
+    aforoMax: 12,
+    aforoActual: 8,
+    temperatura: '22.1°C',
+    statusSST: 'PASSED',
+    salidaCercana: 'Salida de Emergencia 3 (Norte-Este) & Acceso Carga',
+    distanciaSalidaM: 4.5,
     tipoRiesgoGTC45: {
-      clasificacion: 'Físico (Calor Radiante 34°C, Ruido Continuo 86 dBA) y Químico (Material Particulado Orgánico Polvo de Café)',
-      nivelDeficiencia: 'Alto (6)',
+      clasificacion: 'Mecánico (Herramientas de ensamble, componentes cortopunzantes) y Físico (Ruido continuo 82 dBA)',
+      nivelDeficiencia: 'Medio (2)',
       nivelExposicion: 'Continua (4)',
-      nivelProbabilidad: 'Muy Alto (24)',
+      nivelProbabilidad: 'Alto (8)',
       nivelConsecuencia: 'Grave (25)',
       nivelRiesgo: 'II',
-      aceptabilidad: 'Aceptable con Controles Específicos Estrictos',
+      aceptabilidad: 'Aceptable con Control Específico',
       controles: {
-        eliminacionSustitucion: 'Mantenimiento predictivo de rodamientos de molinos para abatir emisión sonora.',
-        ingenieria: 'Sistema de extracción localizada ciclónica de humos y particulado, apantallamiento térmico de pailas tostadoras.',
-        administrativos: 'Mediciones semestrales de sonometría y estrés térmico TGBH, hidratación reglamentaria cada 45 min.',
-        epp: 'Protección auditiva tipo copa NRR 27 dB, respirador con filtro N95 para polvos orgánicos, guantes térmicos de carnaza de descarne.',
+        ingenieria: 'Mesas antiestáticas ESD, iluminación focalizada 500 Lux, extracción localizada de humos de soldadura.',
+        administrativos: 'Pausas osteomusculares cada 60 min, inspección preoperacional de herramientas manuales.',
+        epp: 'Guantes de nitrilo anticorte Nivel 3, gafas de policarbonato con filtro UV, calzado dieléctrico.',
       },
     },
-    aforoMax: 18,
-    aforoNominal: 14,
     equiposSeguridad: [
-      { nombre: '2 Extintores Multipropósito ABC 20 lbs', tipo: 'EXTINTOR', detalle: 'Presión contenida PQS con manómetro verificado' },
-      { nombre: 'Ducha de Emergencia y Lavaojos', tipo: 'EMERGENCIA', detalle: 'Flujo continuo 15 min según norma ANSI Z358.1' },
-      { nombre: 'Pulsadores de Parada de Emergencia (Seta)', tipo: 'EMERGENCIA', detalle: 'Interbloqueo eléctrico de molinos y quemadores' },
+      { nombre: 'Extintor PQS ABC (20 lbs)', tipo: 'EXTINTOR', detalle: 'Ubicado en columna central de ensamblaje' },
+      { nombre: 'Sensor Óptico de Humo', tipo: 'DETECTOR', detalle: 'Enlace inalámbrico a central de alarmas' },
+      { nombre: 'Botiquín Tipo B Industrial', tipo: 'PRIMEROS_AUXILIOS', detalle: 'Dotación contra laceraciones y quemaduras' }
     ],
-    responsableZona: 'Mario Alberto Silva (Supervisor de Planta)',
-    suplenteBrigada: 'Nelson Javier Cárdenas (Brigadista Incendios)',
-    canalRadio: 'Canal 1 (Brigada SST)',
-    gridCoord: { x: 230, y: 30, w: 170, h: 120, z: 20 },
-    colorAcento: '#1A56DB', // Azul Corporativo
-    colorHighlight: '#2563EB',
-    ultimaInspeccion: '15 de Noviembre de 2026',
+    responsableZona: 'Ing. Carlos Mendoza (Líder Producción)',
+    colorHalo: '#F59E0B', // Ámbar Neón (como en la referencia)
+    cadBox: { x: 720, y: 30, w: 260, h: 160 },
   },
   {
-    id: 'ZONA-3',
-    codigo: 'Z-03-ENV',
-    nombre: 'Línea de Envasado al Vacío y Sellado',
-    area: 'Empaque, Termosellado y Embalaje',
-    ala: 'Sector Central Oriental (Nivel 1)',
+    id: 'Z-ALMACEN',
+    codigo: 'Z-02-ALM',
+    nombre: 'Almacén General y Estibas',
+    categoria: 'OPERATIVA',
+    areaM2: 85,
+    aforoNominal: 4,
+    aforoMax: 8,
+    aforoActual: 3,
+    temperatura: '20.4°C',
+    statusSST: 'PASSED',
+    salidaCercana: 'Acceso de Carga Este (Portón Seccional)',
+    distanciaSalidaM: 6.0,
     tipoRiesgoGTC45: {
-      clasificacion: 'Mecánico (Atrapamiento en mordazas neumáticas) y Biomecánico (Movimientos repetitivos de miembro superior)',
+      clasificacion: 'Biomecánico (Levantamiento de cargas pesadas) y Locativo (Trabajo en altura en estanterías > 1.50m)',
       nivelDeficiencia: 'Alto (6)',
       nivelExposicion: 'Frecuente (3)',
       nivelProbabilidad: 'Alto (18)',
-      nivelConsecuencia: 'Grave (25)',
-      nivelRiesgo: 'II',
-      aceptabilidad: 'Aceptable con Controles Específicos',
-      controles: {
-        eliminacionSustitucion: 'Diseño de tolvas de alimentación gravitacional automatizadas.',
-        ingenieria: 'Cortinas fotoeléctricas de seguridad categoría 4, resguardos de acrílico de alta resistencia en bandas.',
-        administrativos: 'Rotación obligatoria de puestos operativos cada 90 minutos, pausas de elongación de túnel carpiano.',
-        epp: 'Calzado ergonómico de seguridad dieléctrico, cofia desechable, guantes de nitrilo antideslizantes para empaque.',
-      },
-    },
-    aforoMax: 24,
-    aforoNominal: 20,
-    equiposSeguridad: [
-      { nombre: 'Extintor CO2 10 lbs (Dióxido de Carbono)', tipo: 'EXTINTOR', detalle: 'Para tableros eléctricos y motores de selladoras' },
-      { nombre: 'Botiquín Tipo B Industrial', tipo: 'PRIMEROS_AUXILIOS', detalle: 'Dotación para inmovilización y curaciones' },
-      { nombre: 'Estación de Pausa Activa EP-02', tipo: 'EMERGENCIA', detalle: 'Guía visual y cronómetro de estiramiento articular' },
-    ],
-    responsableZona: 'Gloria Inés Patiño',
-    suplenteBrigada: 'Diana Marcela López (Brigadista Evacuación)',
-    canalRadio: 'Canal 1 (Brigada SST)',
-    gridCoord: { x: 230, y: 180, w: 170, h: 110, z: 20 },
-    colorAcento: '#10B981', // Verde Esmeralda
-    colorHighlight: '#34D399',
-    ultimaInspeccion: '14 de Noviembre de 2026',
-  },
-  {
-    id: 'ZONA-4',
-    codigo: 'Z-04-BOD',
-    nombre: 'Bodega de Almacenamiento y Estibado',
-    area: 'Logística, Carga y Despachos',
-    ala: 'Sector Central Occidental (Nivel 1)',
-    tipoRiesgoGTC45: {
-      clasificacion: 'Locativo (Caída de objetos en estanterías drive-in) y Mecánico (Interacción peatón - montacargas eléctrico)',
-      nivelDeficiencia: 'Alto (6)',
-      nivelExposicion: 'Continua (4)',
-      nivelProbabilidad: 'Muy Alto (24)',
       nivelConsecuencia: 'Muy Grave (60)',
       nivelRiesgo: 'I',
-      aceptabilidad: 'Situación Crítica / Control Prioritario Inmediato',
+      aceptabilidad: 'No Aceptable sin Controles Severos',
       controles: {
-        eliminacionSustitucion: 'Sustitución de estibas deterioradas por estibas plásticas sanitarias de alta carga.',
-        ingenieria: 'Barreras de contención de estanterías según norma EN 15635, espejos cóncavos panorámicos en intersecciones de pasillo.',
-        administrativos: 'Velocidad máxima de montacargas limitada a 8 km/h, demarcación estricta de sendas peatonales de 1.20 m.',
-        epp: 'Casco de seguridad Tipo I Clase E, chaleco reflectivo clase 2 según ANSI/ISEA 107, botas con puntera de acero.',
+        ingenieria: 'Estanterías industriales ancladas con pernos Hilti a losa, transpaletas hidráulicas de apoyo.',
+        administrativos: 'Límite de carga manual máx. 25 kg hombres / 12.5 kg mujeres (Res. 2400/1979). Certificación alturas.',
+        epp: 'Casco con barbuquejo dieléctrico, botas con puntera de acero, faja ergonómica certificada.',
       },
     },
-    aforoMax: 15,
-    aforoNominal: 10,
     equiposSeguridad: [
-      { nombre: '3 Extintores Multipropósito ABC 30 lbs', tipo: 'EXTINTOR', detalle: 'Ubicados en cabeceras de pasillos principales' },
-      { nombre: 'Camilla Rígida Espinal con Inmovilizadores', tipo: 'PRIMEROS_AUXILIOS', detalle: 'Equipada con arnés de sujeción tipo araña' },
-      { nombre: 'Luces Estroboscópicas de Intersección', tipo: 'EMERGENCIA', detalle: 'Advertencia visual de proximidad de montacargas' },
+      { nombre: 'Extintor PQS ABC (20 lbs)', tipo: 'EXTINTOR', detalle: 'Cabecera de rack pasillo 2' },
+      { nombre: 'Alarma Manual tipo Estación', tipo: 'DETECTOR', detalle: 'Pulsador de emergencia junto a portón' },
     ],
-    responsableZona: 'Javier Enrique Gómez (Vigía COPASST)',
-    suplenteBrigada: 'Wilmer Alexander Castro (Brigadista Rescate)',
-    canalRadio: 'Canal 1 (Brigada SST)',
-    gridCoord: { x: 40, y: 180, w: 150, h: 110, z: 20 },
-    colorAcento: '#14B8A6', // Turquesa
-    colorHighlight: '#2DD4BF',
-    ultimaInspeccion: '16 de Noviembre de 2026',
+    responsableZona: 'Javier Enrique Gómez (Jefe Almacén)',
+    colorHalo: '#F59E0B',
+    cadBox: { x: 810, y: 200, w: 170, h: 280 },
   },
   {
-    id: 'ZONA-5',
-    codigo: 'Z-05-ADM',
-    nombre: 'Oficinas Administrativas y SG-SST',
-    area: 'Administración, Gestión del Talento y SG-SST',
-    ala: 'Ala Sur Occidental (Nivel 1)',
+    id: 'Z-TI',
+    codigo: 'Z-03-SRV',
+    nombre: 'Cuarto de Servidores / Datacenter IT',
+    categoria: 'TECNICA',
+    areaM2: 18,
+    aforoNominal: 1,
+    aforoMax: 3,
+    aforoActual: 1,
+    temperatura: '18.5°C',
+    statusSST: 'PASSED',
+    salidaCercana: 'Salida de Emergencia 1 (Norte)',
+    distanciaSalidaM: 2.5,
     tipoRiesgoGTC45: {
-      clasificacion: 'Biomecánico (Sedestación continua y trabajo en VDT) y Psicosocial (Atención y cumplimiento de metas anuales)',
-      nivelDeficiencia: 'Bajo (0)',
+      clasificacion: 'Eléctrico (Alta tensión en UPS y tableros trifásicos) y Tecnológico (Riesgo de arco eléctrico / conato)',
+      nivelDeficiencia: 'Alto (6)',
+      nivelExposicion: 'Ocasional (2)',
+      nivelProbabilidad: 'Medio (12)',
+      nivelConsecuencia: 'Mortal / Catastrófico (100)',
+      nivelRiesgo: 'I',
+      aceptabilidad: 'Crítico — Control Automático',
+      controles: {
+        ingenieria: 'Sistema de supresión de incendios por gas limpio FM-200, climatización de precisión dual redundancy.',
+        administrativos: 'Acceso restringido por tarjeta biométrica RFID, mantenimiento preventivo según RETIE.',
+        epp: 'Calzado dieléctrico 18 kV, traje ignífugo para maniobras en tableros energizados.',
+      },
+    },
+    equiposSeguridad: [
+      { nombre: 'Extintor Solkaflam 123 (10 lbs)', tipo: 'EXTINTOR', detalle: 'Agente limpio no conductor de electricidad' },
+      { nombre: 'Boquilla de Descarga FM-200', tipo: 'DETECTOR', detalle: 'Inundación total automática ante humo' },
+    ],
+    responsableZona: 'Ing. David Arboleda (SysAdmin / IT)',
+    colorHalo: '#06B6D4', // Cian Neón Técnico
+    cadBox: { x: 400, y: 30, w: 100, h: 140 },
+  },
+  {
+    id: 'Z-ID',
+    codigo: 'Z-04-DEV',
+    nombre: 'Desarrollo, Diseño e I+D',
+    categoria: 'OPERATIVA',
+    areaM2: 44,
+    aforoNominal: 6,
+    aforoMax: 10,
+    aforoActual: 5,
+    temperatura: '21.8°C',
+    statusSST: 'PASSED',
+    salidaCercana: 'Salida de Emergencia 2 (Norte)',
+    distanciaSalidaM: 2.0,
+    tipoRiesgoGTC45: {
+      clasificacion: 'Biomecánico (Postura sedente prolongada en pantallas VDT) y Psicosocial (Carga mental / entregas)',
+      nivelDeficiencia: 'Medio (2)',
       nivelExposicion: 'Continua (4)',
-      nivelProbabilidad: 'Bajo (4)',
+      nivelProbabilidad: 'Alto (8)',
       nivelConsecuencia: 'Leve (10)',
       nivelRiesgo: 'III',
-      aceptabilidad: 'Aceptable con Mantenimiento de Controles',
+      aceptabilidad: 'Mejorable con Ergonomía',
       controles: {
-        eliminacionSustitucion: 'Digitalización completa de archivo documental SST (cero cargue de carpetas pesadas).',
-        ingenieria: 'Brazos neumáticos portamonitor a la altura de la vista, apoyapiés ergonómicos ajustables con inclinación.',
-        administrativos: 'App Pausas Vitales instalada en estaciones con bloqueo recordatorio cada 60 min, tamizaje psicosocial Res. 2764/2022.',
-        epp: 'Lentes con filtro de luz azul antirreflejo para colaboradores con prescripción optométrica.',
+        ingenieria: 'Sillas ergonómicas certificación BIFMA, brazos de monitor ajustables en 3 ejes, luminarias antirreflejo.',
+        administrativos: 'Pausas activas visuales cada 50 minutos (regla 20-20-20), monitoreo de confort higrotérmico.',
+        epp: 'Gafas con filtro blue-light antirreflejo para programadores y diseñadores.',
       },
     },
-    aforoMax: 30,
-    aforoNominal: 22,
     equiposSeguridad: [
-      { nombre: 'Extintor Solkaflam 123 (10 lbs)', tipo: 'EXTINTOR', detalle: 'Para servidor y equipos de cómputo' },
-      { nombre: 'Desfibrilador Externo Automático (DEA)', tipo: 'PRIMEROS_AUXILIOS', detalle: 'Cumplimiento Ley 1831 de 2017 con batería testeada' },
-      { nombre: 'Botiquín Tipo A Institucional', tipo: 'PRIMEROS_AUXILIOS', detalle: 'Ubicado en recepción principal' },
+      { nombre: 'Extintor Solkaflam 123 (5 lbs)', tipo: 'EXTINTOR', detalle: 'Montado en pared norte junto a salida' },
+      { nombre: 'Detector Fotoeléctrico', tipo: 'DETECTOR', detalle: 'Conexión direccionable al panel central' },
     ],
-    responsableZona: 'Ing. Carlos Andrés Montoya (Líder SST)',
-    suplenteBrigada: 'Paola Andrea Méndez (Brigadista Auxilios)',
-    canalRadio: 'Canal 1 (Brigada SST)',
-    gridCoord: { x: 40, y: 310, w: 150, h: 70, z: 20 },
-    colorAcento: '#0B7A87', // Agua Marina Oscuro
-    colorHighlight: '#1A56DB',
-    ultimaInspeccion: '10 de Noviembre de 2026',
+    responsableZona: 'Laura Camila Torres (Líder I+D)',
+    colorHalo: '#10B981', // Verde Esmeralda
+    cadBox: { x: 510, y: 30, w: 200, h: 140 },
   },
   {
-    id: 'ZONA-6',
-    codigo: 'PE-01-EXT',
-    nombre: 'Punto de Encuentro Exterior (PE-01)',
-    area: 'Patio Principal, Bahía de Maniobras y Despeje',
-    ala: 'Explanada Sur Exterior (Zona Segura)',
+    id: 'Z-JUNTAS1',
+    codigo: 'Z-05-JUN1',
+    nombre: 'Sala de Juntas Ejecutiva 1',
+    categoria: 'REUNION',
+    areaM2: 36,
+    aforoNominal: 10,
+    aforoMax: 12,
+    aforoActual: 0,
+    temperatura: '21.0°C',
+    statusSST: 'PASSED',
+    salidaCercana: 'Salida de Emergencia 1 (Norte)',
+    distanciaSalidaM: 3.0,
     tipoRiesgoGTC45: {
-      clasificacion: 'Zona Segura de Concentración y Conteo (Libre de riesgos de colapso estructural y redes aéreas de media tensión)',
-      nivelDeficiencia: 'Bajo (0)',
-      nivelExposicion: 'Esporádica (1)',
+      clasificacion: 'Locativo Menor (Cables pasacables, tropiezo) y Biomecánico leve',
+      nivelDeficiencia: 'Bajo (1)',
+      nivelExposicion: 'Ocasional (2)',
       nivelProbabilidad: 'Bajo (2)',
       nivelConsecuencia: 'Leve (10)',
       nivelRiesgo: 'IV',
-      aceptabilidad: 'Aceptable Pleno / Zona Normalizada',
+      aceptabilidad: 'Aceptable sin Novedad',
       controles: {
-        eliminacionSustitucion: 'Ubicación calculada a más de 1.5 veces la altura máxima de la edificación adyacente.',
-        ingenieria: 'Demarcación con pintura epóxica verde reflectiva de alta durabilidad, baliza solar estroboscópica.',
-        administrativos: 'Simulacros de evacuación generales cada 6 meses, censo nominal digital en tableta de mando.',
-        epp: 'Chalecos reflectivos de alta visibilidad para coordinadores de evacuación y brigadistas.',
+        ingenieria: 'Canaletas embutidas en mesa para conectividad HDMI/Red, climatización silenciosa.',
+        administrativos: 'Control estricto de aforo máximo en puerta (máx 12 personas).',
+        epp: 'No requiere EPP especial.',
       },
     },
-    aforoMax: 300,
-    aforoNominal: 0,
     equiposSeguridad: [
-      { nombre: 'Megáfono Electrónico de Evacuación (25W)', tipo: 'EMERGENCIA', detalle: 'Con sirena audible a más de 500 metros' },
-      { nombre: 'Carpeta Maestra de Censo y Trazabilidad', tipo: 'EMERGENCIA', detalle: 'Listado actualizado de turnos y contratistas' },
-      { nombre: 'Baliza Verde Fotoluminiscente de Despeje', tipo: 'EMERGENCIA', detalle: 'Baliza solar permanente de georreferenciación' },
+      { nombre: 'Detector Iónico de Humo', tipo: 'DETECTOR', detalle: 'En cielo raso suspendido' },
     ],
-    responsableZona: 'Comandante de Brigada Integral',
-    suplenteBrigada: 'Coordinador General de Evacuación',
-    canalRadio: 'Canal 1 (Brigada SST)',
-    gridCoord: { x: 210, y: 310, w: 190, h: 70, z: 6 },
-    colorAcento: '#047857', // Verde Bosque
-    colorHighlight: '#10B981',
-    ultimaInspeccion: '18 de Noviembre de 2026',
+    responsableZona: 'Secretaría de Gerencia',
+    colorHalo: '#3B82F6',
+    cadBox: { x: 190, y: 30, w: 200, h: 140 },
+  },
+  {
+    id: 'Z-JUNTAS2',
+    codigo: 'Z-06-JUN2',
+    nombre: 'Sala de Juntas Central 2',
+    categoria: 'REUNION',
+    areaM2: 48,
+    aforoNominal: 12,
+    aforoMax: 16,
+    aforoActual: 6,
+    temperatura: '21.5°C',
+    statusSST: 'PASSED',
+    salidaCercana: 'Pasillo Central hacia Acceso Principal',
+    distanciaSalidaM: 8.0,
+    tipoRiesgoGTC45: {
+      clasificacion: 'Locativo y Biomecánico',
+      nivelDeficiencia: 'Bajo (1)',
+      nivelExposicion: 'Frecuente (3)',
+      nivelProbabilidad: 'Medio (3)',
+      nivelConsecuencia: 'Leve (10)',
+      nivelRiesgo: 'IV',
+      aceptabilidad: 'Aceptable Conforme',
+      controles: {
+        ingenieria: 'Doble puerta de salida abatible hacia afuera conforme a NSR-10.',
+        administrativos: 'Plan de evacuación impreso junto al interruptor.',
+        epp: 'No aplica.',
+      },
+    },
+    equiposSeguridad: [
+      { nombre: 'Sensor de Humo y Térmico', tipo: 'DETECTOR', detalle: 'Direccionable zona 2' }
+    ],
+    responsableZona: 'Coordinación COPASST',
+    colorHalo: '#3B82F6',
+    cadBox: { x: 190, y: 220, w: 230, h: 140 },
+  },
+  {
+    id: 'Z-RECEPCION',
+    codigo: 'Z-07-REC',
+    nombre: 'Recepción, Hall y Sala de Espera',
+    categoria: 'ADMINISTRATIVA',
+    areaM2: 60,
+    aforoNominal: 10,
+    aforoMax: 20,
+    aforoActual: 4,
+    temperatura: '21.2°C',
+    statusSST: 'PASSED',
+    salidaCercana: 'Acceso Principal Oeste (Doble Batiente)',
+    distanciaSalidaM: 1.5,
+    tipoRiesgoGTC45: {
+      clasificacion: 'Público (Ingreso de terceros no autorizados) y Locativo (Piso pulido / riesgo de resbalón)',
+      nivelDeficiencia: 'Medio (2)',
+      nivelExposicion: 'Continua (4)',
+      nivelProbabilidad: 'Alto (8)',
+      nivelConsecuencia: 'Leve (10)',
+      nivelRiesgo: 'III',
+      aceptabilidad: 'Mejorable con Controles de Seguridad Física',
+      controles: {
+        ingenieria: 'Cinta antideslizante en umbral de entrada, torniquetes de control biométrico.',
+        administrativos: 'Registro de visitas con carné de identificación e inducción SST express.',
+        epp: 'Calzado antideslizante.',
+      },
+    },
+    equiposSeguridad: [
+      { nombre: 'Extintor Solkaflam 123 (10 lbs)', tipo: 'EXTINTOR', detalle: 'Detrás de mostrador de recepción' },
+      { nombre: 'Pulsador de Pánico Asaltos/Emergencia', tipo: 'DETECTOR', detalle: 'Enlace directo con Policía 123 y Central SST' },
+      { nombre: 'Botiquín Primeros Auxilios Tipo A', tipo: 'PRIMEROS_AUXILIOS', detalle: 'Junto a sala de espera' },
+    ],
+    responsableZona: 'Valeria Cárdenas (Recepcionista)',
+    colorHalo: '#10B981',
+    cadBox: { x: 20, y: 200, w: 160, h: 280 },
+  },
+  {
+    id: 'Z-OFICINAS-SUR',
+    codigo: 'Z-08-OFIC',
+    nombre: 'Batería de Oficinas Sur (Gerencia, RRHH, Finanzas)',
+    categoria: 'ADMINISTRATIVA',
+    areaM2: 78,
+    aforoNominal: 14,
+    aforoMax: 18,
+    aforoActual: 11,
+    temperatura: '22.0°C',
+    statusSST: 'PASSED',
+    salidaCercana: 'Pasillo Sur hacia Salida 2 o Recepción',
+    distanciaSalidaM: 9.0,
+    tipoRiesgoGTC45: {
+      clasificacion: 'Biomecánico (Sedestación) y Psicosocial (Atención y responsabilidades directivas)',
+      nivelDeficiencia: 'Medio (2)',
+      nivelExposicion: 'Continua (4)',
+      nivelProbabilidad: 'Alto (8)',
+      nivelConsecuencia: 'Leve (10)',
+      nivelRiesgo: 'III',
+      aceptabilidad: 'Aceptable con Controles Ergonómicos',
+      controles: {
+        ingenieria: 'Luminarias microprismáticas < 19 UGR para prevención de fatiga visual.',
+        administrativos: 'Capacitaciones anuales de manejo de estrés y pausas activas.',
+        epp: 'No aplica.',
+      },
+    },
+    equiposSeguridad: [
+      { nombre: 'Extintor PQS ABC (10 lbs)', tipo: 'EXTINTOR', detalle: 'Pasillo intermedio oficinas sur' },
+      { nombre: 'Detectores Fotoeléctricos', tipo: 'DETECTOR', detalle: 'Uno por cada oficina privada' },
+    ],
+    responsableZona: 'Dra. Elena Santos (Directora RRHH)',
+    colorHalo: '#14B8A6',
+    cadBox: { x: 190, y: 390, w: 510, h: 90 },
+  },
+  {
+    id: 'Z-COMEDOR',
+    codigo: 'Z-09-COM',
+    nombre: 'Comedor / Kitchenette y Servicios',
+    categoria: 'SERVICIOS',
+    areaM2: 32,
+    aforoNominal: 8,
+    aforoMax: 12,
+    aforoActual: 2,
+    temperatura: '22.5°C',
+    statusSST: 'PASSED',
+    salidaCercana: 'Pasillo Este hacia Acceso de Carga',
+    distanciaSalidaM: 5.0,
+    tipoRiesgoGTC45: {
+      clasificacion: 'Físico (Quemaduras por microondas y cafetera) y Biológico / Higiene alimentaria',
+      nivelDeficiencia: 'Medio (2)',
+      nivelExposicion: 'Ocasional (2)',
+      nivelProbabilidad: 'Bajo (4)',
+      nivelConsecuencia: 'Grave (25)',
+      nivelRiesgo: 'III',
+      aceptabilidad: 'Aceptable con Mantenimiento',
+      controles: {
+        ingenieria: 'Tomacorrientes GFCI a prueba de agua y cortocircuitos, extractor de olores.',
+        administrativos: 'Protocolo de desinfección diaria y limpieza de superficies.',
+        epp: 'Guantes de látex y delantal para personal de aseo.',
+      },
+    },
+    equiposSeguridad: [
+      { nombre: 'Extintor Acetato de Potasio Tipo K', tipo: 'EXTINTOR', detalle: 'Especial para fuegos en cocinas y grasas' },
+      { nombre: 'Detector Térmico de Temperatura', tipo: 'DETECTOR', detalle: 'Evita falsas alarmas por vapor de cocción' },
+    ],
+    responsableZona: 'Gloria Inés Patiño (Líder COPASST)',
+    colorHalo: '#10B981',
+    cadBox: { x: 720, y: 200, w: 80, h: 280 },
   },
 ];
 
-// Etiquetas en 2 líneas para el visor SVG que garantizan cero recortes
-const LABELS_ZONAS_SVG: Record<string, { linea1: string; linea2: string }> = {
-  'ZONA-1': { linea1: 'Laboratorio Calidad', linea2: '& Catación' },
-  'ZONA-2': { linea1: 'Sala de Tostaduría', linea2: '& Molienda' },
-  'ZONA-3': { linea1: 'Línea de Envasado', linea2: '& Sellado al Vacío' },
-  'ZONA-4': { linea1: 'Bodega Almacenamiento', linea2: '& Estibado' },
-  'ZONA-5': { linea1: 'Oficinas Administrativas', linea2: '& SG-SST' },
-  'ZONA-6': { linea1: 'Punto de Encuentro', linea2: 'Exterior (PE-01)' },
-};
-
-// Helper para proyección isométrica (30 grados)
-function toIso(x: number, y: number, z: number = 0, originX = 460, originY = 110, scale = 1.05) {
-  const cos30 = 0.86602540378;
-  const sin30 = 0.5;
-  const px = originX + (x - y) * cos30 * scale;
-  const py = originY + (x + y) * sin30 * scale - z * scale;
-  return { x: Math.round(px * 10) / 10, y: Math.round(py * 10) / 10 };
-}
-
-function getTopPoly(x: number, y: number, w: number, h: number, z: number) {
-  const p0 = toIso(x, y, z);
-  const p1 = toIso(x + w, y, z);
-  const p2 = toIso(x + w, y + h, z);
-  const p3 = toIso(x, y + h, z);
-  return `${p0.x},${p0.y} ${p1.x},${p1.y} ${p2.x},${p2.y} ${p3.x},${p3.y}`;
-}
-
-function getFrontLeftWall(x: number, y: number, w: number, h: number, z: number) {
-  const p3_top = toIso(x, y + h, z);
-  const p2_top = toIso(x + w, y + h, z);
-  const p2_bot = toIso(x + w, y + h, 0);
-  const p3_bot = toIso(x, y + h, 0);
-  return `${p3_top.x},${p3_top.y} ${p2_top.x},${p2_top.y} ${p2_bot.x},${p2_bot.y} ${p3_bot.x},${p3_bot.y}`;
-}
-
-function getFrontRightWall(x: number, y: number, w: number, h: number, z: number) {
-  const p2_top = toIso(x + w, y + h, z);
-  const p1_top = toIso(x + w, y, z);
-  const p1_bot = toIso(x + w, y, 0);
-  const p2_bot = toIso(x + w, y + h, 0);
-  return `${p2_top.x},${p2_top.y} ${p1_top.x},${p1_top.y} ${p1_bot.x},${p1_bot.y} ${p2_bot.x},${p2_bot.y}`;
-}
-
-function getCenter(x: number, y: number, w: number, h: number, z: number) {
-  return toIso(x + w / 2, y + h / 2, z);
-}
-
 export default function IsometricBlueprint() {
-  const [capaActiva, setCapaActiva] = useState<'GENERAL' | 'EVACUACION' | 'PAUSAS' | 'EQUIPOS'>('GENERAL');
-  const [zonaSeleccionada, setZonaSeleccionada] = useState<ZonaPlano>(ZONAS_EMPRESA[0]);
-  const [simulando, setSimulando] = useState(false);
-  const [segundosSimulacion, setSegundosSimulacion] = useState(0);
-  const [isMuted, setIsMuted] = useState(false);
+  const [capaActiva, setCapaActiva] = useState<'GENERAL' | 'EVACUACION' | 'EQUIPOS' | 'RIESGOS'>('GENERAL');
+  const [zonaSeleccionada, setZonaSeleccionada] = useState<ZonaPlanoReal>(ZONAS_REALES_SST[0]);
+  const [zonaHover, setZonaHover] = useState<ZonaPlanoReal | null>(null);
+  const [simulandoEvacuacion, setSimulandoEvacuacion] = useState(false);
+  const [sonidoHabilitado, setSonidoHabilitado] = useState(true);
   const [modalSugerenciaAbierto, setModalSugerenciaAbierto] = useState(false);
-  const [zonaModal, setZonaModal] = useState<string>('ZONA-1');
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const [tiempoSimulacion, setTiempoSimulacion] = useState(0);
+
+  const audioContextRef = useRef<AudioContext | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
 
-  // Reproducción armónica del chime de despeje (Do-Mi-Sol-Do) con Web Audio API
-  const reproducirChime = () => {
-    if (isMuted) return;
+  // Reproducción de sonido de evacuación armónico (Web Audio API)
+  const reproducirChimeEvacuacion = () => {
+    if (!sonidoHabilitado) return;
     try {
       const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      if (!AudioCtx) return;
-      const audioCtx = new AudioCtx();
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
+      if (!audioContextRef.current) {
+        audioContextRef.current = new AudioCtx();
+      }
+      const ctx = audioContextRef.current;
+      if (ctx.state === 'suspended') {
+        ctx.resume();
       }
 
-      // Campanas armónicas de despeje (Acorde mayor brillante en Do Mayor: C5, E5, G5, C6)
-      const notas = [523.25, 659.25, 783.99, 1046.50];
-      notas.forEach((freq, idx) => {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sine';
-        const startTime = audioCtx.currentTime + idx * 0.08;
-        const duracion = 0.5;
+      // Secuencia de campanas armónicas de seguridad (C5, E5, G5, C6)
+      const frecuencias = [523.25, 659.25, 783.99, 1046.50];
+      const tiempos = [0, 0.14, 0.28, 0.42];
 
-        osc.frequency.setValueAtTime(freq, startTime);
-        gain.gain.setValueAtTime(0.001, startTime);
-        gain.gain.linearRampToValueAtTime(0.05, startTime + 0.02);
-        gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duracion);
+      frecuencias.forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, ctx.currentTime + tiempos[idx]);
+
+        gain.gain.setValueAtTime(0, ctx.currentTime + tiempos[idx]);
+        gain.gain.linearRampToValueAtTime(0.12, ctx.currentTime + tiempos[idx] + 0.03);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + tiempos[idx] + 0.55);
 
         osc.connect(gain);
-        gain.connect(audioCtx.destination);
+        gain.connect(ctx.destination);
 
-        osc.start(startTime);
-        osc.stop(startTime + duracion);
+        osc.start(ctx.currentTime + tiempos[idx]);
+        osc.stop(ctx.currentTime + tiempos[idx] + 0.6);
       });
     } catch {
-      // Audio silencioso en entornos restringidos
+      // Audio no disponible
     }
   };
 
-  const alternarSimulacion = () => {
-    if (simulando) {
-      setSimulando(false);
-      setSegundosSimulacion(0);
-    } else {
+  const toggleSimulacion = () => {
+    if (!simulandoEvacuacion) {
+      setSimulandoEvacuacion(true);
       setCapaActiva('EVACUACION');
-      setSimulando(true);
-      setSegundosSimulacion(0);
-      const pe01 = ZONAS_EMPRESA.find((z) => z.id === 'ZONA-6');
-      if (pe01) setZonaSeleccionada(pe01);
-      reproducirChime();
+      setTiempoSimulacion(0);
+      reproducirChimeEvacuacion();
+    } else {
+      setSimulandoEvacuacion(false);
+      setTiempoSimulacion(0);
     }
   };
 
+  // Temporizador de simulación
   useEffect(() => {
     let timer: NodeJS.Timeout;
-    if (simulando) {
+    if (simulandoEvacuacion) {
       timer = setInterval(() => {
-        setSegundosSimulacion((s) => {
-          if (s >= 15) {
-            setSimulando(false);
+        setTiempoSimulacion((prev) => {
+          if (prev >= 25) {
+            setSimulandoEvacuacion(false);
             return 0;
           }
-          return s + 1;
+          return prev + 1;
         });
       }, 1000);
     }
     return () => clearInterval(timer);
-  }, [simulando]);
+  }, [simulandoEvacuacion]);
 
-  // Entrada animada con GSAP respetando prefers-reduced-motion
+  // Animación de entrada GSAP
   useEffect(() => {
     if (!svgRef.current) return;
-    const prefiereReducido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (!prefiereReducido) {
-      const ctx = gsap.context(() => {
-        gsap.fromTo(
-          '.iso-bloque',
-          { opacity: 0, y: 15 },
-          { opacity: 1, y: 0, duration: 0.9, stagger: 0.08, ease: 'power2.out' }
-        );
-        gsap.fromTo(
-          '.iso-linea-trazado',
-          { strokeDashoffset: 500, opacity: 0 },
-          { strokeDashoffset: 0, opacity: 1, duration: 1.2, delay: 0.2, ease: 'power2.out' }
-        );
-      }, svgRef);
-
-      return () => ctx.revert();
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reducedMotion) {
+      gsap.fromTo(
+        '.cad-wall-element',
+        { opacity: 0, y: 15 },
+        { opacity: 1, y: 0, duration: 0.8, stagger: 0.03, ease: 'power2.out' }
+      );
     }
   }, []);
 
-  const abrirModalParaZona = (zonaId: string) => {
-    setZonaModal(zonaId);
-    setModalSugerenciaAbierto(true);
+  // Detección de parámetros de URL (?simular=true & ?focus=...)
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('simular') === 'true') {
+        setSimulandoEvacuacion(true);
+        setCapaActiva('EVACUACION');
+        setTiempoSimulacion(0);
+      }
+      const focusParam = params.get('focus');
+      if (focusParam) {
+        const found = ZONAS_REALES_SST.find(z => 
+          z.id.toLowerCase().includes(focusParam.toLowerCase()) || 
+          z.nombre.toLowerCase().includes(focusParam.toLowerCase())
+        );
+        if (found) {
+          setZonaSeleccionada(found);
+        }
+      }
+    }
+  }, []);
+
+  /* =========================================================================
+     MOTOR DE PROYECCIÓN ISOMÉTRICA (30° CAD AXONOMETRIC ENGINE)
+     Transforma coordenadas del plano 2D (X: 0..1000, Y: 0..500) a pantalla SVG
+     ========================================================================= */
+  const originX = 720;
+  const originY = 230;
+  const scale = 1.12;
+  const cos30 = 0.866025;
+  const sin30 = 0.5;
+
+  const toIso = (x: number, y: number, z: number = 0) => {
+    const screenX = originX + (x - y) * cos30 * scale;
+    const screenY = originY + (x + y) * sin30 * scale - z * scale;
+    return { x: Math.round(screenX), y: Math.round(screenY) };
   };
 
-  // Coordenadas calculadas de los pasillos de evacuación (isométricos)
-  const rutaLab = `${toIso(115, 90, 2).x},${toIso(115, 90, 2).y} L ${toIso(210, 90, 2).x},${toIso(210, 90, 2).y}`;
-  const rutaTost = `${toIso(315, 90, 2).x},${toIso(315, 90, 2).y} L ${toIso(210, 90, 2).x},${toIso(210, 90, 2).y}`;
-  const rutaBodega = `${toIso(115, 235, 2).x},${toIso(115, 235, 2).y} L ${toIso(210, 235, 2).x},${toIso(210, 235, 2).y}`;
-  const rutaEnv = `${toIso(315, 235, 2).x},${toIso(315, 235, 2).y} L ${toIso(210, 235, 2).x},${toIso(210, 235, 2).y}`;
-  const rutaOficinas = `${toIso(115, 345, 2).x},${toIso(115, 345, 2).y} L ${toIso(210, 345, 2).x},${toIso(210, 345, 2).y}`;
-  const espinaTroncal = `M ${toIso(210, 60, 2).x},${toIso(210, 60, 2).y} L ${toIso(210, 310, 2).x},${toIso(210, 310, 2).y} L ${toIso(300, 345, 2).x},${toIso(300, 345, 2).y}`;
+  // Función auxiliar para dibujar un polígono de piso isométrico
+  const isoFloor = (x: number, y: number, w: number, h: number, z: number = 0) => {
+    const p1 = toIso(x, y, z);
+    const p2 = toIso(x + w, y, z);
+    const p3 = toIso(x + w, y + h, z);
+    const p4 = toIso(x, y + h, z);
+    return `${p1.x},${p1.y} ${p2.x},${p2.y} ${p3.x},${p3.y} ${p4.x},${p4.y}`;
+  };
+
+  // Función para dibujar muros con volumen 3D (Cutaway a altura zWall)
+  const isoWallBox = (x: number, y: number, w: number, h: number, wallHeight: number = 26) => {
+    // Cara superior (top face)
+    const t1 = toIso(x, y, wallHeight);
+    const t2 = toIso(x + w, y, wallHeight);
+    const t3 = toIso(x + w, y + h, wallHeight);
+    const t4 = toIso(x, y + h, wallHeight);
+    const topPolygon = `${t1.x},${t1.y} ${t2.x},${t2.y} ${t3.x},${t3.y} ${t4.x},${t4.y}`;
+
+    // Cara frontal sur (front-south face)
+    const b3 = toIso(x + w, y + h, 0);
+    const b4 = toIso(x, y + h, 0);
+    const frontPolygon = `${t4.x},${t4.y} ${t3.x},${t3.y} ${b3.x},${b3.y} ${b4.x},${b4.y}`;
+
+    // Cara lateral este (right-east face)
+    const b2 = toIso(x + w, y, 0);
+    const rightPolygon = `${t2.x},${t2.y} ${t3.x},${t3.y} ${b3.x},${b3.y} ${b2.x},${b2.y}`;
+
+    return { topPolygon, frontPolygon, rightPolygon };
+  };
+
+  // Coordenadas calculadas para rutas de evacuación
+  // 1. Ruta desde Ensamblaje hacia Salida 3
+  const pSalida3 = toIso(950, 30, 2);
+  const pProduccionCentro = toIso(850, 110, 2);
+  const pSalidaCarga = toIso(980, 180, 2);
+
+  // 2. Ruta troncal desde Almacén hacia pasillos
+  const pAlmacen1 = toIso(900, 340, 2);
+  const pAlmacenSalida = toIso(810, 270, 2);
+
+  // 3. Troncal central
+  const pPasilloEste = toIso(720, 195, 2);
+  const pPasilloCentro = toIso(450, 195, 2);
+  const pPasilloOeste = toIso(180, 195, 2);
+
+  // 4. Salida de Emergencia 2 (I+D)
+  const pSalida2 = toIso(690, 30, 2);
+  const pIDCentro = toIso(610, 100, 2);
+
+  // 5. Salida de Emergencia 1 (Sala de Juntas 1)
+  const pSalida1 = toIso(370, 30, 2);
+  const pJuntas1Centro = toIso(290, 100, 2);
+
+  // 6. Acceso Principal Oeste
+  const pAccesoPrincipal = toIso(20, 250, 2);
+
+  // Rutas SVG
+  const rutaEvacNorte = `M ${pIDCentro.x},${pIDCentro.y} L ${pSalida2.x},${pSalida2.y}`;
+  const rutaEvacJuntas1 = `M ${pJuntas1Centro.x},${pJuntas1Centro.y} L ${pSalida1.x},${pSalida1.y}`;
+  const rutaEvacProd = `M ${pProduccionCentro.x},${pProduccionCentro.y} L ${pSalida3.x},${pSalida3.y}`;
+  const rutaTroncalPrincipal = `M ${pAlmacen1.x},${pAlmacen1.y} L ${pAlmacenSalida.x},${pAlmacenSalida.y} L ${pPasilloEste.x},${pPasilloEste.y} L ${pPasilloCentro.x},${pPasilloCentro.y} L ${pPasilloOeste.x},${pPasilloOeste.y} L ${pAccesoPrincipal.x},${pAccesoPrincipal.y}`;
+  const rutaConexionID = `M ${pIDCentro.x},${pIDCentro.y} L ${toIso(610, 195, 2).x},${toIso(610, 195, 2).y}`;
+  const rutaConexionOficinasSur = `M ${toIso(450, 420, 2).x},${toIso(450, 420, 2).y} L ${pPasilloCentro.x},${pPasilloCentro.y}`;
+  const rutaEvacOficinas = `M ${toIso(330, 420, 2).x},${toIso(330, 420, 2).y} L ${toIso(330, 370, 2).x},${toIso(330, 370, 2).y} L ${toIso(370, 195, 2).x},${toIso(370, 195, 2).y} L ${pSalida1.x},${pSalida1.y}`;
+
+  // Callouts flotantes (Tooltips anclados en 3D exactamente como en la imagen)
+  const posCalloutProd = toIso(850, 110, 65);
+  const posCalloutSalida2 = toIso(690, 30, 75);
 
   return (
-    <div className="w-full bg-white border border-[#64748B]/20 rounded-3xl p-4 sm:p-6 lg:p-8 shadow-sm relative overflow-hidden">
+    <div data-theme="dark" className="w-full bg-[#0B132B] border border-[#1E293B] rounded-3xl overflow-hidden shadow-2xl text-white font-sans select-none relative">
       
       {/* =========================================================================
-          ENCABEZADO DEL PLANO: TÍTULO, SUBTÍTULO Y SELECTORES DE CAPA
+          1. HEADER SUPERIOR DEL DASHBOARD CAD (Idéntico a SafePulse SST)
           ========================================================================= */}
-      <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between pb-6 border-b border-[#64748B]/20 gap-5">
-        <div>
-          <div className="flex items-center space-x-2.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#1A56DB] animate-pulse shrink-0"></span>
-            <span className="text-xs font-mono uppercase tracking-widest text-[#1A56DB] font-bold">
-              DIRECCIÓN 3: BLUEPRINT CARTOGRÁFICO E ISOMÉTRICO // SEDE BOGOTÁ
-            </span>
+      <div className="bg-[#0E1726]/95 border-b border-[#1E293B] px-4 sm:px-6 py-3 flex items-center justify-between font-mono text-xs">
+        
+        {/* Lado Izquierdo: Logotipo SafePulse SST */}
+        <div className="flex items-center space-x-3">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#0B7A87] to-[#14B8A6] flex items-center justify-center shadow-lg shadow-[#14B8A6]/20">
+            <Activity className="w-4 h-4 text-[#0B132B] stroke-[2.5]" />
           </div>
-          <h2 className="text-2xl sm:text-3xl font-black text-[#0E1B2F] font-outfit mt-1 leading-tight">
-            Plano Isométrico Cartográfico e Instalaciones
-          </h2>
-          <p className="text-xs sm:text-sm text-[#64748B] font-sans mt-1 font-medium leading-relaxed">
-            Proyección axonométrica de las 6 zonas operativas, rutas fotoluminiscentes y estaciones ergonómicas.
-          </p>
+          <div>
+            <div className="flex items-center space-x-2">
+              <span className="font-extrabold text-white text-sm tracking-tight font-outfit">
+                SafePulse <span className="text-[#14B8A6]">SST</span>
+              </span>
+              <span className="text-[10px] bg-[#1E293B] text-[#2DD4BF] border border-[#14B8A6]/30 px-1.5 py-0.5 rounded font-bold">
+                CAD BIM v2.6
+              </span>
+            </div>
+            <p className="text-[9.5px] text-slate-400 font-sans hidden sm:block">
+              INNOVATEC SOLUCIONES S.A. // Sede Principal Operativa
+            </p>
+          </div>
         </div>
 
-        {/* Selector de las 4 Capas Operativas Requeridas — Responsive sin recortes */}
-        <div className="w-full xl:w-auto flex flex-wrap items-center gap-1.5 bg-[#F8FAFC] p-1.5 rounded-2xl border border-[#64748B]/20 shadow-xs">
-          
-          {/* Capa 1: General */}
-          <button
-            onClick={() => setCapaActiva('GENERAL')}
-            className={`px-3 py-2 rounded-xl text-xs font-mono transition-all flex items-center space-x-1.5 ${
-              capaActiva === 'GENERAL'
-                ? 'bg-[#1A56DB] text-white font-bold shadow-md shadow-[#1A56DB]/25'
-                : 'text-[#64748B] hover:text-[#0E1B2F] hover:bg-white'
-            }`}
-          >
-            <Layers className="w-3.5 h-3.5 shrink-0" />
-            <span>General</span>
-          </button>
-
-          {/* Capa 2: Evacuación (Verde) */}
-          <button
-            onClick={() => setCapaActiva('EVACUACION')}
-            className={`px-3 py-2 rounded-xl text-xs font-mono transition-all flex items-center space-x-1.5 ${
-              capaActiva === 'EVACUACION'
-                ? 'bg-[#10B981] text-white font-bold shadow-md shadow-[#10B981]/25'
-                : 'text-[#047857] hover:bg-white'
-            }`}
-          >
-            <DoorOpen className="w-3.5 h-3.5 shrink-0" />
-            <span>Evacuación <span className="hidden sm:inline">(Verde)</span></span>
-          </button>
-
-          {/* Capa 3: Zonas de Pausa (Turquesa) */}
-          <button
-            onClick={() => setCapaActiva('PAUSAS')}
-            className={`px-3 py-2 rounded-xl text-xs font-mono transition-all flex items-center space-x-1.5 ${
-              capaActiva === 'PAUSAS'
-                ? 'bg-[#14B8A6] text-white font-bold shadow-md shadow-[#14B8A6]/25'
-                : 'text-[#0B7A87] hover:bg-white'
-            }`}
-          >
-            <HeartPulse className="w-3.5 h-3.5 shrink-0" />
-            <span><span className="hidden sm:inline">Zonas de </span>Pausas</span>
-          </button>
-
-          {/* Capa 4: Equipos y Extintores (Agua Marina / Rojo) */}
-          <button
-            onClick={() => setCapaActiva('EQUIPOS')}
-            className={`px-3 py-2 rounded-xl text-xs font-mono transition-all flex items-center space-x-1.5 ${
-              capaActiva === 'EQUIPOS'
-                ? 'bg-[#0B7A87] text-white font-bold shadow-md shadow-[#0B7A87]/25'
-                : 'text-[#64748B] hover:bg-white'
-            }`}
-          >
-            <ShieldAlert className="w-3.5 h-3.5 shrink-0" />
-            <span>Equipos <span className="hidden sm:inline">/ Extintores</span></span>
-          </button>
-
-          {/* Control de Audio Chime */}
-          <button
-            onClick={() => setIsMuted(!isMuted)}
-            className="p-2 rounded-xl bg-white border border-[#64748B]/20 text-[#64748B] hover:text-[#0E1B2F] transition-colors shrink-0"
-            title={isMuted ? 'Activar sonido armónico' : 'Silenciar feedback sonoro'}
-            aria-label={isMuted ? 'Activar sonido' : 'Silenciar sonido'}
-          >
-            {isMuted ? <VolumeX className="w-3.5 h-3.5 text-slate-400" /> : <Volume2 className="w-3.5 h-3.5 text-[#10B981]" />}
-          </button>
-
-          {/* Botón de Simulación Activa de Evacuación */}
-          <button
-            onClick={alternarSimulacion}
-            className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-mono transition-all flex items-center space-x-1.5 sm:space-x-2 border shrink-0 ${
-              simulando
-                ? 'bg-[#047857] hover:bg-[#035941] text-white border-emerald-400 font-bold shadow-md shadow-emerald-500/25'
-                : 'bg-[#10B981]/15 hover:bg-[#10B981]/25 text-[#047857] border-[#10B981]/40 font-bold'
-            }`}
-            title="Activa el trazado dinámico y continuo de evacuación hacia PE-01"
-          >
-            {simulando ? (
-              <>
-                <RotateCcw className="w-3.5 h-3.5" />
-                <span>Detener ({15 - segundosSimulacion}s)</span>
-              </>
-            ) : (
-              <>
-                <Play className="w-3.5 h-3.5 fill-current" />
-                <span>Simular <span className="hidden sm:inline">Evacuación</span></span>
-              </>
-            )}
-          </button>
+        {/* Centro: Telemetría de Coordenadas CAD en Vivo */}
+        <div className="hidden lg:flex items-center space-x-4 bg-[#0B132B]/80 border border-[#1E293B] px-3.5 py-1.5 rounded-xl text-slate-400 font-mono text-[11px]">
+          <span className="flex items-center space-x-1.5">
+            <span className="text-[#14B8A6] font-bold">X:</span>
+            <span className="text-slate-200">1450</span>
+          </span>
+          <span className="text-slate-700">•</span>
+          <span className="flex items-center space-x-1.5">
+            <span className="text-[#14B8A6] font-bold">Y:</span>
+            <span className="text-slate-200">620</span>
+          </span>
+          <span className="text-slate-700">•</span>
+          <span className="flex items-center space-x-1.5">
+            <span className="text-[#10B981] font-bold">Z:</span>
+            <span className="text-slate-200">18</span>
+          </span>
+          <span className="text-slate-700">•</span>
+          <span className="text-[10px] text-emerald-400 font-bold flex items-center">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping mr-1"></span>
+            LIVE SYNC
+          </span>
         </div>
+
+        {/* Lado Derecho: Acciones de Simulación, Sonido y Perfil */}
+        <div className="flex items-center space-x-2">
+          {/* Botón Simulación de Evacuación */}
+          <button
+            onClick={toggleSimulacion}
+            className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold flex items-center space-x-1.5 transition-all shadow-md ${
+              simulandoEvacuacion
+                ? 'bg-emerald-500 text-[#0B132B] shadow-emerald-500/30 animate-pulse'
+                : 'bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/40 hover:bg-[#10B981]/25'
+            }`}
+          >
+            {simulandoEvacuacion ? <RotateCcw className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+            <span className="hidden sm:inline">
+              {simulandoEvacuacion ? `Evacuando (${tiempoSimulacion}s)` : 'Simular Evacuación'}
+            </span>
+          </button>
+
+          {/* Toggle Sonido */}
+          <button
+            onClick={() => setSonidoHabilitado(!sonidoHabilitado)}
+            className="p-1.5 rounded-xl bg-[#0E1726] border border-[#1E293B] text-slate-300 hover:text-white transition-colors"
+            title={sonidoHabilitado ? 'Silenciar alarma' : 'Activar alarma sonora'}
+          >
+            {sonidoHabilitado ? <Volume2 className="w-4 h-4 text-[#14B8A6]" /> : <VolumeX className="w-4 h-4 text-slate-500" />}
+          </button>
+
+          {/* Notificaciones */}
+          <div className="relative p-1.5 rounded-xl bg-[#0E1726] border border-[#1E293B] text-slate-300">
+            <Bell className="w-4 h-4" />
+            <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-red-500 ring-2 ring-[#0B132B]"></span>
+          </div>
+        </div>
+
       </div>
 
       {/* =========================================================================
-          TELEMETRÍA EN VIVO DURANTE LA SIMULACIÓN
+          2. CUERPO PRINCIPAL: SIDEBAR IZQUIERDO + CANVAS CAD 3D + PANEL HUD DERECHO
           ========================================================================= */}
-      {simulando && (
-        <div className="mt-4 p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-950 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 animate-fade-in shadow-xs">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 rounded-xl bg-[#10B981] text-white flex items-center justify-center shrink-0 shadow-sm animate-bounce">
-              <DoorOpen className="w-4 h-4" />
-            </div>
-            <div>
-              <span className="text-[10px] font-mono text-[#047857] font-bold uppercase tracking-wider block">
-                SIMULACIÓN DE EMERGENCIA ACTIVA // NORMA NTC 1461
-              </span>
-              <p className="text-xs font-bold text-emerald-900 font-sans">
-                Flujo continuo despejado hacia el <strong className="text-[#047857]">Punto de Encuentro Exterior (PE-01 - Patio Principal)</strong>.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-center space-x-3 shrink-0 text-xs font-mono">
-            <div className="bg-white px-3 py-1.5 rounded-xl border border-emerald-200">
-              <span className="text-[#64748B] text-[10px] block">Tiempo Transcurrido</span>
-              <span className="font-bold text-[#0E1B2F] num-tabular">{segundosSimulacion} segundos</span>
-            </div>
-            <div className="bg-white px-3 py-1.5 rounded-xl border border-emerald-200">
-              <span className="text-[#64748B] text-[10px] block">Meta Despeje</span>
-              <span className="font-bold text-[#10B981] num-tabular">&le; 90 s (Conforme)</span>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* =========================================================================
-          CUERPO: VISOR ISOMÉTRICO (COL-8) + FICHA TÉCNICA INTERACTIVA (COL-4)
-          ========================================================================= */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6 items-start">
+      <div className="grid grid-cols-1 xl:grid-cols-12 min-h-[640px] relative">
         
-        {/* Visor Técnico Axonométrico (Azul Marino Oscuro #0E1B2F) */}
-        <div className="lg:col-span-8 bg-[#0E1B2F] rounded-3xl p-3 sm:p-5 border border-[#64748B]/30 relative shadow-inner overflow-hidden">
-          
-          {/* Overlay de telemetría técnica superior */}
-          <div className="flex items-center justify-between px-2 pb-2 text-[11px] font-mono border-b border-[#64748B]/30 text-slate-400">
-            <div className="flex items-center space-x-2">
-              <span className="w-2 h-2 rounded-full bg-[#14B8A6] animate-ping"></span>
-              <span className="text-[#2DD4BF] font-bold">PROYECCIÓN AXONOMÉTRICA 30° // PLANO SEDE</span>
-            </div>
-            <div className="flex items-center space-x-3 text-[10px]">
-              <span>Escala 1:100</span>
-              <span>•</span>
-              <span className="text-white bg-slate-800 px-2 py-0.5 rounded border border-slate-700">
-                Capa: {capaActiva}
-              </span>
-            </div>
-          </div>
-
-          {/* SVG ISOMÉTRICO */}
-          <div className="relative mt-2 w-full flex items-center justify-center overflow-hidden">
-            <svg
-              ref={svgRef}
-              viewBox="0 0 920 580"
-              className="w-full h-auto select-none"
-              role="img"
-              aria-label="Plano Isométrico Cartográfico interactivo de las instalaciones de Industrias Andinas del Café"
+        {/* =======================================================================
+            BARRA LATERAL IZQUIERDA DE NAVEGACIÓN TÉCNICA
+            (Iconos como en la imagen: Dashboard, Blueprints, Reports, Sensors, Settings)
+            ======================================================================= */}
+        <aside className="hidden xl:flex xl:col-span-1 bg-[#091024] border-r border-[#1E293B] flex-col items-center py-5 justify-between">
+          <div className="space-y-4 w-full flex flex-col items-center">
+            {/* Blueprints Activo */}
+            <button 
+              className="w-10 h-10 rounded-xl bg-[#14B8A6]/20 border border-[#14B8A6] text-[#2DD4BF] flex items-center justify-center shadow-lg shadow-[#14B8A6]/20"
+              title="Visor Cartográfico Isométrico"
             >
-              <defs>
-                {/* Patrón de Rejilla Isométrica Técnica */}
-                <pattern id="iso-tech-grid" width="30" height="30" patternUnits="userSpaceOnUse">
-                  <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(20, 184, 166, 0.12)" strokeWidth="0.75" />
-                </pattern>
+              <Layers className="w-5 h-5" />
+            </button>
 
-                {/* Marcador de Flecha Fotoluminiscente Verde */}
-                <marker id="flecha-fotoluminiscente" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-                  <path d="M 0 0 L 8 4 L 0 8 Z" fill="#10B981" />
-                </marker>
-
-                {/* Estilos CSS para animaciones continuas */}
-                <style>{`
-                  @keyframes flujoEvacuacionIso {
-                    from { stroke-dashoffset: 40; }
-                    to { stroke-dashoffset: 0; }
-                  }
-                  .anim-flujo-evacuacion {
-                    animation: flujoEvacuacionIso 0.65s linear infinite;
-                  }
-                  @keyframes pulsoBaliza {
-                    0% { r: 14px; opacity: 0.9; }
-                    50% { r: 38px; opacity: 0.3; }
-                    100% { r: 52px; opacity: 0; }
-                  }
-                  .baliza-sonar {
-                    animation: pulsoBaliza 1.8s ease-out infinite;
-                  }
-                  .iso-bloque {
-                    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-                  }
-                `}</style>
-              </defs>
-
-              {/* Fondo con rejilla isométrica */}
-              <rect width="920" height="580" fill="url(#iso-tech-grid)" rx="16" />
-
-              {/* Plinto de Cimentación Perimetral Exterior */}
-              <polygon
-                points={`${toIso(20, 10, 0).x},${toIso(20, 10, 0).y} ${toIso(420, 10, 0).x},${toIso(420, 10, 0).y} ${toIso(420, 400, 0).x},${toIso(420, 400, 0).y} ${toIso(20, 400, 0).x},${toIso(20, 400, 0).y}`}
-                fill="none"
-                stroke="rgba(20, 184, 166, 0.25)"
-                strokeWidth="1.5"
-                strokeDasharray="4,4"
-              />
-
-              {/* =================================================================
-                  PASILLOS Y SENDEROS ISOMÉTRICOS (Suelo Z = 0)
-                  ================================================================= */}
-              {/* Pasillo Troncal Central */}
-              <polygon
-                points={`${toIso(190, 30, 0).x},${toIso(190, 30, 0).y} ${toIso(230, 30, 0).x},${toIso(230, 30, 0).y} ${toIso(230, 310, 0).x},${toIso(230, 310, 0).y} ${toIso(190, 310, 0).x},${toIso(190, 310, 0).y}`}
-                fill="rgba(14, 27, 47, 0.9)"
-                stroke="rgba(20, 184, 166, 0.3)"
-                strokeWidth="1"
-              />
-
-              {/* Pasillo Transversal */}
-              <polygon
-                points={`${toIso(40, 150, 0).x},${toIso(40, 150, 0).y} ${toIso(400, 150, 0).x},${toIso(400, 150, 0).y} ${toIso(400, 180, 0).x},${toIso(400, 180, 0).y} ${toIso(40, 180, 0).x},${toIso(40, 180, 0).y}`}
-                fill="rgba(14, 27, 47, 0.9)"
-                stroke="rgba(20, 184, 166, 0.3)"
-                strokeWidth="1"
-              />
-
-              {/* Demarcación Peatonal de Pasillo (Líneas de Cebra según NTC 1461) */}
-              {[70, 110, 165, 210, 260, 290].map((posY) => {
-                const ptA = toIso(200, posY, 0.5);
-                const ptB = toIso(220, posY, 0.5);
-                return (
-                  <line
-                    key={posY}
-                    x1={ptA.x}
-                    y1={ptA.y}
-                    x2={ptB.x}
-                    y2={ptB.y}
-                    stroke="#14B8A6"
-                    strokeWidth="1.2"
-                    strokeDasharray="2,2"
-                    opacity="0.5"
-                  />
-                );
-              })}
-
-              {/* =================================================================
-                  ZONAS OPERATIVAS (BLOQUES ISOMÉTRICOS 3D)
-                  ================================================================= */}
-              {ZONAS_EMPRESA.map((zona) => {
-                const esSeleccionada = zonaSeleccionada.id === zona.id;
-                const { x, y, w, h, z } = zona.gridCoord;
-                const topPoly = getTopPoly(x, y, w, h, z);
-                const leftWallPoly = getFrontLeftWall(x, y, w, h, z);
-                const rightWallPoly = getFrontRightWall(x, y, w, h, z);
-                const centerPos = getCenter(x, y, w, h, z);
-                const labelSvg = LABELS_ZONAS_SVG[zona.id] || { linea1: zona.nombre, linea2: '' };
-
-                // Colores adaptativos según capa activa
-                let fillColor = 'rgba(15, 30, 55, 0.82)';
-                let strokeColor = 'rgba(20, 184, 166, 0.45)';
-                let wallLeftColor = 'rgba(10, 20, 38, 0.95)';
-                let wallRightColor = 'rgba(8, 16, 32, 0.98)';
-
-                if (esSeleccionada) {
-                  fillColor = zona.id === 'ZONA-6' ? 'rgba(4, 120, 87, 0.45)' : 'rgba(20, 184, 166, 0.32)';
-                  strokeColor = zona.id === 'ZONA-6' ? '#10B981' : '#2DD4BF';
-                  wallLeftColor = '#0B7A87';
-                  wallRightColor = '#0E1B2F';
-                } else if (capaActiva === 'EVACUACION') {
-                  fillColor = zona.id === 'ZONA-6' ? 'rgba(4, 120, 87, 0.35)' : 'rgba(15, 30, 55, 0.5)';
-                  strokeColor = zona.id === 'ZONA-6' ? '#10B981' : 'rgba(20, 184, 166, 0.25)';
-                } else if (capaActiva === 'PAUSAS') {
-                  if (['ZONA-1', 'ZONA-3', 'ZONA-5'].includes(zona.id)) {
-                    fillColor = 'rgba(20, 184, 166, 0.25)';
-                    strokeColor = '#14B8A6';
-                  }
-                }
-
-                return (
-                  <g
-                    key={zona.id}
-                    onClick={() => setZonaSeleccionada(zona)}
-                    className="cursor-pointer group iso-bloque"
-                    tabIndex={0}
-                    role="button"
-                    aria-label={`Seleccionar área ${zona.nombre}`}
-                    onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setZonaSeleccionada(zona)}
-                  >
-                    {/* Pared Frontal Izquierda */}
-                    <polygon
-                      points={leftWallPoly}
-                      fill={wallLeftColor}
-                      stroke={strokeColor}
-                      strokeWidth="0.8"
-                    />
-
-                    {/* Pared Frontal Derecha */}
-                    <polygon
-                      points={rightWallPoly}
-                      fill={wallRightColor}
-                      stroke={strokeColor}
-                      strokeWidth="0.8"
-                    />
-
-                    {/* Superficie Superior (Techo / Suelo de Zona) */}
-                    <polygon
-                      points={topPoly}
-                      fill={fillColor}
-                      stroke={strokeColor}
-                      strokeWidth={esSeleccionada ? '2.5' : '1.2'}
-                      className="group-hover:fill-[#14B8A6]/25 group-hover:stroke-[#2DD4BF] transition-all"
-                    />
-
-                    {/* Nombre de la Zona en 2 Líneas perfectamente calculadas para no recortarse */}
-                    <text
-                      x={centerPos.x}
-                      y={centerPos.y - 13}
-                      textAnchor="middle"
-                      fill="#FFFFFF"
-                      fontSize={zona.id === 'ZONA-6' ? '11.5' : '10.5'}
-                      fontFamily="Plus Jakarta Sans, sans-serif"
-                      fontWeight="700"
-                    >
-                      {labelSvg.linea1}
-                    </text>
-                    <text
-                      x={centerPos.x}
-                      y={centerPos.y}
-                      textAnchor="middle"
-                      fill="#FFFFFF"
-                      fontSize={zona.id === 'ZONA-6' ? '11.5' : '10.5'}
-                      fontFamily="Plus Jakarta Sans, sans-serif"
-                      fontWeight="700"
-                    >
-                      {labelSvg.linea2}
-                    </text>
-
-                    {/* Subtítulo técnico y aforo */}
-                    <text
-                      x={centerPos.x}
-                      y={centerPos.y + 14}
-                      textAnchor="middle"
-                      fill={esSeleccionada ? '#2DD4BF' : '#94A3B8'}
-                      fontSize="9"
-                      fontFamily="Space Mono, monospace"
-                      fontWeight="600"
-                    >
-                      [{zona.codigo}] • {zona.aforoNominal}/{zona.aforoMax} pers.
-                    </text>
-
-                    {/* Badge de Nivel de Riesgo GTC 45 */}
-                    <text
-                      x={centerPos.x}
-                      y={centerPos.y + 26}
-                      textAnchor="middle"
-                      fill={zona.tipoRiesgoGTC45.nivelRiesgo === 'I' ? '#2DD4BF' : '#14B8A6'}
-                      fontSize="8.5"
-                      fontFamily="Space Mono, monospace"
-                      fontWeight="bold"
-                    >
-                      GTC 45: NR {zona.tipoRiesgoGTC45.nivelRiesgo}
-                    </text>
-
-                    {/* Baliza Pulsante Exclusiva en PE-01 */}
-                    {zona.id === 'ZONA-6' && (
-                      <g transform={`translate(${centerPos.x + 65}, ${centerPos.y})`}>
-                        <circle cx="0" cy="0" r="10" fill="#047857" stroke="#10B981" strokeWidth="2" />
-                        <circle cx="0" cy="0" r="4" fill="#FFFFFF" />
-                        {simulando && (
-                          <>
-                            <circle cx="0" cy="0" r="14" fill="none" stroke="#10B981" strokeWidth="2" className="baliza-sonar" />
-                            <circle cx="0" cy="0" r="28" fill="none" stroke="#2DD4BF" strokeWidth="1.5" className="baliza-sonar" style={{ animationDelay: '0.6s' }} />
-                          </>
-                        )}
-                        <text x="0" y="-14" textAnchor="middle" fill="#10B981" fontSize="8" fontWeight="bold" fontFamily="Space Mono">
-                          BALIZA PE-01
-                        </text>
-                      </g>
-                    )}
-                  </g>
-                );
-              })}
-
-              {/* =================================================================
-                  CAPA 2: RUTAS DE EVACUACIÓN Y SIMULACIÓN ACTIVA (Verde Esmeralda)
-                  ================================================================= */}
-              {(capaActiva === 'GENERAL' || capaActiva === 'EVACUACION') && (
-                <g className="capa-evacuacion-iso">
-                  {/* Ramales laterales que desembocan en el pasillo central */}
-                  <path
-                    d={`M ${rutaLab}`}
-                    fill="none"
-                    stroke="#10B981"
-                    strokeWidth={simulando ? '3.5' : '2.5'}
-                    strokeDasharray="6,4"
-                    className={simulando ? 'anim-flujo-evacuacion' : ''}
-                    markerEnd="url(#flecha-fotoluminiscente)"
-                  />
-                  <path
-                    d={`M ${rutaTost}`}
-                    fill="none"
-                    stroke="#10B981"
-                    strokeWidth={simulando ? '3.5' : '2.5'}
-                    strokeDasharray="6,4"
-                    className={simulando ? 'anim-flujo-evacuacion' : ''}
-                    markerEnd="url(#flecha-fotoluminiscente)"
-                  />
-                  <path
-                    d={`M ${rutaBodega}`}
-                    fill="none"
-                    stroke="#10B981"
-                    strokeWidth={simulando ? '3.5' : '2.5'}
-                    strokeDasharray="6,4"
-                    className={simulando ? 'anim-flujo-evacuacion' : ''}
-                    markerEnd="url(#flecha-fotoluminiscente)"
-                  />
-                  <path
-                    d={`M ${rutaEnv}`}
-                    fill="none"
-                    stroke="#10B981"
-                    strokeWidth={simulando ? '3.5' : '2.5'}
-                    strokeDasharray="6,4"
-                    className={simulando ? 'anim-flujo-evacuacion' : ''}
-                    markerEnd="url(#flecha-fotoluminiscente)"
-                  />
-                  <path
-                    d={`M ${rutaOficinas}`}
-                    fill="none"
-                    stroke="#10B981"
-                    strokeWidth={simulando ? '3.5' : '2.5'}
-                    strokeDasharray="6,4"
-                    className={simulando ? 'anim-flujo-evacuacion' : ''}
-                    markerEnd="url(#flecha-fotoluminiscente)"
-                  />
-
-                  {/* Espina Troncal hacia Salida de Emergencia y PE-01 */}
-                  <path
-                    d={espinaTroncal}
-                    fill="none"
-                    stroke="#10B981"
-                    strokeWidth={simulando ? '5' : '3.5'}
-                    strokeDasharray="10,6"
-                    className={simulando ? 'anim-flujo-evacuacion' : ''}
-                    markerEnd="url(#flecha-fotoluminiscente)"
-                  />
-
-                  {/* Cartel Salida de Emergencia Fotoluminiscente */}
-                  <g transform={`translate(${toIso(210, 310, 8).x - 30}, ${toIso(210, 310, 8).y - 12})`}>
-                    <rect width="60" height="15" rx="3" fill="#047857" stroke="#10B981" strokeWidth="1" />
-                    <text x="30" y="11" textAnchor="middle" fill="#FFFFFF" fontSize="7.5" fontWeight="bold" fontFamily="Space Mono">
-                      SALIDA EMERG.
-                    </text>
-                  </g>
-                </g>
-              )}
-
-              {/* =================================================================
-                  CAPA 3: ESTACIONES DE PAUSAS VITALES (Turquesa #14B8A6)
-                  ================================================================= */}
-              {(capaActiva === 'GENERAL' || capaActiva === 'PAUSAS') && (
-                <g className="capa-pausas-iso">
-                  {/* Estación EP-01 en Oficinas Administrativas */}
-                  <g transform={`translate(${getCenter(40, 310, 150, 70, 22).x}, ${getCenter(40, 310, 150, 70, 22).y - 24})`}>
-                    <circle cx="0" cy="0" r="14" fill="rgba(20, 184, 166, 0.25)" stroke="#14B8A6" strokeWidth="1.8" strokeDasharray="3,2" />
-                    <circle cx="0" cy="0" r="4" fill="#2DD4BF" />
-                    <text x="0" y="-17" textAnchor="middle" fill="#2DD4BF" fontSize="8" fontWeight="bold" fontFamily="Space Mono">
-                      PAUSA VITAL EP-01
-                    </text>
-                  </g>
-
-                  {/* Estación EP-02 en Línea de Envasado */}
-                  <g transform={`translate(${getCenter(230, 180, 170, 110, 22).x}, ${getCenter(230, 180, 170, 110, 22).y - 24})`}>
-                    <circle cx="0" cy="0" r="14" fill="rgba(20, 184, 166, 0.25)" stroke="#14B8A6" strokeWidth="1.8" strokeDasharray="3,2" />
-                    <circle cx="0" cy="0" r="4" fill="#2DD4BF" />
-                    <text x="0" y="-17" textAnchor="middle" fill="#2DD4BF" fontSize="8" fontWeight="bold" fontFamily="Space Mono">
-                      PAUSA VITAL EP-02
-                    </text>
-                  </g>
-
-                  {/* Estación EP-03 en Molienda */}
-                  <g transform={`translate(${getCenter(230, 30, 170, 120, 22).x}, ${getCenter(230, 30, 170, 120, 22).y - 24})`}>
-                    <circle cx="0" cy="0" r="14" fill="rgba(20, 184, 166, 0.25)" stroke="#14B8A6" strokeWidth="1.8" strokeDasharray="3,2" />
-                    <circle cx="0" cy="0" r="4" fill="#2DD4BF" />
-                    <text x="0" y="-17" textAnchor="middle" fill="#2DD4BF" fontSize="8" fontWeight="bold" fontFamily="Space Mono">
-                      PAUSA VITAL EP-03
-                    </text>
-                  </g>
-                </g>
-              )}
-
-              {/* =================================================================
-                  CAPA 4: EQUIPOS DE EXTINCIÓN Y PRIMEROS AUXILIOS
-                  ================================================================= */}
-              {(capaActiva === 'GENERAL' || capaActiva === 'EQUIPOS') && (
-                <g className="capa-equipos-iso">
-                  {/* Extintores Solkaflam / ABC / CO2 (Rojo de Señal #DC2626) */}
-                  {[
-                    { pos: toIso(50, 40, 22), label: 'SOLK' },
-                    { pos: toIso(240, 40, 22), label: 'ABC' },
-                    { pos: toIso(390, 40, 22), label: 'ABC' },
-                    { pos: toIso(240, 190, 22), label: 'CO2' },
-                    { pos: toIso(50, 190, 22), label: 'ABC' },
-                    { pos: toIso(50, 320, 22), label: 'SOLK' },
-                  ].map((ext, idx) => (
-                    <g key={idx} transform={`translate(${ext.pos.x}, ${ext.pos.y})`}>
-                      <circle cx="0" cy="0" r="7.5" fill="#DC2626" stroke="#FFFFFF" strokeWidth="1.2" />
-                      <text x="0" y="3" textAnchor="middle" fill="#FFFFFF" fontSize="7" fontWeight="bold" fontFamily="Space Mono">
-                        E
-                      </text>
-                    </g>
-                  ))}
-
-                  {/* Botiquines y DEA (Azul Corporativo / Verde) */}
-                  <g transform={`translate(${toIso(180, 40, 22).x}, ${toIso(180, 40, 22).y})`}>
-                    <rect x="-7" y="-7" width="14" height="14" rx="3" fill="#1A56DB" stroke="#FFFFFF" strokeWidth="1" />
-                    <text x="0" y="3.5" textAnchor="middle" fill="#FFFFFF" fontSize="9" fontWeight="bold">+</text>
-                  </g>
-                  <g transform={`translate(${toIso(180, 320, 22).x}, ${toIso(180, 320, 22).y})`}>
-                    <rect x="-8" y="-8" width="16" height="16" rx="3" fill="#0B7A87" stroke="#2DD4BF" strokeWidth="1.2" />
-                    <text x="0" y="3.5" textAnchor="middle" fill="#2DD4BF" fontSize="7" fontWeight="bold">DEA</text>
-                  </g>
-                  <g transform={`translate(${toIso(180, 230, 22).x}, ${toIso(180, 230, 22).y})`}>
-                    <rect x="-7" y="-7" width="14" height="14" rx="3" fill="#10B981" stroke="#FFFFFF" strokeWidth="1" />
-                    <text x="0" y="3.5" textAnchor="middle" fill="#FFFFFF" fontSize="9" fontWeight="bold">+</text>
-                  </g>
-                </g>
-              )}
-            </svg>
-          </div>
-
-          {/* Leyenda Técnica Normativa Inferior (ISO 7010 / NTC 1461) */}
-          <div className="flex flex-wrap items-center justify-between mt-3 pt-3 border-t border-[#64748B]/30 text-[11px] font-mono text-slate-300 gap-2">
-            <span className="flex items-center space-x-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#10B981] shrink-0"></span>
-              <span>Ruta Evacuación NTC 1461</span>
-            </span>
-            <span className="flex items-center space-x-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#14B8A6] shrink-0"></span>
-              <span>Pausa Vital Ergonómica</span>
-            </span>
-            <span className="flex items-center space-x-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#DC2626] shrink-0"></span>
-              <span>Extintor / Conato</span>
-            </span>
-            <span className="flex items-center space-x-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#1A56DB] shrink-0"></span>
-              <span>Primeros Auxilios / DEA</span>
-            </span>
-          </div>
-        </div>
-
-        {/* =====================================================================
-            PANEL LATERAL: FICHA TÉCNICA INTERACTIVA DE LA ZONA SELECCIONADA
-            Fondo: Azul Grisáceo Claro (#F8FAFC)
-            Contenedores: Blanco (#FFFFFF) con bordes en #64748B/20
-            ===================================================================== */}
-        <div className="lg:col-span-4 bg-[#F8FAFC] rounded-3xl p-4 sm:p-6 border border-[#64748B]/20 text-[#0E1B2F] shadow-xs space-y-4">
-          
-          {/* Cabecera de la Ficha */}
-          <div className="flex items-center justify-between pb-3 border-b border-[#64748B]/20">
-            <div className="flex items-center space-x-2">
-              <Info className="w-4 h-4 text-[#0B7A87]" />
-              <span className="text-xs font-mono uppercase tracking-wider text-[#0B7A87] font-bold">
-                FICHA TÉCNICA DE CONTROL
-              </span>
-            </div>
-            <span className="text-[10px] bg-white text-[#0E1B2F] px-2.5 py-1 rounded-lg font-mono font-bold border border-[#64748B]/20 shadow-xs">
-              {zonaSeleccionada.codigo}
-            </span>
-          </div>
-
-          {/* Nombre y Ubicación */}
-          <div>
-            <h3 className="text-xl font-black text-[#0E1B2F] font-outfit leading-tight break-words">
-              {zonaSeleccionada.nombre}
-            </h3>
-            <p className="text-xs text-[#0B7A87] font-mono mt-1 font-bold break-words">
-              {zonaSeleccionada.ala}
-            </p>
-          </div>
-
-          {/* Métricas de Aforo y Liderazgo */}
-          <div className="bg-white p-4 rounded-2xl border border-[#64748B]/20 space-y-2.5 text-xs shadow-xs">
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
-              <span className="text-[#64748B] shrink-0">Aforo Autorizado:</span>
-              <span className="font-bold text-[#0E1B2F] font-mono break-words">
-                {zonaSeleccionada.aforoNominal} nominal / {zonaSeleccionada.aforoMax} máx.
-              </span>
-            </div>
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-baseline gap-1">
-              <span className="text-[#64748B] shrink-0">Líder de Área:</span>
-              <span className="font-semibold text-[#0E1B2F] break-words sm:text-right">
-                {zonaSeleccionada.responsableZona}
-              </span>
-            </div>
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-baseline gap-1">
-              <span className="text-[#64748B] shrink-0">Suplente Brigada:</span>
-              <span className="font-semibold text-[#0B7A87] break-words sm:text-right">
-                {zonaSeleccionada.suplenteBrigada}
-              </span>
-            </div>
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 pt-2 border-t border-[#64748B]/10">
-              <span className="text-[#64748B] shrink-0">Canal de Radio:</span>
-              <span className="font-mono font-bold text-[#1A56DB] break-words">
-                {zonaSeleccionada.canalRadio}
-              </span>
-            </div>
-          </div>
-
-          {/* Matriz de Riesgo GTC 45 Detallada — Totalmente legible sin recortes */}
-          <div className="bg-white p-4 rounded-2xl border border-[#64748B]/20 space-y-3 shadow-xs">
-            <div className="flex flex-wrap items-center justify-between gap-1.5">
-              <span className="text-[11px] font-bold text-[#0E1B2F] uppercase tracking-wider font-mono">
-                Matriz de Riesgo (GTC 45)
-              </span>
-              <span className={`text-[10px] font-mono px-2 py-0.5 rounded font-bold border ${
-                zonaSeleccionada.tipoRiesgoGTC45.nivelRiesgo === 'I'
-                  ? 'bg-red-50 text-red-700 border-red-200'
-                  : zonaSeleccionada.tipoRiesgoGTC45.nivelRiesgo === 'II'
-                  ? 'bg-blue-50 text-[#1A56DB] border-blue-200'
-                  : 'bg-teal-50 text-[#0B7A87] border-teal-200'
-              }`}>
-                NIVEL DE RIESGO: {zonaSeleccionada.tipoRiesgoGTC45.nivelRiesgo}
-              </span>
-            </div>
-
-            <p className="text-xs text-[#0E1B2F] font-sans font-medium leading-relaxed bg-[#F8FAFC] p-3 rounded-xl border border-[#64748B]/15 break-words">
-              {zonaSeleccionada.tipoRiesgoGTC45.clasificacion}
-            </p>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] font-mono">
-              <div className="p-2.5 rounded-xl bg-[#F8FAFC] border border-[#64748B]/15">
-                <span className="text-[#64748B] block text-[10px]">Deficiencia / Exposición</span>
-                <span className="font-bold text-[#0E1B2F] block mt-0.5 break-words">
-                  ND: {zonaSeleccionada.tipoRiesgoGTC45.nivelDeficiencia} • NE: {zonaSeleccionada.tipoRiesgoGTC45.nivelExposicion}
-                </span>
-              </div>
-              <div className="p-2.5 rounded-xl bg-[#F8FAFC] border border-[#64748B]/15">
-                <span className="text-[#64748B] block text-[10px]">Aceptabilidad Legal</span>
-                <span className="font-bold text-[#047857] block mt-0.5 break-words leading-tight">
-                  {zonaSeleccionada.tipoRiesgoGTC45.aceptabilidad}
-                </span>
-              </div>
-            </div>
-
-            {/* Medidas de Intervención Clave */}
-            <div className="text-xs space-y-2 pt-1">
-              <div>
-                <span className="text-[10px] font-mono text-[#0B7A87] font-bold block">Control de Ingeniería:</span>
-                <p className="text-[11px] text-[#64748B] font-sans break-words leading-relaxed">{zonaSeleccionada.tipoRiesgoGTC45.controles.ingenieria}</p>
-              </div>
-              <div>
-                <span className="text-[10px] font-mono text-[#1A56DB] font-bold block">EPP Obligatorio:</span>
-                <p className="text-[11px] text-[#64748B] font-sans break-words leading-relaxed">{zonaSeleccionada.tipoRiesgoGTC45.controles.epp}</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Equipos de Seguridad Presentes */}
-          <div className="bg-white p-4 rounded-2xl border border-[#64748B]/20 shadow-xs space-y-2.5">
-            <span className="text-[11px] font-bold text-[#0E1B2F] uppercase tracking-wider font-mono block">
-              Equipamiento de Protección Presente
-            </span>
-            <ul className="space-y-2">
-              {zonaSeleccionada.equiposSeguridad.map((eq, i) => (
-                <li key={i} className="text-xs text-[#0E1B2F] flex items-start space-x-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981] shrink-0 mt-0.5" />
-                  <div className="min-w-0">
-                    <span className="font-semibold block leading-tight break-words">{eq.nombre}</span>
-                    <span className="text-[10px] text-[#64748B] font-sans block mt-0.5 break-words">{eq.detalle}</span>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Acciones y Enlace Directo a Radicación */}
-          <div className="pt-2">
-            <button
-              onClick={() => abrirModalParaZona(zonaSeleccionada.id)}
-              className="w-full py-3 px-4 rounded-xl bg-[#1A56DB] hover:bg-blue-700 text-white font-mono text-xs font-bold transition-all flex items-center justify-center space-x-2 shadow-md shadow-[#1A56DB]/20 active:scale-95"
+            <button 
+              onClick={() => setCapaActiva('GENERAL')}
+              className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
+                capaActiva === 'GENERAL' ? 'bg-slate-800 text-[#14B8A6]' : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+              }`}
+              title="Capa General de Arquitectura"
             >
-              <Send className="w-3.5 h-3.5" />
-              <span>Radicar Reporte de esta Zona</span>
+              <Building className="w-4 h-4" />
+            </button>
+
+            <button 
+              onClick={() => setCapaActiva('EVACUACION')}
+              className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
+                capaActiva === 'EVACUACION' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50' : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+              }`}
+              title="Rutas de Evacuación y Salidas"
+            >
+              <DoorOpen className="w-4 h-4" />
+            </button>
+
+            <button 
+              onClick={() => setCapaActiva('EQUIPOS')}
+              className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
+                capaActiva === 'EQUIPOS' ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50' : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+              }`}
+              title="Extintores y Detectores de Humo"
+            >
+              <Flame className="w-4 h-4" />
+            </button>
+
+            <button 
+              onClick={() => setCapaActiva('RIESGOS')}
+              className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
+                capaActiva === 'RIESGOS' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/50' : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+              }`}
+              title="Matriz de Riesgos GTC 45"
+            >
+              <ShieldAlert className="w-4 h-4" />
             </button>
           </div>
 
-          <div className="pt-2 border-t border-[#64748B]/20 text-[10px] text-[#64748B] flex items-center justify-between font-mono">
-            <span>Última inspección: {zonaSeleccionada.ultimaInspeccion}</span>
-            <span className="text-[#10B981] font-bold">✓ Conforme</span>
+          <div className="space-y-3 w-full flex flex-col items-center text-slate-500">
+            <button className="p-2 hover:text-slate-300 transition-colors" title="Ajustes de Capas">
+              <Sliders className="w-4 h-4" />
+            </button>
+            <button className="p-2 hover:text-slate-300 transition-colors" title="Información Normativa">
+              <Info className="w-4 h-4" />
+            </button>
           </div>
+        </aside>
+
+        {/* =======================================================================
+            CANVAS ISOMÉTRICO CENTRAL CON CORTE ARQUITECTÓNICO 3D (CAD VIEWER)
+            ======================================================================= */}
+        <div className="xl:col-span-8 relative overflow-hidden flex flex-col justify-between bg-[#080E1E] p-2 sm:p-4">
+          
+          {/* Barra de Herramientas de Control Flotante Superior */}
+          <div className="flex flex-wrap items-center justify-between gap-2 z-10 font-mono text-[11px] mb-2 px-2">
+            
+            {/* Selector de Capas */}
+            <div className="flex items-center space-x-1 bg-[#0E1726]/90 p-1 rounded-xl border border-[#1E293B]">
+              <button
+                onClick={() => setCapaActiva('GENERAL')}
+                className={`px-2.5 py-1 rounded-lg transition-all ${
+                  capaActiva === 'GENERAL' ? 'bg-[#1E293B] text-white font-bold' : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                General
+              </button>
+              <button
+                onClick={() => setCapaActiva('EVACUACION')}
+                className={`px-2.5 py-1 rounded-lg transition-all flex items-center space-x-1 ${
+                  capaActiva === 'EVACUACION' ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/40' : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                <span>Evacuación</span>
+              </button>
+              <button
+                onClick={() => setCapaActiva('EQUIPOS')}
+                className={`px-2.5 py-1 rounded-lg transition-all flex items-center space-x-1 ${
+                  capaActiva === 'EQUIPOS' ? 'bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-500/40' : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+                <span>Extintores</span>
+              </button>
+              <button
+                onClick={() => setCapaActiva('RIESGOS')}
+                className={`px-2.5 py-1 rounded-lg transition-all flex items-center space-x-1 ${
+                  capaActiva === 'RIESGOS' ? 'bg-amber-500/20 text-amber-300 font-bold border border-amber-500/40' : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                <span>Riesgos GTC 45</span>
+              </button>
+            </div>
+
+            {/* Controles de Zoom */}
+            <div className="flex items-center space-x-1 bg-[#0E1726]/90 p-1 rounded-xl border border-[#1E293B] text-slate-300">
+              <button 
+                onClick={() => setZoomLevel((z) => Math.max(0.8, z - 0.1))} 
+                className="p-1 hover:text-white"
+                title="Alejar"
+              >
+                <ZoomOut className="w-3.5 h-3.5" />
+              </button>
+              <span className="px-1 text-[10px] text-slate-400">{Math.round(zoomLevel * 100)}%</span>
+              <button 
+                onClick={() => setZoomLevel((z) => Math.min(1.4, z + 0.1))} 
+                className="p-1 hover:text-white"
+                title="Acercar"
+              >
+                <ZoomIn className="w-3.5 h-3.5" />
+              </button>
+              <button 
+                onClick={() => setZoomLevel(1)} 
+                className="p-1 hover:text-white ml-1 border-l border-slate-700 pl-1.5"
+                title="Restablecer"
+              >
+                <Maximize2 className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+          </div>
+
+          {/* =====================================================================
+              LIENZO VECTORIAL SVG CON EL PLANO REAL MODELADO
+              ===================================================================== */}
+          <div className="relative w-full flex-1 flex items-center justify-center min-h-[500px]">
+            
+            {/* Regla de Calibración CAD en la esquina inferior izquierda (como en la imagen: '0 mm') */}
+            <div className="absolute bottom-2 left-3 text-[10px] font-mono text-slate-600 flex items-center space-x-2 pointer-events-none">
+              <span>0 mm</span>
+              <div className="w-16 h-[1px] bg-slate-700"></div>
+              <span>5.0 m</span>
+            </div>
+
+            <svg
+              ref={svgRef}
+              viewBox="0 0 1700 960"
+              className="w-full h-auto max-h-[620px] select-none transition-transform duration-300"
+              style={{ transform: `scale(${zoomLevel})` }}
+            >
+              <defs>
+                {/* Grilla isométrica de fondo estilo blueprint */}
+                <pattern id="cad-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                  <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1E293B" strokeWidth="0.5" strokeOpacity="0.4" />
+                </pattern>
+
+                {/* Filtro de resplandor neón verde (Glow) */}
+                <filter id="neon-glow-green" x="-30%" y="-30%" width="160%" height="160%">
+                  <feGaussianBlur stdDeviation="5" result="blur" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+
+                {/* Filtro de resplandor cian para extintores */}
+                <filter id="neon-glow-cyan" x="-30%" y="-30%" width="160%" height="160%">
+                  <feGaussianBlur stdDeviation="4" result="blur" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+
+                {/* Filtro de resplandor ámbar */}
+                <filter id="neon-glow-amber" x="-30%" y="-30%" width="160%" height="160%">
+                  <feGaussianBlur stdDeviation="5" result="blur" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+
+                {/* Marcador de flecha de evacuación */}
+                <marker id="flecha-evac" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                  <path d="M 0 0 L 6 3 L 0 6 Z" fill="#10B981" />
+                </marker>
+              </defs>
+
+              {/* Fondo con grilla técnica */}
+              <rect x="0" y="0" width="1700" height="960" fill="url(#cad-grid)" />
+
+              {/* =================================================================
+                  1. LOSA BASE EXTERIOR DEL EDIFICIO (Concreto Técnico Isométrico)
+                  ================================================================= */}
+              <g className="cad-slab-base">
+                {/* Losa de piso */}
+                <polygon
+                  points={isoFloor(0, 0, 1000, 500, 0)}
+                  fill="#0D1629"
+                  stroke="#1E293B"
+                  strokeWidth="2"
+                />
+                
+                {/* Borde inferior de la losa para espesor 3D de cimentación */}
+                <polygon
+                  points={`${toIso(0, 500, 0).x},${toIso(0, 500, 0).y} ${toIso(1000, 500, 0).x},${toIso(1000, 500, 0).y} ${toIso(1000, 500, -12).x},${toIso(1000, 500, -12).y} ${toIso(0, 500, -12).x},${toIso(0, 500, -12).y}`}
+                  fill="#080F1E"
+                  stroke="#1E293B"
+                  strokeWidth="1.5"
+                />
+                <polygon
+                  points={`${toIso(1000, 0, 0).x},${toIso(1000, 0, 0).y} ${toIso(1000, 500, 0).x},${toIso(1000, 500, 0).y} ${toIso(1000, 500, -12).x},${toIso(1000, 500, -12).y} ${toIso(1000, 0, -12).x},${toIso(1000, 0, -12).y}`}
+                  fill="#060C18"
+                  stroke="#1E293B"
+                  strokeWidth="1.5"
+                />
+              </g>
+
+              {/* =================================================================
+                  2. PISOS DE ZONAS OPERATIVAS CON HALOS ILUMINADOS
+                  ================================================================= */}
+              <g className="cad-zone-floors">
+                {ZONAS_REALES_SST.map((zona) => {
+                  const esSeleccionada = zonaSeleccionada.id === zona.id;
+                  const esHover = zonaHover?.id === zona.id;
+
+                  // Color de piso según capa activa
+                  let fillPiso = '#0F1A30';
+                  let strokePiso = '#1E293B';
+                  let strokeWidth = '1';
+
+                  if (capaActiva === 'RIESGOS') {
+                    if (zona.tipoRiesgoGTC45.nivelRiesgo === 'I') fillPiso = '#450A0A/40';
+                    else if (zona.tipoRiesgoGTC45.nivelRiesgo === 'II') fillPiso = '#78350F/40';
+                    else fillPiso = '#064E3B/40';
+                    strokePiso = zona.colorHalo;
+                  } else if (zona.id === 'Z-PROD' || zona.id === 'Z-ALMACEN') {
+                    fillPiso = '#1C1917/60';
+                    strokePiso = '#F59E0B';
+                  } else if (zona.id === 'Z-TI') {
+                    fillPiso = '#082F49/50';
+                    strokePiso = '#06B6D4';
+                  }
+
+                  if (esSeleccionada || esHover) {
+                    strokeWidth = '2.5';
+                    strokePiso = zona.colorHalo;
+                  }
+
+                  return (
+                    <polygon
+                      key={zona.id}
+                      points={isoFloor(zona.cadBox.x, zona.cadBox.y, zona.cadBox.w, zona.cadBox.h, 1)}
+                      fill={fillPiso}
+                      stroke={strokePiso}
+                      strokeWidth={strokeWidth}
+                      className="cursor-pointer transition-all duration-200 hover:opacity-90"
+                      onClick={() => setZonaSeleccionada(zona)}
+                      onMouseEnter={() => setZonaHover(zona)}
+                      onMouseLeave={() => setZonaHover(null)}
+                      filter={esSeleccionada ? 'url(#neon-glow-cyan)' : undefined}
+                    />
+                  );
+                })}
+              </g>
+
+              {/* =================================================================
+                  3. MOBILIARIO INTERNO ARQUITECTÓNICO (Escritorios, Racks, Juntas)
+                  ================================================================= */}
+              <g className="cad-interior-furniture opacity-80 pointer-events-none">
+                {/* Mesa de Juntas 1 (10 puestos) */}
+                <polygon
+                  points={isoFloor(240, 70, 100, 50, 4)}
+                  fill="#1E293B"
+                  stroke="#334155"
+                  strokeWidth="1.5"
+                />
+                
+                {/* Mesa de Juntas Central 2 (12 puestos) */}
+                <polygon
+                  points={isoFloor(240, 260, 130, 60, 4)}
+                  fill="#1E293B"
+                  stroke="#334155"
+                  strokeWidth="1.5"
+                />
+
+                {/* Racks de Datacenter IT (3 racks verticales luminosos) */}
+                {[0, 25, 50].map((offset, i) => (
+                  <g key={i}>
+                    <polygon
+                      points={isoFloor(420 + offset, 50, 18, 45, 12)}
+                      fill="#0C4A6E"
+                      stroke="#0284C7"
+                      strokeWidth="1"
+                    />
+                    {/* Luces de los servidores */}
+                    <line
+                      x1={toIso(422 + offset, 52, 12).x}
+                      y1={toIso(422 + offset, 52, 12).y}
+                      x2={toIso(436 + offset, 52, 12).x}
+                      y2={toIso(436 + offset, 52, 12).y}
+                      stroke="#38BDF8"
+                      strokeWidth="1.5"
+                    />
+                  </g>
+                ))}
+
+                {/* Escritorios en I+D */}
+                {[0, 60].map((dx, i) => (
+                  <polygon
+                    key={i}
+                    points={isoFloor(530 + dx, 60, 45, 70, 3)}
+                    fill="#1E293B"
+                    stroke="#475569"
+                    strokeWidth="1"
+                  />
+                ))}
+
+                {/* Mostrador de Recepción */}
+                <polygon
+                  points={isoFloor(60, 270, 80, 25, 5)}
+                  fill="#0F766E"
+                  stroke="#14B8A6"
+                  strokeWidth="1.5"
+                />
+
+                {/* Mesas de Trabajo en Ensamblaje / Producción */}
+                <polygon
+                  points={isoFloor(760, 60, 160, 50, 4)}
+                  fill="#292524"
+                  stroke="#78350F"
+                  strokeWidth="1.5"
+                />
+                <polygon
+                  points={isoFloor(760, 125, 160, 45, 4)}
+                  fill="#292524"
+                  stroke="#78350F"
+                  strokeWidth="1.5"
+                />
+
+                {/* Racks de Almacén General (3 baterías de estanterías industriales) */}
+                {[0, 70, 140].map((dy, i) => (
+                  <g key={i}>
+                    <polygon
+                      points={isoFloor(835, 230 + dy, 120, 35, 18)}
+                      fill="#1C1917"
+                      stroke="#F59E0B"
+                      strokeWidth="1.2"
+                      strokeDasharray="4 2"
+                    />
+                  </g>
+                ))}
+              </g>
+
+              {/* =================================================================
+                  4. MUROS ARQUITECTÓNICOS EN CORTE 3D (Cutaway Walls a Z = 26)
+                  Muros modelados a media altura para ver los interiores
+                  ================================================================= */}
+              <g className="cad-walls pointer-events-none">
+                {/* Muros Perimetrales Exteriores */}
+                {/* Muro Norte con aberturas para las 3 Salidas de Emergencia */}
+                <g className="cad-wall-element">
+                  {/* Segmento 1: Oeste hasta Salida 1 */}
+                  {(() => {
+                    const w = isoWallBox(0, 0, 370, 12, 28);
+                    return (
+                      <>
+                        <polygon points={w.frontPolygon} fill="#1E293B" stroke="#334155" />
+                        <polygon points={w.rightPolygon} fill="#0F172A" stroke="#334155" />
+                        <polygon points={w.topPolygon} fill="#334155" stroke="#64748B" />
+                      </>
+                    );
+                  })()}
+                  {/* Segmento 2: Entre Salida 1 y Salida 2 */}
+                  {(() => {
+                    const w = isoWallBox(400, 0, 290, 12, 28);
+                    return (
+                      <>
+                        <polygon points={w.frontPolygon} fill="#1E293B" stroke="#334155" />
+                        <polygon points={w.rightPolygon} fill="#0F172A" stroke="#334155" />
+                        <polygon points={w.topPolygon} fill="#334155" stroke="#64748B" />
+                      </>
+                    );
+                  })()}
+                  {/* Segmento 3: Entre Salida 2 y Salida 3 */}
+                  {(() => {
+                    const w = isoWallBox(720, 0, 230, 12, 28);
+                    return (
+                      <>
+                        <polygon points={w.frontPolygon} fill="#1E293B" stroke="#334155" />
+                        <polygon points={w.rightPolygon} fill="#0F172A" stroke="#334155" />
+                        <polygon points={w.topPolygon} fill="#334155" stroke="#64748B" />
+                      </>
+                    );
+                  })()}
+                </g>
+
+                {/* Muro Oeste con vano para Acceso Principal */}
+                <g className="cad-wall-element">
+                  {(() => {
+                    const w1 = isoWallBox(0, 0, 12, 220, 28);
+                    const w2 = isoWallBox(0, 280, 12, 220, 28);
+                    return (
+                      <>
+                        <polygon points={w1.frontPolygon} fill="#1E293B" stroke="#334155" />
+                        <polygon points={w1.rightPolygon} fill="#0F172A" stroke="#334155" />
+                        <polygon points={w1.topPolygon} fill="#334155" stroke="#64748B" />
+                        <polygon points={w2.frontPolygon} fill="#1E293B" stroke="#334155" />
+                        <polygon points={w2.rightPolygon} fill="#0F172A" stroke="#334155" />
+                        <polygon points={w2.topPolygon} fill="#334155" stroke="#64748B" />
+                      </>
+                    );
+                  })()}
+                </g>
+
+                {/* Muro Sur (Batería de oficinas frontales) */}
+                <g className="cad-wall-element">
+                  {(() => {
+                    const w = isoWallBox(0, 488, 1000, 12, 20);
+                    return (
+                      <>
+                        <polygon points={w.frontPolygon} fill="#1E293B" stroke="#334155" />
+                        <polygon points={w.rightPolygon} fill="#0F172A" stroke="#334155" />
+                        <polygon points={w.topPolygon} fill="#334155" stroke="#64748B" />
+                      </>
+                    );
+                  })()}
+                </g>
+
+                {/* Muro Este (Zona de Ensamblaje y Almacén con Acceso de Carga) */}
+                <g className="cad-wall-element">
+                  {(() => {
+                    const w1 = isoWallBox(988, 0, 12, 150, 28);
+                    const w2 = isoWallBox(988, 220, 12, 280, 28);
+                    return (
+                      <>
+                        <polygon points={w1.frontPolygon} fill="#1E293B" stroke="#334155" />
+                        <polygon points={w1.rightPolygon} fill="#0F172A" stroke="#334155" />
+                        <polygon points={w1.topPolygon} fill="#334155" stroke="#64748B" />
+                        <polygon points={w2.frontPolygon} fill="#1E293B" stroke="#334155" />
+                        <polygon points={w2.rightPolygon} fill="#0F172A" stroke="#334155" />
+                        <polygon points={w2.topPolygon} fill="#334155" stroke="#64748B" />
+                      </>
+                    );
+                  })()}
+                </g>
+
+                {/* Tabiques Interiores Divisorios */}
+                {/* Muro divisorio entre Oficinas Norte y Pasillo Central */}
+                <g className="cad-wall-element">
+                  {(() => {
+                    const w = isoWallBox(180, 170, 530, 8, 22);
+                    return (
+                      <>
+                        <polygon points={w.frontPolygon} fill="#162032" stroke="#253347" />
+                        <polygon points={w.rightPolygon} fill="#0D1524" stroke="#253347" />
+                        <polygon points={w.topPolygon} fill="#2A384F" stroke="#4B5E7A" />
+                      </>
+                    );
+                  })()}
+                </g>
+
+                {/* Muro divisorio entre Producción/Almacén y Oficinas Centrales */}
+                <g className="cad-wall-element">
+                  {(() => {
+                    const w = isoWallBox(712, 0, 8, 490, 24);
+                    return (
+                      <>
+                        <polygon points={w.frontPolygon} fill="#162032" stroke="#253347" />
+                        <polygon points={w.rightPolygon} fill="#0D1524" stroke="#253347" />
+                        <polygon points={w.topPolygon} fill="#2A384F" stroke="#4B5E7A" />
+                      </>
+                    );
+                  })()}
+                </g>
+
+                {/* Muro divisorio Servidores IT (Blindado) */}
+                <g className="cad-wall-element">
+                  {(() => {
+                    const w1 = isoWallBox(395, 0, 6, 170, 24);
+                    const w2 = isoWallBox(500, 0, 6, 170, 24);
+                    return (
+                      <>
+                        <polygon points={w1.topPolygon} fill="#0284C7" stroke="#38BDF8" />
+                        <polygon points={w2.topPolygon} fill="#0284C7" stroke="#38BDF8" />
+                      </>
+                    );
+                  })()}
+                </g>
+              </g>
+
+              {/* =================================================================
+                  5. RUTAS DE EVACUACIÓN FOTOLUMINISCENTES (Verde Neón Resplandeciente)
+                  (Se activan en Capa 'EVACUACION' o durante simulación)
+                  ================================================================= */}
+              {(capaActiva === 'EVACUACION' || simulandoEvacuacion) && (
+                <g className="cad-evacuation-routes" filter="url(#neon-glow-green)">
+                  {/* Troncal Principal de Evacuación */}
+                  <path
+                    d={rutaTroncalPrincipal}
+                    fill="none"
+                    stroke="#10B981"
+                    strokeWidth="3.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className={simulandoEvacuacion ? 'animate-pulse' : ''}
+                  />
+
+                  {/* Rutas hacia las 3 Salidas de Emergencia Norte (Líneas fotoluminiscentes sin flechas) */}
+                  <path
+                    d={rutaEvacNorte}
+                    fill="none"
+                    stroke="#34D399"
+                    strokeWidth="3.5"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d={rutaEvacJuntas1}
+                    fill="none"
+                    stroke="#34D399"
+                    strokeWidth="3.5"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d={rutaEvacProd}
+                    fill="none"
+                    stroke="#34D399"
+                    strokeWidth="3.5"
+                    strokeLinecap="round"
+                  />
+
+                  {/* Alimentadores desde oficinas */}
+                  <path
+                    d={rutaConexionID}
+                    fill="none"
+                    stroke="#10B981"
+                    strokeWidth="2.5"
+                    strokeDasharray="6 4"
+                  />
+                  <path
+                    d={rutaConexionOficinasSur}
+                    fill="none"
+                    stroke="#10B981"
+                    strokeWidth="2.5"
+                    strokeDasharray="6 4"
+                  />
+                  <path
+                    d={rutaEvacOficinas}
+                    fill="none"
+                    stroke="#34D399"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                  />
+
+                  {/* Marcadores de Puertas de Salida Iluminadas */}
+                  {/* Salida 1 */}
+                  <circle cx={pSalida1.x} cy={pSalida1.y} r="7" fill="#10B981" className="animate-ping" />
+                  <circle cx={pSalida1.x} cy={pSalida1.y} r="5" fill="#34D399" />
+                  
+                  {/* Salida 2 */}
+                  <circle cx={pSalida2.x} cy={pSalida2.y} r="7" fill="#10B981" className="animate-ping" />
+                  <circle cx={pSalida2.x} cy={pSalida2.y} r="5" fill="#34D399" />
+
+                  {/* Salida 3 */}
+                  <circle cx={pSalida3.x} cy={pSalida3.y} r="7" fill="#10B981" className="animate-ping" />
+                  <circle cx={pSalida3.x} cy={pSalida3.y} r="5" fill="#34D399" />
+
+                  {/* Acceso Principal */}
+                  <circle cx={pAccesoPrincipal.x} cy={pAccesoPrincipal.y} r="8" fill="#10B981" className="animate-ping" />
+                  <circle cx={pAccesoPrincipal.x} cy={pAccesoPrincipal.y} r="6" fill="#34D399" />
+                </g>
+              )}
+
+              {/* =================================================================
+                  5.1 MUÑECOS EN RECORRIDO DE EVACUACIÓN (SIMULACIÓN ACTIVA)
+                  Reemplaza flechas estáticas por avatares humanos con casco y chaleco SST
+                  que recorren físicamente el plano hasta las salidas
+                  ================================================================= */}
+              {simulandoEvacuacion && (
+                <g className="cad-evacuees-group">
+                  {/* Muñeco 1: Operario de Ensamblaje / Producción -> Salida 3 */}
+                  <g id="evacuante-produccion">
+                    <animateMotion
+                      path={rutaEvacProd}
+                      dur="4.5s"
+                      repeatCount="indefinite"
+                    />
+                    <g transform="translate(0, -2)">
+                      <animateTransform
+                        attributeName="transform"
+                        type="translate"
+                        values="0,0; 0,-3; 0,0; 0,-3; 0,0"
+                        dur="0.5s"
+                        repeatCount="indefinite"
+                      />
+                      {/* Sombra y halo de piso */}
+                      <ellipse cx="0" cy="0" rx="9" ry="4.5" fill="#000000" fillOpacity="0.5" />
+                      <ellipse cx="0" cy="0" rx="14" ry="7" fill="none" stroke="#F59E0B" strokeWidth="1.5" />
+                      
+                      {/* Piernas */}
+                      <line x1="-3" y1="-6" x2="-4" y2="0" stroke="#0F172A" strokeWidth="3" strokeLinecap="round" />
+                      <line x1="3" y1="-6" x2="4" y2="0" stroke="#0F172A" strokeWidth="3" strokeLinecap="round" />
+                      <circle cx="-4" cy="0" r="1.8" fill="#1E293B" />
+                      <circle cx="4" cy="0" r="1.8" fill="#1E293B" />
+
+                      {/* Torso con chaleco reflectivo naranja industrial */}
+                      <path d="M -6 -18 L 6 -18 L 5 -6 L -5 -6 Z" fill="#F97316" stroke="#0F172A" strokeWidth="1" />
+                      <line x1="-5.5" y1="-14" x2="5.5" y2="-14" stroke="#FFFFFF" strokeWidth="1.5" />
+                      <line x1="-5" y1="-10" x2="5" y2="-10" stroke="#FFFFFF" strokeWidth="1.5" />
+
+                      {/* Brazos en marcha */}
+                      <line x1="-6" y1="-17" x2="-9" y2="-11" stroke="#F97316" strokeWidth="2.5" strokeLinecap="round" />
+                      <line x1="6" y1="-17" x2="9" y2="-11" stroke="#F97316" strokeWidth="2.5" strokeLinecap="round" />
+
+                      {/* Cabeza y Casco Blanco */}
+                      <circle cx="0" cy="-21" r="4.2" fill="#FBBF24" />
+                      <path d="M -6 -23 C -6 -28, 6 -28, 6 -23 L 7 -22 L -7 -22 Z" fill="#FFFFFF" stroke="#334155" strokeWidth="1" />
+
+                      {/* Badge HUD de Rol */}
+                      <g transform="translate(0, -32)">
+                        <rect x="-26" y="-13" width="52" height="13" rx="4" fill="#091024" fillOpacity="0.9" stroke="#F59E0B" strokeWidth="1" />
+                        <text x="0" y="-4" textAnchor="middle" fill="#FFFFFF" fontSize="7.5" fontWeight="bold" fontFamily="monospace">
+                          🏃 Ensamblaje
+                        </text>
+                      </g>
+                    </g>
+                  </g>
+
+                  {/* Muñeco 2: Ingeniero / Dev I+D -> Salida 2 */}
+                  <g id="evacuante-id">
+                    <animateMotion
+                      path={rutaEvacNorte}
+                      dur="5s"
+                      repeatCount="indefinite"
+                    />
+                    <g transform="translate(0, -2)">
+                      <animateTransform
+                        attributeName="transform"
+                        type="translate"
+                        values="0,0; 0,-3; 0,0; 0,-3; 0,0"
+                        dur="0.55s"
+                        repeatCount="indefinite"
+                      />
+                      <ellipse cx="0" cy="0" rx="9" ry="4.5" fill="#000000" fillOpacity="0.5" />
+                      <ellipse cx="0" cy="0" rx="14" ry="7" fill="none" stroke="#10B981" strokeWidth="1.5" />
+
+                      <line x1="-3" y1="-6" x2="-4" y2="0" stroke="#0F172A" strokeWidth="3" strokeLinecap="round" />
+                      <line x1="3" y1="-6" x2="4" y2="0" stroke="#0F172A" strokeWidth="3" strokeLinecap="round" />
+                      <circle cx="-4" cy="0" r="1.8" fill="#1E293B" />
+                      <circle cx="4" cy="0" r="1.8" fill="#1E293B" />
+
+                      <path d="M -6 -18 L 6 -18 L 5 -6 L -5 -6 Z" fill="#10B981" stroke="#0F172A" strokeWidth="1" />
+                      <line x1="-5.5" y1="-14" x2="5.5" y2="-14" stroke="#FFFFFF" strokeWidth="1.5" />
+                      <line x1="-5" y1="-10" x2="5" y2="-10" stroke="#FFFFFF" strokeWidth="1.5" />
+
+                      <line x1="-6" y1="-17" x2="-9" y2="-11" stroke="#10B981" strokeWidth="2.5" strokeLinecap="round" />
+                      <line x1="6" y1="-17" x2="9" y2="-11" stroke="#10B981" strokeWidth="2.5" strokeLinecap="round" />
+
+                      <circle cx="0" cy="-21" r="4.2" fill="#FBBF24" />
+                      <path d="M -6 -23 C -6 -28, 6 -28, 6 -23 L 7 -22 L -7 -22 Z" fill="#FFFFFF" stroke="#334155" strokeWidth="1" />
+
+                      <g transform="translate(0, -32)">
+                        <rect x="-24" y="-13" width="48" height="13" rx="4" fill="#091024" fillOpacity="0.9" stroke="#10B981" strokeWidth="1" />
+                        <text x="0" y="-4" textAnchor="middle" fill="#FFFFFF" fontSize="7.5" fontWeight="bold" fontFamily="monospace">
+                          🏃 Dev I+D
+                        </text>
+                      </g>
+                    </g>
+                  </g>
+
+                  {/* Muñeco 3: Líder de Almacén -> Pasillo Troncal -> Acceso Principal */}
+                  <g id="evacuante-almacen">
+                    <animateMotion
+                      path={rutaTroncalPrincipal}
+                      dur="9.5s"
+                      repeatCount="indefinite"
+                    />
+                    <g transform="translate(0, -2)">
+                      <animateTransform
+                        attributeName="transform"
+                        type="translate"
+                        values="0,0; 0,-3; 0,0; 0,-3; 0,0"
+                        dur="0.5s"
+                        repeatCount="indefinite"
+                      />
+                      <ellipse cx="0" cy="0" rx="9" ry="4.5" fill="#000000" fillOpacity="0.5" />
+                      <ellipse cx="0" cy="0" rx="14" ry="7" fill="none" stroke="#FACC15" strokeWidth="1.5" />
+
+                      <line x1="-3" y1="-6" x2="-4" y2="0" stroke="#0F172A" strokeWidth="3" strokeLinecap="round" />
+                      <line x1="3" y1="-6" x2="4" y2="0" stroke="#0F172A" strokeWidth="3" strokeLinecap="round" />
+                      <circle cx="-4" cy="0" r="1.8" fill="#1E293B" />
+                      <circle cx="4" cy="0" r="1.8" fill="#1E293B" />
+
+                      <path d="M -6 -18 L 6 -18 L 5 -6 L -5 -6 Z" fill="#FACC15" stroke="#0F172A" strokeWidth="1" />
+                      <line x1="-5.5" y1="-14" x2="5.5" y2="-14" stroke="#FFFFFF" strokeWidth="1.5" />
+                      <line x1="-5" y1="-10" x2="5" y2="-10" stroke="#FFFFFF" strokeWidth="1.5" />
+
+                      <line x1="-6" y1="-17" x2="-9" y2="-11" stroke="#FACC15" strokeWidth="2.5" strokeLinecap="round" />
+                      <line x1="6" y1="-17" x2="9" y2="-11" stroke="#FACC15" strokeWidth="2.5" strokeLinecap="round" />
+
+                      <circle cx="0" cy="-21" r="4.2" fill="#FBBF24" />
+                      <path d="M -6 -23 C -6 -28, 6 -28, 6 -23 L 7 -22 L -7 -22 Z" fill="#FACC15" stroke="#713F12" strokeWidth="1" />
+
+                      <g transform="translate(0, -32)">
+                        <rect x="-26" y="-13" width="52" height="13" rx="4" fill="#091024" fillOpacity="0.9" stroke="#FACC15" strokeWidth="1" />
+                        <text x="0" y="-4" textAnchor="middle" fill="#FFFFFF" fontSize="7.5" fontWeight="bold" fontFamily="monospace">
+                          🏃 Almacén
+                        </text>
+                      </g>
+                    </g>
+                  </g>
+
+                  {/* Muñeco 4: Colaborador de Oficinas Sur -> Salida 1 */}
+                  <g id="evacuante-oficinas">
+                    <animateMotion
+                      path={rutaEvacOficinas}
+                      dur="6.5s"
+                      repeatCount="indefinite"
+                    />
+                    <g transform="translate(0, -2)">
+                      <animateTransform
+                        attributeName="transform"
+                        type="translate"
+                        values="0,0; 0,-3; 0,0; 0,-3; 0,0"
+                        dur="0.55s"
+                        repeatCount="indefinite"
+                      />
+                      <ellipse cx="0" cy="0" rx="9" ry="4.5" fill="#000000" fillOpacity="0.5" />
+                      <ellipse cx="0" cy="0" rx="14" ry="7" fill="none" stroke="#22D3EE" strokeWidth="1.5" />
+
+                      <line x1="-3" y1="-6" x2="-4" y2="0" stroke="#0F172A" strokeWidth="3" strokeLinecap="round" />
+                      <line x1="3" y1="-6" x2="4" y2="0" stroke="#0F172A" strokeWidth="3" strokeLinecap="round" />
+                      <circle cx="-4" cy="0" r="1.8" fill="#1E293B" />
+                      <circle cx="4" cy="0" r="1.8" fill="#1E293B" />
+
+                      <path d="M -6 -18 L 6 -18 L 5 -6 L -5 -6 Z" fill="#06B6D4" stroke="#0F172A" strokeWidth="1" />
+                      <line x1="-5.5" y1="-14" x2="5.5" y2="-14" stroke="#FFFFFF" strokeWidth="1.5" />
+                      <line x1="-5" y1="-10" x2="5" y2="-10" stroke="#FFFFFF" strokeWidth="1.5" />
+
+                      <line x1="-6" y1="-17" x2="-9" y2="-11" stroke="#06B6D4" strokeWidth="2.5" strokeLinecap="round" />
+                      <line x1="6" y1="-17" x2="9" y2="-11" stroke="#06B6D4" strokeWidth="2.5" strokeLinecap="round" />
+
+                      <circle cx="0" cy="-21" r="4.2" fill="#FBBF24" />
+                      <path d="M -6 -23 C -6 -28, 6 -28, 6 -23 L 7 -22 L -7 -22 Z" fill="#FFFFFF" stroke="#334155" strokeWidth="1" />
+
+                      <g transform="translate(0, -32)">
+                        <rect x="-24" y="-13" width="48" height="13" rx="4" fill="#091024" fillOpacity="0.9" stroke="#22D3EE" strokeWidth="1" />
+                        <text x="0" y="-4" textAnchor="middle" fill="#FFFFFF" fontSize="7.5" fontWeight="bold" fontFamily="monospace">
+                          🏃 Oficinas
+                        </text>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              )}
+
+              {/* =================================================================
+                  6. PINES FLOTANTES 3D DE EXTINTORES Y DETECTORES (Cian Neón)
+                  ================================================================= */}
+              {(capaActiva === 'EQUIPOS' || capaActiva === 'GENERAL') && (
+                <g className="cad-safety-pins" filter="url(#neon-glow-cyan)">
+                  {/* Extintor 1: Servidores IT */}
+                  {(() => {
+                    const p = toIso(410, 165, 32);
+                    return (
+                      <g className="cursor-pointer" onClick={() => setZonaSeleccionada(ZONAS_REALES_SST[2])}>
+                        <rect x={p.x - 12} y={p.y - 12} width="24" height="24" rx="6" fill="#0E7490" stroke="#22D3EE" strokeWidth="1.5" />
+                        <path d="M 0 -5 L 0 5 M -3 -2 L 3 -2" transform={`translate(${p.x}, ${p.y})`} stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" />
+                      </g>
+                    );
+                  })()}
+
+                  {/* Extintor 2: Pasillo Central */}
+                  {(() => {
+                    const p = toIso(450, 205, 32);
+                    return (
+                      <g className="cursor-pointer" onClick={() => setZonaSeleccionada(ZONAS_REALES_SST[5])}>
+                        <rect x={p.x - 12} y={p.y - 12} width="24" height="24" rx="6" fill="#0E7490" stroke="#22D3EE" strokeWidth="1.5" />
+                        <path d="M 0 -5 L 0 5 M -3 -2 L 3 -2" transform={`translate(${p.x}, ${p.y})`} stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" />
+                      </g>
+                    );
+                  })()}
+
+                  {/* Extintor 3: Ensamblaje / Producción */}
+                  {(() => {
+                    const p = toIso(780, 45, 34);
+                    return (
+                      <g className="cursor-pointer" onClick={() => setZonaSeleccionada(ZONAS_REALES_SST[0])}>
+                        <rect x={p.x - 12} y={p.y - 12} width="24" height="24" rx="6" fill="#0E7490" stroke="#22D3EE" strokeWidth="1.5" />
+                        <path d="M 0 -5 L 0 5 M -3 -2 L 3 -2" transform={`translate(${p.x}, ${p.y})`} stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" />
+                      </g>
+                    );
+                  })()}
+
+                  {/* Extintor 4: Almacén Industrial */}
+                  {(() => {
+                    const p = toIso(840, 240, 34);
+                    return (
+                      <g className="cursor-pointer" onClick={() => setZonaSeleccionada(ZONAS_REALES_SST[1])}>
+                        <rect x={p.x - 12} y={p.y - 12} width="24" height="24" rx="6" fill="#0E7490" stroke="#22D3EE" strokeWidth="1.5" />
+                        <path d="M 0 -5 L 0 5 M -3 -2 L 3 -2" transform={`translate(${p.x}, ${p.y})`} stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" />
+                      </g>
+                    );
+                  })()}
+
+                  {/* Extintor 5: Recepción */}
+                  {(() => {
+                    const p = toIso(50, 240, 32);
+                    return (
+                      <g className="cursor-pointer" onClick={() => setZonaSeleccionada(ZONAS_REALES_SST[6])}>
+                        <rect x={p.x - 12} y={p.y - 12} width="24" height="24" rx="6" fill="#0E7490" stroke="#22D3EE" strokeWidth="1.5" />
+                        <path d="M 0 -5 L 0 5 M -3 -2 L 3 -2" transform={`translate(${p.x}, ${p.y})`} stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" />
+                      </g>
+                    );
+                  })()}
+                </g>
+              )}
+
+              {/* =================================================================
+                  7. CALLOUTS FLOTANTES GLASSMORPHISM CON LÍNEAS GUÍA (Idénticos a la Imagen)
+                  ================================================================= */}
+              {/* Callout 1: Manufacturing / Ensamblaje Zone B */}
+              <g className="cad-callout-manufacturing">
+                {/* Línea guía conectora */}
+                <line
+                  x1={toIso(850, 110, 10).x}
+                  y1={toIso(850, 110, 10).y}
+                  x2={posCalloutProd.x}
+                  y2={posCalloutProd.y}
+                  stroke="#F59E0B"
+                  strokeWidth="1.2"
+                  strokeDasharray="3 3"
+                />
+                <circle cx={toIso(850, 110, 10).x} cy={toIso(850, 110, 10).y} r="3" fill="#F59E0B" />
+
+                {/* Tarjeta flotante SVG */}
+                <g transform={`translate(${posCalloutProd.x - 100}, ${posCalloutProd.y - 95})`}>
+                  <rect
+                    width="190"
+                    height="85"
+                    rx="12"
+                    fill="#0E1726"
+                    fillOpacity="0.95"
+                    stroke="#F59E0B"
+                    strokeWidth="1.2"
+                    filter="drop-shadow(0 10px 15px rgba(0,0,0,0.5))"
+                  />
+                  <text x="14" y="22" fill="#FFFFFF" fontSize="12" fontWeight="bold" fontFamily="outfit">
+                    Área de Ensamblaje
+                  </text>
+                  <text x="14" y="40" fill="#94A3B8" fontSize="10" fontFamily="monospace">
+                    Temperatura: <tspan fill="#F8FAFC">22.1°C</tspan>
+                  </text>
+                  <text x="14" y="55" fill="#94A3B8" fontSize="10" fontFamily="monospace">
+                    Check SST: <tspan fill="#10B981" fontWeight="bold">Passed ✓</tspan>
+                  </text>
+                  <text x="14" y="70" fill="#94A3B8" fontSize="10" fontFamily="monospace">
+                    Aforo en Planta: <tspan fill="#F59E0B" fontWeight="bold">8 / 10</tspan>
+                  </text>
+                </g>
+              </g>
+
+              {/* Callout 2: Emergency Exit 2 (Salida de Emergencia I+D) */}
+              <g className="cad-callout-emergency-exit">
+                {/* Línea guía */}
+                <line
+                  x1={pSalida2.x}
+                  y1={pSalida2.y}
+                  x2={posCalloutSalida2.x}
+                  y2={posCalloutSalida2.y}
+                  stroke="#10B981"
+                  strokeWidth="1.2"
+                  strokeDasharray="3 3"
+                />
+                <circle cx={pSalida2.x} cy={pSalida2.y} r="3" fill="#10B981" />
+
+                {/* Tarjeta flotante */}
+                <g transform={`translate(${posCalloutSalida2.x - 95}, ${posCalloutSalida2.y - 90})`}>
+                  <rect
+                    width="190"
+                    height="80"
+                    rx="12"
+                    fill="#0E1726"
+                    fillOpacity="0.95"
+                    stroke="#10B981"
+                    strokeWidth="1.2"
+                    filter="drop-shadow(0 10px 15px rgba(0,0,0,0.5))"
+                  />
+                  <text x="14" y="22" fill="#FFFFFF" fontSize="12" fontWeight="bold" fontFamily="outfit">
+                    Salida de Emergencia 2
+                  </text>
+                  <text x="14" y="38" fill="#94A3B8" fontSize="10" fontFamily="monospace">
+                    Estado: <tspan fill="#10B981" fontWeight="bold">Despejada (Clear)</tspan>
+                  </text>
+                  <text x="14" y="53" fill="#94A3B8" fontSize="10" fontFamily="monospace">
+                    Inspección: <tspan fill="#F8FAFC">Hace 10 min</tspan>
+                  </text>
+                  <text x="14" y="68" fill="#94A3B8" fontSize="10" fontFamily="monospace">
+                    Flujo: <tspan fill="#34D399">Sin Obstrucción</tspan>
+                  </text>
+                </g>
+              </g>
+
+            </svg>
+          </div>
+
+          {/* Barra de Leyenda Rápida Inferior */}
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-[#1E293B] text-[11px] font-mono text-slate-400 px-2">
+            <div className="flex items-center space-x-4">
+              <span className="flex items-center space-x-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#10B981]"></span>
+                <span>Rutas y Salidas Despejadas</span>
+              </span>
+              <span className="flex items-center space-x-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#F59E0B]"></span>
+                <span>Zonas de Operación / Producción</span>
+              </span>
+              <span className="flex items-center space-x-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#06B6D4]"></span>
+                <span>Extintores & Datacenter</span>
+              </span>
+            </div>
+
+            <span className="text-slate-500 hidden sm:inline">
+              Haz clic en cualquier área para ver su ficha técnica de control GTC 45
+            </span>
+          </div>
+
         </div>
+
+        {/* =======================================================================
+            PANEL LATERAL DERECHO: TELEMETRÍA, INCIDENT FEED Y COMPLIANCE
+            (Copia fiel del sidebar derecho en la imagen de referencia)
+            ======================================================================= */}
+        <aside className="xl:col-span-3 bg-[#0A1124] border-t xl:border-t-0 xl:border-l border-[#1E293B] p-4 sm:p-5 flex flex-col justify-between space-y-6">
+          
+          <div className="space-y-6">
+            
+            {/* 1. MÓDULO SYSTEM HEALTH */}
+            <div className="bg-[#0E1726] border border-[#1E293B] rounded-2xl p-4 shadow-sm">
+              <div className="flex items-center justify-between pb-2 border-b border-[#1E293B] mb-3">
+                <span className="text-xs font-mono font-bold text-white flex items-center">
+                  <ShieldCheck className="w-4 h-4 text-[#10B981] mr-1.5" />
+                  System Health: <span className="text-[#10B981] ml-1">OK</span>
+                </span>
+                <span className="w-2 h-2 rounded-full bg-[#10B981] animate-ping"></span>
+              </div>
+
+              <div className="space-y-1.5 text-xs font-mono">
+                <div className="flex items-center justify-between text-slate-400">
+                  <span>System Health:</span>
+                  <span className="text-emerald-400 font-bold flex items-center">
+                    Passed <Check className="w-3 h-3 ml-0.5" />
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-slate-400">
+                  <span>Safety Check:</span>
+                  <span className="text-emerald-400 font-bold flex items-center">
+                    Passed <Check className="w-3 h-3 ml-0.5" />
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-slate-400">
+                  <span>Last Check:</span>
+                  <span className="text-slate-200">10 mins ago</span>
+                </div>
+              </div>
+            </div>
+
+            {/* 2. MÓDULO INCIDENT FEED EN TIEMPO REAL */}
+            <div className="bg-[#0E1726] border border-[#1E293B] rounded-2xl p-4 shadow-sm">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs font-mono font-bold text-white uppercase tracking-wider">
+                  Incident Feed
+                </span>
+                <span className="text-[10px] font-mono text-[#14B8A6] bg-[#14B8A6]/10 px-2 py-0.5 rounded border border-[#14B8A6]/30">
+                  Real time
+                </span>
+              </div>
+
+              <div className="space-y-3 text-[11px] font-mono">
+                {/* Evento 1 */}
+                <div className="flex items-start space-x-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 mt-1 shrink-0"></span>
+                  <div>
+                    <p className="text-slate-200 leading-tight">Manufacturing Capacity verified: 8/10</p>
+                    <span className="text-[9.5px] text-slate-500 block mt-0.5">10 mins ago • Zona Ensamblaje</span>
+                  </div>
+                </div>
+
+                {/* Evento 2 */}
+                <div className="flex items-start space-x-2">
+                  <span className="w-2 h-2 rounded-full bg-cyan-400 mt-1 shrink-0"></span>
+                  <div>
+                    <p className="text-slate-200 leading-tight">Exit 2 magnetic latch checked</p>
+                    <span className="text-[9.5px] text-slate-500 block mt-0.5">10 mins ago • Sensor I+D</span>
+                  </div>
+                </div>
+
+                {/* Evento 3 */}
+                <div className="flex items-start space-x-2">
+                  <span className="w-2 h-2 rounded-full bg-amber-400 mt-1 shrink-0"></span>
+                  <div>
+                    <p className="text-slate-200 leading-tight">Warehouse forklift lane inspected</p>
+                    <span className="text-[9.5px] text-slate-500 block mt-0.5">18 mins ago • Almacén</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 3. MÓDULO COMPLIANCE OVERVIEW */}
+            <div className="bg-[#0E1726] border border-[#1E293B] rounded-2xl p-4 shadow-sm">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs font-mono font-bold text-white uppercase tracking-wider">
+                  Compliance Overview
+                </span>
+                <span className="text-[10px] text-slate-400 font-mono">SG-SST</span>
+              </div>
+
+              <div className="space-y-3 text-xs font-mono">
+                {/* Barra 1: Extintores */}
+                <div>
+                  <div className="flex justify-between text-slate-300 text-[11px] mb-1">
+                    <span>Fire Extinguishers (NTC 2885)</span>
+                    <span className="text-emerald-400 font-bold">100%</span>
+                  </div>
+                  <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                    <div className="h-full bg-emerald-500 rounded-full w-full"></div>
+                  </div>
+                </div>
+
+                {/* Barra 2: Zonas Operativas */}
+                <div>
+                  <div className="flex justify-between text-slate-300 text-[11px] mb-1">
+                    <span>Operating Zones GTC 45</span>
+                    <span className="text-amber-400 font-bold">85%</span>
+                  </div>
+                  <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                    <div className="h-full bg-amber-500 rounded-full w-[85%]"></div>
+                  </div>
+                </div>
+
+                {/* Barra 3: Rutas de Evacuación */}
+                <div>
+                  <div className="flex justify-between text-slate-300 text-[11px] mb-1">
+                    <span>Assembly Point Cleared</span>
+                    <span className="text-cyan-400 font-bold">100%</span>
+                  </div>
+                  <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                    <div className="h-full bg-cyan-500 rounded-full w-full"></div>
+                  </div>
+                </div>
+
+                {/* Barra 4: Salidas de Emergencia */}
+                <div>
+                  <div className="flex justify-between text-slate-300 text-[11px] mb-1">
+                    <span>Emergency Exits (3 Norte + Acceso)</span>
+                    <span className="text-emerald-400 font-bold">100%</span>
+                  </div>
+                  <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                    <div className="h-full bg-emerald-400 rounded-full w-full"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          {/* FICHA TÉCNICA RÁPIDA DE LA SALA SELECCIONADA */}
+          <div className="bg-[#0E1726] border border-[#14B8A6]/40 rounded-2xl p-4 text-xs font-mono">
+            <div className="flex items-center justify-between pb-2 border-b border-[#1E293B] mb-2">
+              <span className="text-[10px] text-[#14B8A6] font-bold uppercase">Área Seleccionada</span>
+              <span className="text-[10px] bg-slate-800 text-white px-2 py-0.5 rounded font-bold">
+                {zonaSeleccionada.codigo}
+              </span>
+            </div>
+
+            <h4 className="font-bold text-white font-outfit text-sm leading-tight mb-1">
+              {zonaSeleccionada.nombre}
+            </h4>
+            <p className="text-[10px] text-slate-400 mb-2">
+              Aforo Actual: <strong className="text-white">{zonaSeleccionada.aforoActual}</strong> / {zonaSeleccionada.aforoMax} máx.
+            </p>
+
+            <div className="p-2 rounded-xl bg-[#091024] border border-[#1E293B] mb-3 text-[10.5px]">
+              <span className="text-[#14B8A6] block text-[9.5px]">Control Primario:</span>
+              <span className="text-slate-300 leading-tight block mt-0.5">
+                {zonaSeleccionada.tipoRiesgoGTC45.controles.ingenieria}
+              </span>
+            </div>
+
+            <button
+              onClick={() => setModalSugerenciaAbierto(true)}
+              className="w-full py-2 px-3 rounded-xl bg-[#1A56DB] hover:bg-blue-600 text-white font-bold text-xs transition-all flex items-center justify-center space-x-1.5 shadow-md shadow-blue-600/20 active:scale-95"
+            >
+              <Send className="w-3.5 h-3.5" />
+              <span>Radicar Novedad en esta Área</span>
+            </button>
+          </div>
+
+        </aside>
+
       </div>
 
       {/* Modal de Radicación de Sugerencias y Reportes */}
       <SuggestionModal
         isOpen={modalSugerenciaAbierto}
         onClose={() => setModalSugerenciaAbierto(false)}
-        initialZoneId={zonaModal}
+        initialZoneId={zonaSeleccionada.id}
         initialZoneName={zonaSeleccionada.nombre}
       />
     </div>

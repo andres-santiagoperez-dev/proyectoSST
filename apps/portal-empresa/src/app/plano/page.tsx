@@ -3,13 +3,13 @@ import type { Metadata } from 'next';
 import IsometricBlueprint from '@/components/IsometricBlueprint';
 
 export const metadata: Metadata = {
-  title: 'Plano Isométrico Cartográfico — Portal Corporativo SST',
-  description: 'Visor axonométrico SVG interactivo de la sede, rutas de evacuación PE-01, estaciones de pausas y equipos contra incendio.',
+  title: 'Plano Isométrico Digital CAD — SafePulse SST // Innovatec',
+  description: 'Digital Twin y plano axonométrico en corte 3D de la sede con telemetría en tiempo real, rutas fotoluminiscentes y monitoreo de riesgos GTC 45.',
 };
 
 export default function PlanoPage() {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 w-full animate-fade-in">
+    <div className="max-w-[1550px] mx-auto px-2 sm:px-4 lg:px-6 py-4 sm:py-6 w-full animate-fade-in">
       <IsometricBlueprint />
     </div>
   );
