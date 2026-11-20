@@ -17,6 +17,7 @@
     "build:pausas": "npm run build --workspace=pausas-vitales",
     "build:admin": "npm run build --workspace=admin-sgsst",
     "build": "npm run build --workspaces",
+    "package:dist": "node scripts/package-dist.mjs",
     "package:hostinger": "node scripts/package-hostinger.mjs",
     "package:portal": "node scripts/package-hostinger.mjs portal",
     "package:pausas": "node scripts/package-hostinger.mjs pausas",
