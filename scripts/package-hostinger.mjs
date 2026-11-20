@@ -147,20 +147,33 @@ function packageApp(app, shouldBuild = false) {
   fs.writeFileSync(path.join(app.outDir, '.env.example'), envContent + '\n', 'utf-8');
   console.log(`⚙️  Generado archivo .env con configuración base.`);
 
-  // 8. Crear archivo .zip para subida directa en Hostinger File Manager
+  // 8. Crear archivos .zip y .tar.gz compatibles con el descompresor Linux de Hostinger
   const zipDest = path.join(rootDir, 'deploy', 'hostinger', app.zipName);
-  if (fs.existsSync(zipDest)) {
-    fs.rmSync(zipDest, { force: true });
+  const tarGzName = app.zipName.replace('.zip', '.tar.gz');
+  const tarGzDest = path.join(rootDir, 'deploy', 'hostinger', tarGzName);
+
+  if (fs.existsSync(zipDest)) fs.rmSync(zipDest, { force: true });
+  if (fs.existsSync(tarGzDest)) fs.rmSync(tarGzDest, { force: true });
+
+  console.log(`🗜️  Comprimiendo archivos compatibles con Linux para hPanel: ${app.zipName} y ${tarGzName}...`);
+  try {
+    // Usamos tar.exe para formato POSIX estándar (compatible 100% con descompresores Linux)
+    execSync(`tar.exe -a -c -f "${zipDest}" -C "${app.outDir}" .`, { stdio: 'inherit' });
+    execSync(`tar.exe -czf "${tarGzDest}" -C "${app.outDir}" .`, { stdio: 'inherit' });
+  } catch (err) {
+    // Fallback con PowerShell si tar no estuviese
+    const psZipCmd = `powershell -Command "Compress-Archive -Path '${app.outDir}\\*' -DestinationPath '${zipDest}' -Force"`;
+    execSync(psZipCmd, { stdio: 'inherit' });
   }
 
-  console.log(`🗜️  Comprimiendo archivo listo para hPanel: ${app.zipName}...`);
-  // Usamos PowerShell nativo en Windows
-  const psZipCmd = `powershell -Command "Compress-Archive -Path '${app.outDir}\\*' -DestinationPath '${zipDest}' -Force"`;
-  execSync(psZipCmd, { stdio: 'inherit' });
-
-  const stats = fs.statSync(zipDest);
-  const sizeMb = (stats.size / (1024 * 1024)).toFixed(2);
-  console.log(`✅ ¡Paquete completado!: ${zipDest} (${sizeMb} MB)`);
+  const zipStats = fs.statSync(zipDest);
+  const zipSizeMb = (zipStats.size / (1024 * 1024)).toFixed(2);
+  console.log(`✅ ¡Paquete ZIP listo!: ${zipDest} (${zipSizeMb} MB)`);
+  if (fs.existsSync(tarGzDest)) {
+    const tarStats = fs.statSync(tarGzDest);
+    const tarSizeMb = (tarStats.size / (1024 * 1024)).toFixed(2);
+    console.log(`✅ ¡Paquete TAR.GZ listo!: ${tarGzDest} (${tarSizeMb} MB)`);
+  }
 }
 
 function main() {

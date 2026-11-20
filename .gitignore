@@ -12,6 +12,9 @@ build/
 .next/
 out/
 deploy/
+*.rar
+*.zip
+*.tar.gz
 
 # Environment files
 .env
